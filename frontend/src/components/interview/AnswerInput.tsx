@@ -11,17 +11,10 @@ export default function AnswerInput({
   onSubmit,
   disabled,
 }: AnswerInputProps) {
-  const wordCount = value.trim()
-    ? value.trim().split(/\s+/).length
-    : 0;
+  const wordCount = value.trim() ? value.trim().split(/\s+/).length : 0;
 
-  const handleKeyDown = (
-    event: React.KeyboardEvent<HTMLTextAreaElement>,
-  ) => {
-    if (
-      event.key === "Enter" &&
-      (event.ctrlKey || event.metaKey)
-    ) {
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (event.key === "Enter" && (event.ctrlKey || event.metaKey)) {
       event.preventDefault();
 
       if (!disabled && value.trim()) {
@@ -39,8 +32,7 @@ export default function AnswerInput({
           </div>
 
           <p className="mt-1 text-xs text-slate-600">
-            Explain your thinking as if you were in a real
-            interview.
+            Explain your thinking as if you were in a real interview.
           </p>
         </div>
 
@@ -51,9 +43,7 @@ export default function AnswerInput({
 
       <textarea
         value={value}
-        onChange={(event) =>
-          onChange(event.target.value)
-        }
+        onChange={(event) => onChange(event.target.value)}
         onKeyDown={handleKeyDown}
         disabled={disabled}
         placeholder="Start typing your answer..."
@@ -72,9 +62,7 @@ export default function AnswerInput({
           onClick={onSubmit}
           className="rounded-xl bg-white px-6 py-3 font-display text-sm font-semibold text-slate-950 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_12px_35px_rgba(139,92,246,0.22)] disabled:cursor-not-allowed disabled:opacity-40"
         >
-          {disabled
-            ? "Evaluating..."
-            : "Submit answer →"}
+          {disabled ? "Evaluating..." : "Submit answer →"}
         </button>
       </div>
     </section>

@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
-  CodingLanguage,
   CodingQuestion,
   Difficulty,
   getCodingQuestions,
@@ -51,7 +50,9 @@ export default function PracticeProblems() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedDifficulty, setSelectedDifficulty] = useState<string>("all");
   const [selectedLanguage, setSelectedLanguage] = useState<string>("all");
-  const [statusFilter, setStatusFilter] = useState<"all" | "solved" | "unsolved">("all");
+  const [statusFilter, setStatusFilter] = useState<
+    "all" | "solved" | "unsolved"
+  >("all");
 
   useEffect(() => {
     async function loadData() {
@@ -79,7 +80,9 @@ export default function PracticeProblems() {
       if (searchQuery.trim()) {
         const query = searchQuery.toLowerCase();
         const matchesTitle = q.title.toLowerCase().includes(query);
-        const matchesStatement = q.problem_statement.toLowerCase().includes(query);
+        const matchesStatement = q.problem_statement
+          .toLowerCase()
+          .includes(query);
         if (!matchesTitle && !matchesStatement) return false;
       }
 
@@ -100,17 +103,32 @@ export default function PracticeProblems() {
 
       return true;
     });
-  }, [questions, solvedIds, searchQuery, selectedDifficulty, selectedLanguage, statusFilter]);
+  }, [
+    questions,
+    solvedIds,
+    searchQuery,
+    selectedDifficulty,
+    selectedLanguage,
+    statusFilter,
+  ]);
 
   const stats = useMemo(() => {
     const total = questions.length;
     const solved = questions.filter((q) => solvedIds.has(q.id)).length;
     const easyTotal = questions.filter((q) => q.difficulty === "easy").length;
-    const easySolved = questions.filter((q) => q.difficulty === "easy" && solvedIds.has(q.id)).length;
-    const mediumTotal = questions.filter((q) => q.difficulty === "medium").length;
-    const mediumSolved = questions.filter((q) => q.difficulty === "medium" && solvedIds.has(q.id)).length;
+    const easySolved = questions.filter(
+      (q) => q.difficulty === "easy" && solvedIds.has(q.id),
+    ).length;
+    const mediumTotal = questions.filter(
+      (q) => q.difficulty === "medium",
+    ).length;
+    const mediumSolved = questions.filter(
+      (q) => q.difficulty === "medium" && solvedIds.has(q.id),
+    ).length;
     const hardTotal = questions.filter((q) => q.difficulty === "hard").length;
-    const hardSolved = questions.filter((q) => q.difficulty === "hard" && solvedIds.has(q.id)).length;
+    const hardSolved = questions.filter(
+      (q) => q.difficulty === "hard" && solvedIds.has(q.id),
+    ).length;
 
     return {
       total,
@@ -167,28 +185,45 @@ export default function PracticeProblems() {
                 Master Algorithms & Data Structures
               </h2>
               <p className="mt-2 max-w-2xl text-sm leading-relaxed text-slate-400">
-                Select a problem, test your solution against visible test cases with our Monaco code editor, and submit for full automated grading across hidden test suites.
+                Select a problem, test your solution against visible test cases
+                with our Monaco code editor, and submit for full automated
+                grading across hidden test suites.
               </p>
             </div>
 
             {/* Stat Counters */}
             <div className="grid grid-cols-3 gap-3">
               <div className="rounded-2xl border border-emerald-500/20 bg-emerald-500/[0.04] p-4 text-center">
-                <div className="text-xs font-semibold uppercase tracking-wider text-emerald-400">Easy</div>
+                <div className="text-xs font-semibold uppercase tracking-wider text-emerald-400">
+                  Easy
+                </div>
                 <div className="mt-2 text-xl font-bold text-white">
-                  {stats.easySolved} <span className="text-xs font-normal text-slate-500">/ {stats.easyTotal}</span>
+                  {stats.easySolved}{" "}
+                  <span className="text-xs font-normal text-slate-500">
+                    / {stats.easyTotal}
+                  </span>
                 </div>
               </div>
               <div className="rounded-2xl border border-amber-500/20 bg-amber-500/[0.04] p-4 text-center">
-                <div className="text-xs font-semibold uppercase tracking-wider text-amber-400">Medium</div>
+                <div className="text-xs font-semibold uppercase tracking-wider text-amber-400">
+                  Medium
+                </div>
                 <div className="mt-2 text-xl font-bold text-white">
-                  {stats.mediumSolved} <span className="text-xs font-normal text-slate-500">/ {stats.mediumTotal}</span>
+                  {stats.mediumSolved}{" "}
+                  <span className="text-xs font-normal text-slate-500">
+                    / {stats.mediumTotal}
+                  </span>
                 </div>
               </div>
               <div className="rounded-2xl border border-rose-500/20 bg-rose-500/[0.04] p-4 text-center">
-                <div className="text-xs font-semibold uppercase tracking-wider text-rose-400">Hard</div>
+                <div className="text-xs font-semibold uppercase tracking-wider text-rose-400">
+                  Hard
+                </div>
                 <div className="mt-2 text-xl font-bold text-white">
-                  {stats.hardSolved} <span className="text-xs font-normal text-slate-500">/ {stats.hardTotal}</span>
+                  {stats.hardSolved}{" "}
+                  <span className="text-xs font-normal text-slate-500">
+                    / {stats.hardTotal}
+                  </span>
                 </div>
               </div>
             </div>
@@ -255,7 +290,9 @@ export default function PracticeProblems() {
         {loading ? (
           <div className="flex flex-col items-center justify-center rounded-2xl border border-white/[0.08] bg-slate-900/20 py-20">
             <div className="h-8 w-8 animate-spin rounded-full border-2 border-cyan-400 border-t-transparent" />
-            <p className="mt-4 font-mono text-xs uppercase tracking-widest text-slate-400">Loading problem set...</p>
+            <p className="mt-4 font-mono text-xs uppercase tracking-widest text-slate-400">
+              Loading problem set...
+            </p>
           </div>
         ) : error ? (
           <div className="rounded-2xl border border-rose-500/20 bg-rose-500/[0.05] p-6 text-center text-rose-300">
@@ -270,7 +307,9 @@ export default function PracticeProblems() {
         ) : filteredQuestions.length === 0 ? (
           <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-white/10 bg-slate-900/20 py-20 text-center">
             <span className="text-3xl">🔎</span>
-            <h3 className="mt-3 text-base font-semibold text-white">No problems found</h3>
+            <h3 className="mt-3 text-base font-semibold text-white">
+              No problems found
+            </h3>
             <p className="mt-1 text-xs text-slate-500">
               Try adjusting your search query or filters.
             </p>
@@ -290,7 +329,8 @@ export default function PracticeProblems() {
               <tbody className="divide-y divide-white/[0.06] text-sm">
                 {filteredQuestions.map((q) => {
                   const isSolved = solvedIds.has(q.id);
-                  const diff = DIFFICULTY_CONFIG[q.difficulty] || DIFFICULTY_CONFIG.easy;
+                  const diff =
+                    DIFFICULTY_CONFIG[q.difficulty] || DIFFICULTY_CONFIG.easy;
 
                   return (
                     <tr
@@ -305,7 +345,9 @@ export default function PracticeProblems() {
                             ✓ Solved
                           </span>
                         ) : (
-                          <span className="font-mono text-xs text-slate-600">—</span>
+                          <span className="font-mono text-xs text-slate-600">
+                            —
+                          </span>
                         )}
                       </td>
 

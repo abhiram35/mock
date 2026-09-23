@@ -4,7 +4,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
 /* =========================================================
    DESIGN TOKENS
    ========================================================= */
@@ -31,7 +30,6 @@
   --error: #fb7185;
 }
 
-
 /* =========================================================
    RESET
    ========================================================= */
@@ -57,9 +55,7 @@ body {
   background: var(--bg-primary);
   color: var(--text-primary);
 
-  font-family:
-    "DM Sans",
-    sans-serif;
+  font-family: "DM Sans", sans-serif;
 
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
@@ -72,7 +68,6 @@ select {
   font: inherit;
 }
 
-
 /* =========================================================
    SELECTION
    ========================================================= */
@@ -81,7 +76,6 @@ select {
   background: rgba(139, 92, 246, 0.35);
   color: white;
 }
-
 
 /* =========================================================
    SCROLLBAR
@@ -103,7 +97,6 @@ select {
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(139, 92, 246, 0.6);
 }
-
 
 /* =========================================================
    APP BACKGROUND
@@ -133,7 +126,6 @@ select {
     var(--bg-primary);
 }
 
-
 /* =========================================================
    TECH GRID
    ========================================================= */
@@ -143,39 +135,26 @@ select {
   inset: 0;
 
   background-image:
-    linear-gradient(
-      rgba(255, 255, 255, 0.025) 1px,
-      transparent 1px
-    ),
-    linear-gradient(
-      90deg,
-      rgba(255, 255, 255, 0.025) 1px,
-      transparent 1px
-    );
+    linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
 
   background-size: 48px 48px;
 
-  mask-image: linear-gradient(
-    to bottom,
-    black,
-    transparent 85%
-  );
+  mask-image: linear-gradient(to bottom, black, transparent 85%);
 
   pointer-events: none;
 }
-
 
 /* =========================================================
    GLASS PANEL
    ========================================================= */
 
 .glass-panel {
-  background:
-    linear-gradient(
-      135deg,
-      rgba(255, 255, 255, 0.055),
-      rgba(255, 255, 255, 0.018)
-    );
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.055),
+    rgba(255, 255, 255, 0.018)
+  );
 
   border: 1px solid var(--border-subtle);
 
@@ -186,7 +165,6 @@ select {
     0 20px 80px rgba(0, 0, 0, 0.25),
     inset 0 1px 0 rgba(255, 255, 255, 0.035);
 }
-
 
 /* =========================================================
    GLOW ORBS
@@ -216,7 +194,6 @@ select {
   background: rgba(34, 211, 238, 0.08);
 }
 
-
 /* =========================================================
    BUTTON INTERACTION
    ========================================================= */
@@ -237,7 +214,6 @@ button:focus-visible {
   outline: 2px solid var(--accent-cyan);
   outline-offset: 3px;
 }
-
 
 /* =========================================================
    REDUCED MOTION
@@ -449,7 +425,7 @@ button:focus-visible {
   background:
     radial-gradient(
       circle at 15% 10%,
-      rgba(139, 92, 246, 0.10),
+      rgba(139, 92, 246, 0.1),
       transparent 32%
     ),
     radial-gradient(
@@ -463,15 +439,11 @@ button:focus-visible {
 }
 
 .dashboard-container {
-  width: min(
-    1180px,
-    calc(100% - 40px)
-  );
+  width: min(1180px, calc(100% - 40px));
 
   margin: 0 auto;
   padding: 60px 0 90px;
 }
-
 
 /* =========================================================
    DASHBOARD HEADER
@@ -499,15 +471,9 @@ button:focus-visible {
 .dashboard-header h1 {
   margin: 0;
 
-  font-family:
-    "Space Grotesk",
-    sans-serif;
+  font-family: "Space Grotesk", sans-serif;
 
-  font-size: clamp(
-    34px,
-    5vw,
-    52px
-  );
+  font-size: clamp(34px, 5vw, 52px);
 
   line-height: 1.05;
   letter-spacing: -0.04em;
@@ -524,25 +490,22 @@ button:focus-visible {
   line-height: 1.7;
 }
 
-
 /* =========================================================
    DASHBOARD BUTTONS
    ========================================================= */
 
 .dashboard-primary-button {
-  border: 1px solid
-    rgba(139, 92, 246, 0.35);
+  border: 1px solid rgba(139, 92, 246, 0.35);
 
   border-radius: 12px;
 
   padding: 14px 20px;
 
-  background:
-    linear-gradient(
-      135deg,
-      var(--accent-violet),
-      var(--accent-purple)
-    );
+  background: linear-gradient(
+    135deg,
+    var(--accent-violet),
+    var(--accent-purple)
+  );
 
   color: white;
 
@@ -551,23 +514,18 @@ button:focus-visible {
 
   cursor: pointer;
 
-  box-shadow:
-    0 12px 30px
-    rgba(139, 92, 246, 0.18);
+  box-shadow: 0 12px 30px rgba(139, 92, 246, 0.18);
 }
 
 .dashboard-primary-button:hover {
   transform: translateY(-2px);
 
-  box-shadow:
-    0 16px 35px
-    rgba(139, 92, 246, 0.25);
+  box-shadow: 0 16px 35px rgba(139, 92, 246, 0.25);
 }
 
 .dashboard-primary-button span {
   margin-left: 10px;
 }
-
 
 /* =========================================================
    DASHBOARD OVERVIEW
@@ -576,8 +534,7 @@ button:focus-visible {
 .dashboard-overview {
   display: grid;
 
-  grid-template-columns:
-    repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
 
   gap: 14px;
 
@@ -587,24 +544,20 @@ button:focus-visible {
 .dashboard-stat-card {
   padding: 25px;
 
-  border: 1px solid
-    var(--border-subtle);
+  border: 1px solid var(--border-subtle);
 
   border-radius: 18px;
 
-  background:
-    linear-gradient(
-      135deg,
-      rgba(255, 255, 255, 0.045),
-      rgba(255, 255, 255, 0.015)
-    );
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.045),
+    rgba(255, 255, 255, 0.015)
+  );
 
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
 
-  box-shadow:
-    inset 0 1px 0
-    rgba(255, 255, 255, 0.025);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.025);
 }
 
 .dashboard-stat-label {
@@ -614,9 +567,7 @@ button:focus-visible {
 
   color: var(--text-muted);
 
-  font-family:
-    "JetBrains Mono",
-    monospace;
+  font-family: "JetBrains Mono", monospace;
 
   font-size: 9px;
   letter-spacing: 0.15em;
@@ -625,9 +576,7 @@ button:focus-visible {
 .dashboard-stat-card strong {
   display: block;
 
-  font-family:
-    "Space Grotesk",
-    sans-serif;
+  font-family: "Space Grotesk", sans-serif;
 
   font-size: 38px;
   line-height: 1;
@@ -643,7 +592,6 @@ button:focus-visible {
   font-size: 12px;
 }
 
-
 /* =========================================================
    DASHBOARD SECTION
    ========================================================= */
@@ -653,17 +601,15 @@ button:focus-visible {
 
   padding: 30px;
 
-  border: 1px solid
-    var(--border-subtle);
+  border: 1px solid var(--border-subtle);
 
   border-radius: 22px;
 
-  background:
-    linear-gradient(
-      135deg,
-      rgba(255, 255, 255, 0.035),
-      rgba(255, 255, 255, 0.012)
-    );
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.035),
+    rgba(255, 255, 255, 0.012)
+  );
 
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
@@ -683,9 +629,7 @@ button:focus-visible {
 .dashboard-section-header h2 {
   margin: 0;
 
-  font-family:
-    "Space Grotesk",
-    sans-serif;
+  font-family: "Space Grotesk", sans-serif;
 
   font-size: 25px;
   letter-spacing: -0.025em;
@@ -705,7 +649,6 @@ button:focus-visible {
   font-size: 12px;
 }
 
-
 /* =========================================================
    PERFORMANCE TREND
    ========================================================= */
@@ -720,11 +663,9 @@ button:focus-visible {
 
   overflow-x: auto;
 
-  padding:
-    20px 10px 0;
+  padding: 20px 10px 0;
 
-  border-top: 1px solid
-    rgba(255, 255, 255, 0.05);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .dashboard-chart-item {
@@ -743,9 +684,7 @@ button:focus-visible {
 
   color: #b8a4ff;
 
-  font-family:
-    "JetBrains Mono",
-    monospace;
+  font-family: "JetBrains Mono", monospace;
 
   font-size: 11px;
 }
@@ -759,11 +698,9 @@ button:focus-visible {
 
   overflow: hidden;
 
-  border-radius:
-    8px 8px 4px 4px;
+  border-radius: 8px 8px 4px 4px;
 
-  background:
-    rgba(255, 255, 255, 0.035);
+  background: rgba(255, 255, 255, 0.035);
 }
 
 .dashboard-chart-bar {
@@ -771,18 +708,11 @@ button:focus-visible {
 
   min-height: 5px;
 
-  border-radius:
-    8px 8px 3px 3px;
+  border-radius: 8px 8px 3px 3px;
 
-  background:
-    linear-gradient(
-      to top,
-      #7452c9,
-      #b59aff
-    );
+  background: linear-gradient(to top, #7452c9, #b59aff);
 
-  transition:
-    height 0.5s ease;
+  transition: height 0.5s ease;
 }
 
 .dashboard-chart-label {
@@ -801,7 +731,6 @@ button:focus-visible {
   font-size: 9px;
 }
 
-
 /* =========================================================
    IMPROVEMENT INDICATOR
    ========================================================= */
@@ -817,17 +746,14 @@ button:focus-visible {
 .dashboard-improvement-positive {
   color: var(--success);
 
-  background:
-    rgba(52, 211, 153, 0.08);
+  background: rgba(52, 211, 153, 0.08);
 }
 
 .dashboard-improvement-negative {
   color: var(--error);
 
-  background:
-    rgba(251, 113, 133, 0.08);
+  background: rgba(251, 113, 133, 0.08);
 }
-
 
 /* =========================================================
    INTERVIEW HISTORY
@@ -843,8 +769,7 @@ button:focus-visible {
 .dashboard-interview-card {
   display: grid;
 
-  grid-template-columns:
-    55px 1fr 150px;
+  grid-template-columns: 55px 1fr 150px;
 
   gap: 22px;
 
@@ -852,13 +777,11 @@ button:focus-visible {
 
   padding: 23px;
 
-  border: 1px solid
-    rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.06);
 
   border-radius: 17px;
 
-  background:
-    rgba(5, 7, 14, 0.55);
+  background: rgba(5, 7, 14, 0.55);
 
   transition:
     border-color 0.2s ease,
@@ -867,22 +790,17 @@ button:focus-visible {
 }
 
 .dashboard-interview-card:hover {
-  border-color:
-    var(--border-active);
+  border-color: var(--border-active);
 
-  background:
-    rgba(255, 255, 255, 0.025);
+  background: rgba(255, 255, 255, 0.025);
 
-  transform:
-    translateY(-2px);
+  transform: translateY(-2px);
 }
 
 .dashboard-interview-number {
   color: var(--text-muted);
 
-  font-family:
-    "JetBrains Mono",
-    monospace;
+  font-family: "JetBrains Mono", monospace;
 
   font-size: 12px;
 }
@@ -898,9 +816,7 @@ button:focus-visible {
 .dashboard-interview-top h3 {
   margin: 0;
 
-  font-family:
-    "Space Grotesk",
-    sans-serif;
+  font-family: "Space Grotesk", sans-serif;
 
   font-size: 17px;
 }
@@ -912,7 +828,6 @@ button:focus-visible {
 
   font-size: 12px;
 }
-
 
 /* =========================================================
    STATUS
@@ -934,24 +849,20 @@ button:focus-visible {
 .dashboard-status-success {
   color: var(--success);
 
-  background:
-    rgba(52, 211, 153, 0.08);
+  background: rgba(52, 211, 153, 0.08);
 }
 
 .dashboard-status-warning {
   color: var(--warning);
 
-  background:
-    rgba(251, 191, 36, 0.08);
+  background: rgba(251, 191, 36, 0.08);
 }
 
 .dashboard-status-danger {
   color: var(--error);
 
-  background:
-    rgba(251, 113, 133, 0.08);
+  background: rgba(251, 113, 133, 0.08);
 }
-
 
 /* =========================================================
    INTERVIEW META
@@ -976,9 +887,7 @@ button:focus-visible {
 .dashboard-interview-score span {
   color: var(--text-muted);
 
-  font-family:
-    "JetBrains Mono",
-    monospace;
+  font-family: "JetBrains Mono", monospace;
 
   font-size: 8px;
 
@@ -991,7 +900,6 @@ button:focus-visible {
   font-size: 12px;
 }
 
-
 /* =========================================================
    INTERVIEW SCORE
    ========================================================= */
@@ -1003,12 +911,9 @@ button:focus-visible {
 .dashboard-score {
   display: block;
 
-  margin:
-    5px 0 10px;
+  margin: 5px 0 10px;
 
-  font-family:
-    "Space Grotesk",
-    sans-serif;
+  font-family: "Space Grotesk", sans-serif;
 
   font-size: 32px;
 }
@@ -1028,7 +933,6 @@ button:focus-visible {
 .dashboard-score-muted {
   color: var(--text-muted);
 }
-
 
 /* =========================================================
    VIEW REPORT BUTTON
@@ -1056,7 +960,6 @@ button:focus-visible {
   margin-left: 5px;
 }
 
-
 /* =========================================================
    EMPTY / LOADING / ERROR
    ========================================================= */
@@ -1068,8 +971,7 @@ button:focus-visible {
 
   text-align: center;
 
-  border: 1px dashed
-    rgba(255, 255, 255, 0.08);
+  border: 1px dashed rgba(255, 255, 255, 0.08);
 
   border-radius: 18px;
 }
@@ -1081,13 +983,11 @@ button:focus-visible {
   display: grid;
   place-items: center;
 
-  margin:
-    0 auto 18px;
+  margin: 0 auto 18px;
 
   border-radius: 14px;
 
-  background:
-    rgba(139, 92, 246, 0.08);
+  background: rgba(139, 92, 246, 0.08);
 
   color: var(--accent-violet);
 
@@ -1098,23 +998,19 @@ button:focus-visible {
 .dashboard-error h2 {
   margin: 0;
 
-  font-family:
-    "Space Grotesk",
-    sans-serif;
+  font-family: "Space Grotesk", sans-serif;
 }
 
 .dashboard-empty p,
 .dashboard-error p {
   max-width: 480px;
 
-  margin:
-    10px auto 25px;
+  margin: 10px auto 25px;
 
   color: var(--text-secondary);
 
   line-height: 1.6;
 }
-
 
 /* =========================================================
    RESULT PAGE
@@ -1126,7 +1022,7 @@ button:focus-visible {
   background:
     radial-gradient(
       circle at 15% 10%,
-      rgba(139, 92, 246, 0.10),
+      rgba(139, 92, 246, 0.1),
       transparent 32%
     ),
     radial-gradient(
@@ -1140,17 +1036,12 @@ button:focus-visible {
 }
 
 .result-container {
-  width: min(
-    1180px,
-    calc(100% - 40px)
-  );
+  width: min(1180px, calc(100% - 40px));
 
   margin: 0 auto;
 
-  padding:
-    55px 0 90px;
+  padding: 55px 0 90px;
 }
-
 
 /* =========================================================
    RESULT HEADER
@@ -1183,9 +1074,7 @@ button:focus-visible {
 
   color: var(--accent-violet);
 
-  font-family:
-    "JetBrains Mono",
-    monospace;
+  font-family: "JetBrains Mono", monospace;
 
   font-size: 9px;
 
@@ -1205,15 +1094,9 @@ button:focus-visible {
 .result-header h1 {
   margin: 0;
 
-  font-family:
-    "Space Grotesk",
-    sans-serif;
+  font-family: "Space Grotesk", sans-serif;
 
-  font-size: clamp(
-    38px,
-    5vw,
-    54px
-  );
+  font-size: clamp(38px, 5vw, 54px);
 
   line-height: 1.05;
 
@@ -1221,14 +1104,12 @@ button:focus-visible {
 }
 
 .result-header p {
-  margin:
-    14px 0 0;
+  margin: 14px 0 0;
 
   color: var(--text-secondary);
 
   line-height: 1.6;
 }
-
 
 /* =========================================================
    FINAL SCORE
@@ -1239,13 +1120,11 @@ button:focus-visible {
 
   padding: 20px;
 
-  border: 1px solid
-    rgba(139, 92, 246, 0.18);
+  border: 1px solid rgba(139, 92, 246, 0.18);
 
   border-radius: 18px;
 
-  background:
-    rgba(139, 92, 246, 0.06);
+  background: rgba(139, 92, 246, 0.06);
 }
 
 .result-final-score span {
@@ -1253,9 +1132,7 @@ button:focus-visible {
 
   color: var(--text-muted);
 
-  font-family:
-    "JetBrains Mono",
-    monospace;
+  font-family: "JetBrains Mono", monospace;
 
   font-size: 8px;
 
@@ -1263,9 +1140,7 @@ button:focus-visible {
 }
 
 .result-final-score strong {
-  font-family:
-    "Space Grotesk",
-    sans-serif;
+  font-family: "Space Grotesk", sans-serif;
 
   font-size: 50px;
 
@@ -1278,7 +1153,6 @@ button:focus-visible {
   color: var(--text-muted);
 }
 
-
 /* =========================================================
    RESULT INFO
    ========================================================= */
@@ -1286,8 +1160,7 @@ button:focus-visible {
 .result-info-grid {
   display: grid;
 
-  grid-template-columns:
-    repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
 
   gap: 12px;
 }
@@ -1295,13 +1168,11 @@ button:focus-visible {
 .result-info-card {
   padding: 20px;
 
-  border: 1px solid
-    var(--border-subtle);
+  border: 1px solid var(--border-subtle);
 
   border-radius: 15px;
 
-  background:
-    rgba(255, 255, 255, 0.025);
+  background: rgba(255, 255, 255, 0.025);
 }
 
 .result-info-card span {
@@ -1311,9 +1182,7 @@ button:focus-visible {
 
   color: var(--text-muted);
 
-  font-family:
-    "JetBrains Mono",
-    monospace;
+  font-family: "JetBrains Mono", monospace;
 
   font-size: 8px;
 
@@ -1323,7 +1192,6 @@ button:focus-visible {
 .result-info-card strong {
   font-size: 15px;
 }
-
 
 /* =========================================================
    DIFFICULTY PROGRESSION
@@ -1341,28 +1209,23 @@ button:focus-visible {
 
   padding: 28px;
 
-  border: 1px solid
-    var(--border-subtle);
+  border: 1px solid var(--border-subtle);
 
   border-radius: 20px;
 
-  background:
-    rgba(255, 255, 255, 0.025);
+  background: rgba(255, 255, 255, 0.025);
 }
 
 .result-progression h2 {
   margin: 0;
 
-  font-family:
-    "Space Grotesk",
-    sans-serif;
+  font-family: "Space Grotesk", sans-serif;
 
   font-size: 23px;
 }
 
 .result-progression p {
-  margin:
-    8px 0 0;
+  margin: 8px 0 0;
 
   color: var(--text-secondary);
 
@@ -1396,8 +1259,7 @@ button:focus-visible {
 
   border-radius: 50%;
 
-  background:
-    rgba(139, 92, 246, 0.12);
+  background: rgba(139, 92, 246, 0.12);
 
   color: var(--accent-violet);
 
@@ -1412,7 +1274,6 @@ button:focus-visible {
   color: var(--text-muted);
 }
 
-
 /* =========================================================
    RESULT SECTION
    ========================================================= */
@@ -1423,40 +1284,34 @@ button:focus-visible {
 
   padding: 30px;
 
-  border: 1px solid
-    var(--border-subtle);
+  border: 1px solid var(--border-subtle);
 
   border-radius: 22px;
 
-  background:
-    linear-gradient(
-      135deg,
-      rgba(255, 255, 255, 0.035),
-      rgba(255, 255, 255, 0.012)
-    );
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.035),
+    rgba(255, 255, 255, 0.012)
+  );
 }
 
 .result-section h2,
 .result-ai-report h2 {
   margin: 0;
 
-  font-family:
-    "Space Grotesk",
-    sans-serif;
+  font-family: "Space Grotesk", sans-serif;
 
   font-size: 25px;
 }
 
 .result-section-description,
 .result-ai-report > p {
-  margin:
-    9px 0 0;
+  margin: 9px 0 0;
 
   color: var(--text-secondary);
 
   line-height: 1.6;
 }
-
 
 /* =========================================================
    SCORE BREAKDOWN
@@ -1465,8 +1320,7 @@ button:focus-visible {
 .result-score-grid {
   display: grid;
 
-  grid-template-columns:
-    repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
 
   gap: 12px;
 
@@ -1476,13 +1330,11 @@ button:focus-visible {
 .result-score-card {
   padding: 24px;
 
-  border: 1px solid
-    rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.06);
 
   border-radius: 16px;
 
-  background:
-    rgba(5, 7, 14, 0.45);
+  background: rgba(5, 7, 14, 0.45);
 }
 
 .result-score-card span {
@@ -1492,9 +1344,7 @@ button:focus-visible {
 
   color: var(--text-muted);
 
-  font-family:
-    "JetBrains Mono",
-    monospace;
+  font-family: "JetBrains Mono", monospace;
 
   font-size: 9px;
 
@@ -1502,9 +1352,7 @@ button:focus-visible {
 }
 
 .result-score-card strong {
-  font-family:
-    "Space Grotesk",
-    sans-serif;
+  font-family: "Space Grotesk", sans-serif;
 
   font-size: 36px;
 }
@@ -1515,24 +1363,20 @@ button:focus-visible {
   color: var(--text-muted);
 }
 
-
 /* =========================================================
    AI REPORT
    ========================================================= */
 
 .result-ai-report {
-  border-color:
-    rgba(139, 92, 246, 0.12);
+  border-color: rgba(139, 92, 246, 0.12);
 }
 
 .result-report-grid {
   display: grid;
 
-  grid-template-columns:
-    repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 
-  gap:
-    0 35px;
+  gap: 0 35px;
 
   margin-top: 30px;
 }
@@ -1540,14 +1384,12 @@ button:focus-visible {
 .result-report-section {
   padding: 25px 0;
 
-  border-top: 1px solid
-    rgba(255, 255, 255, 0.06);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .result-report-section h2,
 .result-recommendations h2 {
-  margin:
-    0 0 12px;
+  margin: 0 0 12px;
 
   font-size: 18px;
 }
@@ -1568,15 +1410,12 @@ button:focus-visible {
 
   padding: 27px;
 
-  border: 1px solid
-    rgba(139, 92, 246, 0.09);
+  border: 1px solid rgba(139, 92, 246, 0.09);
 
   border-radius: 16px;
 
-  background:
-    rgba(139, 92, 246, 0.045);
+  background: rgba(139, 92, 246, 0.045);
 }
-
 
 /* =========================================================
    QUESTION REVIEW
@@ -1595,13 +1434,11 @@ button:focus-visible {
 .result-question-card {
   padding: 27px;
 
-  border: 1px solid
-    rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.06);
 
   border-radius: 18px;
 
-  background:
-    rgba(5, 7, 14, 0.48);
+  background: rgba(5, 7, 14, 0.48);
 }
 
 .result-question-header {
@@ -1625,9 +1462,7 @@ button:focus-visible {
 
   color: var(--text-muted);
 
-  font-family:
-    "JetBrains Mono",
-    monospace;
+  font-family: "JetBrains Mono", monospace;
 
   font-size: 8px;
 
@@ -1657,9 +1492,7 @@ button:focus-visible {
 }
 
 .result-question-score strong {
-  font-family:
-    "Space Grotesk",
-    sans-serif;
+  font-family: "Space Grotesk", sans-serif;
 
   font-size: 32px;
 
@@ -1671,15 +1504,13 @@ button:focus-visible {
 
   margin-top: 18px;
 
-  padding:
-    5px 9px;
+  padding: 5px 9px;
 
   border-radius: 999px;
 
   color: var(--accent-violet);
 
-  background:
-    rgba(139, 92, 246, 0.08);
+  background: rgba(139, 92, 246, 0.08);
 
   font-size: 10px;
 }
@@ -1691,8 +1522,7 @@ button:focus-visible {
 
   border-radius: 13px;
 
-  background:
-    rgba(255, 255, 255, 0.025);
+  background: rgba(255, 255, 255, 0.025);
 }
 
 .result-answer-block p {
@@ -1705,7 +1535,6 @@ button:focus-visible {
   white-space: pre-line;
 }
 
-
 /* =========================================================
    QUESTION SCORE DETAILS
    ========================================================= */
@@ -1713,8 +1542,7 @@ button:focus-visible {
 .result-question-scores {
   display: grid;
 
-  grid-template-columns:
-    repeat(3, 1fr);
+  grid-template-columns: repeat(3, 1fr);
 
   gap: 10px;
 
@@ -1726,8 +1554,7 @@ button:focus-visible {
 
   border-radius: 12px;
 
-  background:
-    rgba(255, 255, 255, 0.025);
+  background: rgba(255, 255, 255, 0.025);
 }
 
 .result-question-scores span {
@@ -1741,13 +1568,10 @@ button:focus-visible {
 }
 
 .result-question-scores strong {
-  font-family:
-    "Space Grotesk",
-    sans-serif;
+  font-family: "Space Grotesk", sans-serif;
 
   font-size: 20px;
 }
-
 
 /* =========================================================
    FEEDBACK
@@ -1756,8 +1580,7 @@ button:focus-visible {
 .result-feedback-grid {
   display: grid;
 
-  grid-template-columns:
-    repeat(3, 1fr);
+  grid-template-columns: repeat(3, 1fr);
 
   gap: 20px;
 
@@ -1765,8 +1588,7 @@ button:focus-visible {
 
   padding-top: 20px;
 
-  border-top: 1px solid
-    rgba(255, 255, 255, 0.06);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .result-feedback-grid p {
@@ -1780,7 +1602,6 @@ button:focus-visible {
 
   white-space: pre-line;
 }
-
 
 /* =========================================================
    RESULT FOOTER
@@ -1797,15 +1618,13 @@ button:focus-visible {
 }
 
 .result-button {
-  border: 1px solid
-    var(--border-subtle);
+  border: 1px solid var(--border-subtle);
 
   border-radius: 12px;
 
   padding: 14px 20px;
 
-  background:
-    rgba(255, 255, 255, 0.045);
+  background: rgba(255, 255, 255, 0.045);
 
   color: var(--text-primary);
 
@@ -1813,19 +1632,17 @@ button:focus-visible {
 }
 
 .result-primary-button {
-  border: 1px solid
-    rgba(139, 92, 246, 0.35);
+  border: 1px solid rgba(139, 92, 246, 0.35);
 
   border-radius: 12px;
 
   padding: 14px 20px;
 
-  background:
-    linear-gradient(
-      135deg,
-      var(--accent-violet),
-      var(--accent-purple)
-    );
+  background: linear-gradient(
+    135deg,
+    var(--accent-violet),
+    var(--accent-purple)
+  );
 
   color: white;
 
@@ -1833,7 +1650,6 @@ button:focus-visible {
 
   cursor: pointer;
 }
-
 
 /* =========================================================
    RESULT LOADING / ERROR
@@ -1845,8 +1661,7 @@ button:focus-visible {
 
   text-align: center;
 
-  border: 1px dashed
-    rgba(255, 255, 255, 0.08);
+  border: 1px dashed rgba(255, 255, 255, 0.08);
 
   border-radius: 18px;
 }
@@ -1854,38 +1669,31 @@ button:focus-visible {
 .result-error h1 {
   margin: 0;
 
-  font-family:
-    "Space Grotesk",
-    sans-serif;
+  font-family: "Space Grotesk", sans-serif;
 }
 
 .result-error p {
-  margin:
-    12px auto 25px;
+  margin: 12px auto 25px;
 
   color: var(--text-secondary);
 }
-
 
 /* =========================================================
    RESPONSIVE
    ========================================================= */
 
 @media (max-width: 900px) {
-
   .dashboard-header {
     align-items: flex-start;
     flex-direction: column;
   }
 
   .dashboard-overview {
-    grid-template-columns:
-      repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .dashboard-interview-card {
-    grid-template-columns:
-      40px 1fr;
+    grid-template-columns: 40px 1fr;
   }
 
   .dashboard-interview-score {
@@ -1905,8 +1713,7 @@ button:focus-visible {
 
   .result-info-grid,
   .result-score-grid {
-    grid-template-columns:
-      repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .result-report-grid {
@@ -1918,13 +1725,10 @@ button:focus-visible {
   }
 }
 
-
 @media (max-width: 600px) {
-
   .dashboard-container,
   .result-container {
-    width:
-      calc(100% - 24px);
+    width: calc(100% - 24px);
 
     padding-top: 35px;
   }

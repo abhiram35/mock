@@ -16,20 +16,17 @@ const difficulties: {
   {
     value: "easy",
     label: "Easy",
-    description:
-      "Basic concepts and fundamental questions",
+    description: "Basic concepts and fundamental questions",
   },
   {
     value: "medium",
     label: "Medium",
-    description:
-      "Intermediate concepts and practical understanding",
+    description: "Intermediate concepts and practical understanding",
   },
   {
     value: "hard",
     label: "Hard",
-    description:
-      "Advanced concepts and challenging problems",
+    description: "Advanced concepts and challenging problems",
   },
 ];
 
@@ -37,20 +34,16 @@ export default function InterviewSetup() {
   const navigate = useNavigate();
 
   const [topics, setTopics] = useState<Topic[]>([]);
-  const [selectedTopic, setSelectedTopic] =
-    useState<number | null>(null);
+  const [selectedTopic, setSelectedTopic] = useState<number | null>(null);
 
   const [selectedDifficulty, setSelectedDifficulty] =
     useState<Difficulty>("easy");
 
-  const [isLoading, setIsLoading] =
-    useState(true);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const [isStarting, setIsStarting] =
-    useState(false);
+  const [isStarting, setIsStarting] = useState(false);
 
-  const [error, setError] =
-    useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   /*
    * Load available topics
@@ -69,11 +62,7 @@ export default function InterviewSetup() {
           setSelectedTopic(data[0].id);
         }
       } catch (err) {
-        setError(
-          err instanceof Error
-            ? err.message
-            : "Failed to load topics.",
-        );
+        setError(err instanceof Error ? err.message : "Failed to load topics.");
       } finally {
         setIsLoading(false);
       }
@@ -103,14 +92,10 @@ export default function InterviewSetup() {
       /*
        * Navigate to the interview room.
        */
-      navigate(
-        `/interviews/${interview.id}`,
-      );
+      navigate(`/interviews/${interview.id}`);
     } catch (err) {
       setError(
-        err instanceof Error
-          ? err.message
-          : "Failed to start interview.",
+        err instanceof Error ? err.message : "Failed to start interview.",
       );
     } finally {
       setIsStarting(false);
@@ -212,9 +197,8 @@ export default function InterviewSetup() {
               text-slate-400
             "
           >
-            Choose a topic and starting difficulty.
-            Your interview will adapt based on your
-            performance.
+            Choose a topic and starting difficulty. Your interview will adapt
+            based on your performance.
           </p>
         </div>
 
@@ -281,8 +265,7 @@ export default function InterviewSetup() {
                 text-slate-500
               "
             >
-              Select the technical topic you want
-              to practice.
+              Select the technical topic you want to practice.
             </p>
 
             {topics.length === 0 ? (
@@ -304,16 +287,13 @@ export default function InterviewSetup() {
             ) : (
               <div className="mt-7 grid gap-3">
                 {topics.map((topic) => {
-                  const isSelected =
-                    selectedTopic === topic.id;
+                  const isSelected = selectedTopic === topic.id;
 
                   return (
                     <button
                       key={topic.id}
                       type="button"
-                      onClick={() =>
-                        setSelectedTopic(topic.id)
-                      }
+                      onClick={() => setSelectedTopic(topic.id)}
                       className={`
                         w-full
                         rounded-2xl
@@ -336,11 +316,7 @@ export default function InterviewSetup() {
                               font-display
                               text-lg
                               font-semibold
-                              ${
-                                isSelected
-                                  ? "text-violet-300"
-                                  : "text-white"
-                              }
+                              ${isSelected ? "text-violet-300" : "text-white"}
                             `}
                           >
                             {topic.name}
@@ -433,25 +409,18 @@ export default function InterviewSetup() {
                 text-slate-500
               "
             >
-              The difficulty will adapt according
-              to your answers.
+              The difficulty will adapt according to your answers.
             </p>
 
             <div className="mt-7 space-y-3">
               {difficulties.map((difficulty) => {
-                const isSelected =
-                  selectedDifficulty ===
-                  difficulty.value;
+                const isSelected = selectedDifficulty === difficulty.value;
 
                 return (
                   <button
                     key={difficulty.value}
                     type="button"
-                    onClick={() =>
-                      setSelectedDifficulty(
-                        difficulty.value,
-                      )
-                    }
+                    onClick={() => setSelectedDifficulty(difficulty.value)}
                     className={`
                       w-full
                       rounded-2xl
@@ -474,11 +443,7 @@ export default function InterviewSetup() {
                             font-display
                             text-lg
                             font-semibold
-                            ${
-                              isSelected
-                                ? "text-violet-300"
-                                : "text-white"
-                            }
+                            ${isSelected ? "text-violet-300" : "text-white"}
                           `}
                         >
                           {difficulty.label}
@@ -554,9 +519,8 @@ export default function InterviewSetup() {
                   text-slate-500
                 "
               >
-                Strong answers can increase the
-                difficulty, while weaker answers can
-                reduce it.
+                Strong answers can increase the difficulty, while weaker answers
+                can reduce it.
               </p>
             </div>
           </section>
@@ -607,8 +571,7 @@ export default function InterviewSetup() {
                   text-slate-500
                 "
               >
-                Your answers will be evaluated by
-                AI during the interview.
+                Your answers will be evaluated by AI during the interview.
               </p>
             </div>
 
@@ -616,9 +579,7 @@ export default function InterviewSetup() {
               type="button"
               onClick={handleStartInterview}
               disabled={
-                selectedTopic === null ||
-                isStarting ||
-                topics.length === 0
+                selectedTopic === null || isStarting || topics.length === 0
               }
               className="
                 group
@@ -644,9 +605,7 @@ export default function InterviewSetup() {
                 disabled:hover:translate-y-0
               "
             >
-              {isStarting
-                ? "Starting..."
-                : "Start Interview"}
+              {isStarting ? "Starting..." : "Start Interview"}
 
               {!isStarting && (
                 <span

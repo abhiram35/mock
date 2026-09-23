@@ -2,14 +2,10 @@ interface AIOrbProps {
   state?: "idle" | "speaking" | "thinking";
 }
 
-export default function AIOrb({
-  state = "idle",
-}: AIOrbProps) {
-  const isThinking =
-    state === "thinking";
+export default function AIOrb({ state = "idle" }: AIOrbProps) {
+  const isThinking = state === "thinking";
 
-  const isSpeaking =
-    state === "speaking";
+  const isSpeaking = state === "speaking";
 
   return (
     <div
@@ -38,12 +34,7 @@ export default function AIOrb({
           rounded-full
           border
           border-violet-400/10
-          ${
-            isThinking ||
-            isSpeaking
-              ? "animate-ping"
-              : ""
-          }
+          ${isThinking || isSpeaking ? "animate-ping" : ""}
         `}
       />
 
@@ -55,11 +46,7 @@ export default function AIOrb({
           rounded-full
           border
           border-violet-400/20
-          ${
-            isThinking
-              ? "animate-pulse"
-              : ""
-          }
+          ${isThinking ? "animate-pulse" : ""}
         `}
       />
 
@@ -89,11 +76,7 @@ export default function AIOrb({
           border-violet-300/30
           bg-slate-900
           shadow-[0_0_60px_rgba(139,92,246,0.25)]
-          ${
-            isSpeaking
-              ? "animate-pulse"
-              : ""
-          }
+          ${isSpeaking ? "animate-pulse" : ""}
         `}
       >
         <div

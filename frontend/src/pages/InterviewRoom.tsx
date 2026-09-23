@@ -1,9 +1,4 @@
-import {
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import {
@@ -24,12 +19,7 @@ import AIOrb from "../components/interview/AIOrb";
 import QuestionPanel from "../components/interview/QuestionPanel";
 
 type RoomState =
-  | "loading"
-  | "ready"
-  | "submitting"
-  | "evaluated"
-  | "completing"
-  | "error";
+  "loading" | "ready" | "submitting" | "evaluated" | "completing" | "error";
 
 type SpeechRecognitionEventLike = Event & {
   results: SpeechRecognitionResultList;
@@ -46,9 +36,7 @@ interface SpeechRecognitionLike {
   onstart: (() => void) | null;
   onend: (() => void) | null;
   onerror: ((event: Event) => void) | null;
-  onresult:
-    | ((event: SpeechRecognitionEventLike) => void)
-    | null;
+  onresult: ((event: SpeechRecognitionEventLike) => void) | null;
 }
 
 interface SpeechRecognitionConstructor {
@@ -68,10 +56,7 @@ const difficultyLabel: Record<Difficulty, string> = {
   hard: "Hard",
 };
 
-const difficultyDescription: Record<
-  Difficulty,
-  string
-> = {
+const difficultyDescription: Record<Difficulty, string> = {
   easy: "Fundamental concept",
   medium: "Intermediate concept",
   hard: "Advanced concept",
@@ -88,77 +73,57 @@ export default function InterviewRoom() {
 
   const numericSessionId = Number(sessionId);
 
-  const [interview, setInterview] =
-    useState<Interview | null>(null);
+  const [interview, setInterview] = useState<Interview | null>(null);
 
-  const [question, setQuestion] =
-    useState<Question | null>(null);
+  const [question, setQuestion] = useState<Question | null>(null);
 
   const [answer, setAnswer] = useState("");
 
-  const [evaluation, setEvaluation] =
-    useState<Evaluation | null>(null);
+  const [evaluation, setEvaluation] = useState<Evaluation | null>(null);
 
-  const [roomState, setRoomState] =
-    useState<RoomState>("loading");
+  const [roomState, setRoomState] = useState<RoomState>("loading");
 
-  const [error, setError] =
-    useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
-  const [
-    showExitConfirmation,
-    setShowExitConfirmation,
-  ] = useState(false);
+  const [showExitConfirmation, setShowExitConfirmation] = useState(false);
 
-  const [isFinishing, setIsFinishing] =
-    useState(false);
+  const [isFinishing, setIsFinishing] = useState(false);
 
-  const [fullscreenWarningCount, setFullscreenWarningCount] =
-  useState(0);
+  const [fullscreenWarningCount, setFullscreenWarningCount] = useState(0);
 
-const [showFullscreenWarning, setShowFullscreenWarning] =
-  useState(false);
+  const [showFullscreenWarning, setShowFullscreenWarning] = useState(false);
 
-const [showFullscreenGate, setShowFullscreenGate] =
-  useState(true);
+  const [showFullscreenGate, setShowFullscreenGate] = useState(true);
 
-const [isSecurityTerminated, setIsSecurityTerminated] =
-  useState(false);
+  const [isSecurityTerminated, setIsSecurityTerminated] = useState(false);
 
-const [fullscreenError, setFullscreenError] =
-  useState<string | null>(null);
+  const [fullscreenError, setFullscreenError] = useState<string | null>(null);
 
-const securityTerminationRef = useRef(false);
-const securityActiveRef = useRef(false);
+  const securityTerminationRef = useRef(false);
+  const securityActiveRef = useRef(false);
 
-const interviewRef = useRef<Interview | null>(null);
+  const interviewRef = useRef<Interview | null>(null);
 
-useEffect(() => {
-  interviewRef.current = interview;
-}, [interview]);
+  useEffect(() => {
+    interviewRef.current = interview;
+  }, [interview]);
   /*
    * ---------------------------------------------------------
    * Speech-to-text state
    * ---------------------------------------------------------
    */
 
-  const [isListening, setIsListening] =
-    useState(false);
+  const [isListening, setIsListening] = useState(false);
 
-  const [speechSupported, setSpeechSupported] =
-    useState(true);
+  const [speechSupported, setSpeechSupported] = useState(true);
 
-  const [speechError, setSpeechError] =
-    useState<string | null>(null);
+  const [speechError, setSpeechError] = useState<string | null>(null);
 
-  const recognitionRef =
-    useRef<SpeechRecognitionLike | null>(null);
+  const recognitionRef = useRef<SpeechRecognitionLike | null>(null);
 
-  const shouldKeepListeningRef =
-    useRef(false);
+  const shouldKeepListeningRef = useRef(false);
 
-  const speechBaseAnswerRef =
-    useRef("");
+  const speechBaseAnswerRef = useRef("");
 
   /*
    * ---------------------------------------------------------
@@ -185,8 +150,7 @@ useEffect(() => {
 
   useEffect(() => {
     const SpeechRecognition =
-      window.SpeechRecognition ||
-      window.webkitSpeechRecognition;
+      window.SpeechRecognition || window.webkitSpeechRecognition;
 
     if (!SpeechRecognition) {
       setSpeechSupported(false);
@@ -204,39 +168,22 @@ useEffect(() => {
       setSpeechError(null);
     };
 
-    recognition.onresult = (
-      event: SpeechRecognitionEventLike,
-    ) => {
+    recognition.onresult = (event: SpeechRecognitionEventLike) => {
       let transcript = "";
 
-      for (
-        let index = 0;
-        index < event.results.length;
-        index += 1
-      ) {
-        transcript +=
-          event.results[index][0].transcript;
+      for (let index = 0; index < event.results.length; index += 1) {
+        transcript += event.results[index][0].transcript;
       }
 
-      const cleanTranscript =
-        transcript.trim();
+      const cleanTranscript = transcript.trim();
 
-      const baseAnswer =
-        speechBaseAnswerRef.current.trim();
+      const baseAnswer = speechBaseAnswerRef.current.trim();
 
-      const combinedAnswer = [
-        baseAnswer,
-        cleanTranscript,
-      ]
+      const combinedAnswer = [baseAnswer, cleanTranscript]
         .filter(Boolean)
         .join(" ");
 
-      setAnswer(
-        combinedAnswer.slice(
-          0,
-          MAX_ANSWER_LENGTH,
-        ),
-      );
+      setAnswer(combinedAnswer.slice(0, MAX_ANSWER_LENGTH));
     };
 
     recognition.onerror = () => {
@@ -257,15 +204,11 @@ useEffect(() => {
        * after a short period. Restart while the user
        * still expects the microphone to be active.
        */
-      if (
-        shouldKeepListeningRef.current &&
-        roomState === "ready"
-      ) {
+      if (shouldKeepListeningRef.current && roomState === "ready") {
         try {
           recognition.start();
         } catch {
-          shouldKeepListeningRef.current =
-            false;
+          shouldKeepListeningRef.current = false;
         }
       }
     };
@@ -293,23 +236,16 @@ useEffect(() => {
 
   const handleStartListening = () => {
     if (!speechSupported) {
-      setSpeechError(
-        "Speech-to-text is not supported in this browser.",
-      );
+      setSpeechError("Speech-to-text is not supported in this browser.");
       return;
     }
 
     if (!recognitionRef.current) {
-      setSpeechError(
-        "Speech recognition is unavailable.",
-      );
+      setSpeechError("Speech recognition is unavailable.");
       return;
     }
 
-    if (
-      roomState !== "ready" ||
-      isListening
-    ) {
+    if (roomState !== "ready" || isListening) {
       return;
     }
 
@@ -319,17 +255,14 @@ useEffect(() => {
      * Save the text that existed before speaking.
      * New speech will be appended to this.
      */
-    speechBaseAnswerRef.current =
-      answer.trim();
+    speechBaseAnswerRef.current = answer.trim();
 
     shouldKeepListeningRef.current = true;
 
     try {
       recognitionRef.current.start();
     } catch {
-      setSpeechError(
-        "Could not start the microphone. Please try again.",
-      );
+      setSpeechError("Could not start the microphone. Please try again.");
 
       shouldKeepListeningRef.current = false;
       setIsListening(false);
@@ -379,37 +312,23 @@ useEffect(() => {
         setRoomState("loading");
         setError(null);
 
-        const interviewData =
-          await getInterview(
-            numericSessionId,
-          );
+        const interviewData = await getInterview(numericSessionId);
 
         setInterview(interviewData);
 
-        if (
-          interviewData.status !==
-          "in_progress"
-        ) {
-          navigate(
-            `/interviews/${numericSessionId}/result`,
-            { replace: true },
-          );
+        if (interviewData.status !== "in_progress") {
+          navigate(`/interviews/${numericSessionId}/result`, { replace: true });
 
           return;
         }
 
-        const questionData =
-          await getNextQuestion(
-            numericSessionId,
-          );
+        const questionData = await getNextQuestion(numericSessionId);
 
         setQuestion(questionData);
         setRoomState("ready");
       } catch (err) {
         setError(
-          err instanceof Error
-            ? err.message
-            : "Unable to load the interview.",
+          err instanceof Error ? err.message : "Unable to load the interview.",
         );
 
         setRoomState("error");
@@ -417,11 +336,7 @@ useEffect(() => {
     };
 
     void loadInterview();
-  }, [
-    sessionId,
-    numericSessionId,
-    navigate,
-  ]);
+  }, [sessionId, numericSessionId, navigate]);
 
   /*
    * ---------------------------------------------------------
@@ -434,13 +349,10 @@ useEffect(() => {
       return;
     }
 
-    const trimmedAnswer =
-      answer.trim();
+    const trimmedAnswer = answer.trim();
 
     if (!trimmedAnswer) {
-      setError(
-        "Please enter an answer before submitting.",
-      );
+      setError("Please enter an answer before submitting.");
 
       return;
     }
@@ -454,20 +366,17 @@ useEffect(() => {
       setSpeechError(null);
       setRoomState("submitting");
 
-      const result =
-        await submitAnswer(
-          interview.id,
-          question.id,
-          trimmedAnswer,
-        );
+      const result = await submitAnswer(
+        interview.id,
+        question.id,
+        trimmedAnswer,
+      );
 
       setEvaluation(result);
       setRoomState("evaluated");
     } catch (err) {
       setError(
-        err instanceof Error
-          ? err.message
-          : "Unable to evaluate your answer.",
+        err instanceof Error ? err.message : "Unable to evaluate your answer.",
       );
 
       setRoomState("ready");
@@ -495,10 +404,7 @@ useEffect(() => {
       speechBaseAnswerRef.current = "";
       setRoomState("loading");
 
-      const updatedInterview =
-        await getInterview(
-          interview.id,
-        );
+      const updatedInterview = await getInterview(interview.id);
 
       setInterview(updatedInterview);
 
@@ -507,26 +413,17 @@ useEffect(() => {
        * after the previous answer.
        */
 
-      if (
-        updatedInterview.status !==
-        "in_progress"
-      ) {
+      if (updatedInterview.status !== "in_progress") {
         await handleCompleteInterview();
         return;
       }
 
-      const nextQuestion =
-        await getNextQuestion(
-          interview.id,
-        );
+      const nextQuestion = await getNextQuestion(interview.id);
 
       setQuestion(nextQuestion);
       setRoomState("ready");
     } catch (err) {
-      const message =
-        err instanceof Error
-          ? err.message
-          : "";
+      const message = err instanceof Error ? err.message : "";
 
       /*
        * If there are no remaining questions,
@@ -534,21 +431,14 @@ useEffect(() => {
        */
 
       if (
-        message
-          .toLowerCase()
-          .includes("no more") ||
-        message
-          .toLowerCase()
-          .includes("question")
+        message.toLowerCase().includes("no more") ||
+        message.toLowerCase().includes("question")
       ) {
         await handleCompleteInterview();
         return;
       }
 
-      setError(
-        message ||
-          "Unable to load the next question.",
-      );
+      setError(message || "Unable to load the next question.");
 
       setRoomState("evaluated");
     }
@@ -560,73 +450,60 @@ useEffect(() => {
    * ---------------------------------------------------------
    */
 
-  const handleCompleteInterview =
-    async () => {
-      if (!interview) {
-        return;
+  const handleCompleteInterview = async () => {
+    if (!interview) {
+      return;
+    }
+
+    handleStopListening();
+
+    try {
+      setIsFinishing(true);
+      setRoomState("completing");
+      setError(null);
+
+      await completeInterview(interview.id);
+
+      securityActiveRef.current = false;
+
+      if (document.fullscreenElement) {
+        try {
+          await document.exitFullscreen();
+        } catch {
+          // Browser may already have exited fullscreen.
+        }
       }
 
-      handleStopListening();
+      let result: InterviewResult | null = null;
 
       try {
-        setIsFinishing(true);
-        setRoomState("completing");
-        setError(null);
-
-        await completeInterview(
-          interview.id,
-        );
-
-        securityActiveRef.current = false;
-
-        if (document.fullscreenElement) {
-          try {
-            await document.exitFullscreen();
-          } catch {
-            // Browser may already have exited fullscreen.
-          }
-        }
-
-        let result:
-          | InterviewResult
-          | null = null;
-
-        try {
-          result =
-            await getInterviewResult(
-              interview.id,
-            );
-        } catch {
-          /*
-           * The backend may need a moment to
-           * generate the final AI report.
-           */
-        }
-
-        if (result) {
-          navigate(
-            `/interviews/${interview.id}/result`,
-          );
-        } else {
-          navigate(
-            `/interviews/${interview.id}/result`,
-          );
-        }
-      } catch (err) {
-        setError(
-          err instanceof Error
-            ? err.message
-            : "Unable to complete the interview.",
-        );
-
-        setRoomState("evaluated");
-      } finally {
-        setIsFinishing(false);
+        result = await getInterviewResult(interview.id);
+      } catch {
+        /*
+         * The backend may need a moment to
+         * generate the final AI report.
+         */
       }
-    };
 
-    const enterInterviewFullscreen = useCallback(
-  async () => {
+      if (result) {
+        navigate(`/interviews/${interview.id}/result`);
+      } else {
+        navigate(`/interviews/${interview.id}/result`);
+      }
+    } catch (err) {
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Unable to complete the interview.",
+      );
+
+      setRoomState("evaluated");
+    } finally {
+      setIsFinishing(false);
+    }
+  };
+
+  const enterInterviewFullscreen = useCallback(async () => {
     if (!document.fullscreenEnabled) {
       setFullscreenError(
         "Fullscreen mode is not available in this browser. Please use a supported browser to continue.",
@@ -659,178 +536,143 @@ useEffect(() => {
       );
       return false;
     }
-  },
-  [],
-);
+  }, []);
 
-const handleFullscreenWarningReturn = useCallback(
-  async () => {
+  const handleFullscreenWarningReturn = useCallback(async () => {
     await enterInterviewFullscreen();
-  },
-  [enterInterviewFullscreen],
-);
+  }, [enterInterviewFullscreen]);
 
-const terminateForSecurityViolation = useCallback(
-  async (reason: string) => {
-    const currentInterview = interviewRef.current;
+  const terminateForSecurityViolation = useCallback(
+    async (reason: string) => {
+      const currentInterview = interviewRef.current;
 
-    if (
-      !currentInterview ||
-      securityTerminationRef.current
-    ) {
-      return;
-    }
-
-    securityTerminationRef.current = true;
-    securityActiveRef.current = false;
-
-    setIsSecurityTerminated(true);
-    setError(reason);
-    setRoomState("completing");
-
-    try {
-      await abandonInterview(
-        currentInterview.id,
-      );
-    } catch {
-      /*
-       * The local security state still prevents
-       * the candidate from continuing even if
-       * the termination request fails.
-       */
-    }
-
-    if (document.fullscreenElement) {
-      try {
-        await document.exitFullscreen();
-      } catch {
-        // Browser may already have exited fullscreen.
+      if (!currentInterview || securityTerminationRef.current) {
+        return;
       }
-    }
 
-    navigate("/home", {
-      replace: true,
-    });
-  },
-  [navigate],
-);
+      securityTerminationRef.current = true;
+      securityActiveRef.current = false;
+
+      setIsSecurityTerminated(true);
+      setError(reason);
+      setRoomState("completing");
+
+      try {
+        await abandonInterview(currentInterview.id);
+      } catch {
+        /*
+         * The local security state still prevents
+         * the candidate from continuing even if
+         * the termination request fails.
+         */
+      }
+
+      if (document.fullscreenElement) {
+        try {
+          await document.exitFullscreen();
+        } catch {
+          // Browser may already have exited fullscreen.
+        }
+      }
+
+      navigate("/home", {
+        replace: true,
+      });
+    },
+    [navigate],
+  );
   /*
    * ---------------------------------------------------------
    * Abandon current interview.
    * ---------------------------------------------------------
    */
 
-  const handleAbandonInterview =
-    async () => {
-      if (!interview) {
+  const handleAbandonInterview = async () => {
+    if (!interview) {
+      return;
+    }
+
+    handleStopListening();
+
+    try {
+      setError(null);
+
+      await abandonInterview(interview.id);
+
+      securityActiveRef.current = false;
+
+      if (document.fullscreenElement) {
+        try {
+          await document.exitFullscreen();
+        } catch {
+          // Browser may already have exited fullscreen.
+        }
+      }
+
+      navigate("/home");
+    } catch (err) {
+      setError(
+        err instanceof Error ? err.message : "Unable to abandon the interview.",
+      );
+
+      setShowExitConfirmation(false);
+    }
+  };
+
+  useEffect(() => {
+    if (
+      !interview ||
+      interview.status !== "in_progress" ||
+      isSecurityTerminated
+    ) {
+      return;
+    }
+
+    const handleFullscreenChange = () => {
+      // Ignore fullscreen changes until the candidate has started securely.
+      if (!securityActiveRef.current) {
         return;
       }
 
-      handleStopListening();
+      if (document.fullscreenElement) {
+        setShowFullscreenWarning(false);
+        return;
+      }
 
-      try {
-        setError(null);
+      setFullscreenWarningCount((previousCount) => {
+        const nextCount = previousCount + 1;
 
-        await abandonInterview(
-          interview.id,
-        );
-
-        securityActiveRef.current = false;
-
-        if (document.fullscreenElement) {
-          try {
-            await document.exitFullscreen();
-          } catch {
-            // Browser may already have exited fullscreen.
-          }
+        if (nextCount >= 3) {
+          void terminateForSecurityViolation(
+            "The interview was ended because you exited fullscreen three times.",
+          );
+        } else {
+          setShowFullscreenWarning(true);
         }
 
-        navigate("/home");
-      } catch (err) {
-        setError(
-          err instanceof Error
-            ? err.message
-            : "Unable to abandon the interview.",
-        );
+        return nextCount;
+      });
+    };
 
-        setShowExitConfirmation(false);
+    const handleVisibilityChange = () => {
+      // Switching to another tab/window ends the interview immediately.
+      if (securityActiveRef.current && document.visibilityState === "hidden") {
+        void terminateForSecurityViolation(
+          "The interview was ended because you left the interview tab or window.",
+        );
       }
     };
 
+    document.addEventListener("fullscreenchange", handleFullscreenChange);
 
-    useEffect(() => {
-  if (
-    !interview ||
-    interview.status !== "in_progress" ||
-    isSecurityTerminated
-  ) {
-    return;
-  }
+    document.addEventListener("visibilitychange", handleVisibilityChange);
 
-  const handleFullscreenChange = () => {
-    // Ignore fullscreen changes until the candidate has started securely.
-    if (!securityActiveRef.current) {
-      return;
-    }
+    return () => {
+      document.removeEventListener("fullscreenchange", handleFullscreenChange);
 
-    if (document.fullscreenElement) {
-      setShowFullscreenWarning(false);
-      return;
-    }
-
-    setFullscreenWarningCount((previousCount) => {
-      const nextCount = previousCount + 1;
-
-      if (nextCount >= 3) {
-        void terminateForSecurityViolation(
-          "The interview was ended because you exited fullscreen three times.",
-        );
-      } else {
-        setShowFullscreenWarning(true);
-      }
-
-      return nextCount;
-    });
-  };
-
-  const handleVisibilityChange = () => {
-    // Switching to another tab/window ends the interview immediately.
-    if (
-      securityActiveRef.current &&
-      document.visibilityState === "hidden"
-    ) {
-      void terminateForSecurityViolation(
-        "The interview was ended because you left the interview tab or window.",
-      );
-    }
-  };
-
-  document.addEventListener(
-    "fullscreenchange",
-    handleFullscreenChange,
-  );
-
-  document.addEventListener(
-    "visibilitychange",
-    handleVisibilityChange,
-  );
-
-  return () => {
-    document.removeEventListener(
-      "fullscreenchange",
-      handleFullscreenChange,
-    );
-
-    document.removeEventListener(
-      "visibilitychange",
-      handleVisibilityChange,
-    );
-  };
-}, [
-  interview,
-  isSecurityTerminated,
-  terminateForSecurityViolation,
-]);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
+  }, [interview, isSecurityTerminated, terminateForSecurityViolation]);
   /*
    * ---------------------------------------------------------
    * Keyboard shortcut:
@@ -839,36 +681,22 @@ const terminateForSecurityViolation = useCallback(
    */
 
   useEffect(() => {
-    const handleKeyboard =
-      (event: KeyboardEvent) => {
-        if (
-          (event.ctrlKey ||
-            event.metaKey) &&
-          event.key === "Enter" &&
-          roomState === "ready"
-        ) {
-          event.preventDefault();
+    const handleKeyboard = (event: KeyboardEvent) => {
+      if (
+        (event.ctrlKey || event.metaKey) &&
+        event.key === "Enter" &&
+        roomState === "ready"
+      ) {
+        event.preventDefault();
 
-          void handleSubmitAnswer();
-        }
-      };
+        void handleSubmitAnswer();
+      }
+    };
 
-    window.addEventListener(
-      "keydown",
-      handleKeyboard,
-    );
+    window.addEventListener("keydown", handleKeyboard);
 
-    return () =>
-      window.removeEventListener(
-        "keydown",
-        handleKeyboard,
-      );
-  }, [
-    roomState,
-    answer,
-    question,
-    interview,
-  ]);
+    return () => window.removeEventListener("keydown", handleKeyboard);
+  }, [roomState, answer, question, interview]);
 
   /*
    * ---------------------------------------------------------
@@ -957,15 +785,12 @@ const terminateForSecurityViolation = useCallback(
               text-slate-500
             "
           >
-            {error ||
-              "Unable to load this interview."}
+            {error || "Unable to load this interview."}
           </p>
 
           <button
             type="button"
-            onClick={() =>
-              navigate("/home")
-            }
+            onClick={() => navigate("/home")}
             className="
               mt-7
               rounded-2xl
@@ -993,27 +818,20 @@ const terminateForSecurityViolation = useCallback(
   const progress =
     interview.total_questions > 0
       ? Math.min(
-          (interview.current_question_number /
-            interview.total_questions) *
-            100,
+          (interview.current_question_number / interview.total_questions) * 100,
           100,
         )
       : 0;
 
-  const isSubmitting =
-    roomState === "submitting";
+  const isSubmitting = roomState === "submitting";
 
-  const isEvaluated =
-    roomState === "evaluated";
+  const isEvaluated = roomState === "evaluated";
 
-  const isCompleting =
-    roomState === "completing";
+  const isCompleting = roomState === "completing";
 
-  const currentDifficulty =
-    question.difficulty;
+  const currentDifficulty = question.difficulty;
 
-  const canEditAnswer =
-    roomState === "ready";
+  const canEditAnswer = roomState === "ready";
 
   return (
     <div className="app-background min-h-screen">
@@ -1110,9 +928,7 @@ const terminateForSecurityViolation = useCallback(
 
           <button
             type="button"
-            onClick={() =>
-              setShowExitConfirmation(true)
-            }
+            onClick={() => setShowExitConfirmation(true)}
             disabled={isCompleting}
             className="
               rounded-xl
@@ -1327,11 +1143,7 @@ const terminateForSecurityViolation = useCallback(
                       text-violet-300
                     "
                   >
-                    {
-                      difficultyLabel[
-                        currentDifficulty
-                      ]
-                    }
+                    {difficultyLabel[currentDifficulty]}
                   </span>
                 </div>
 
@@ -1342,11 +1154,7 @@ const terminateForSecurityViolation = useCallback(
                     text-slate-500
                   "
                 >
-                  {
-                    difficultyDescription[
-                      currentDifficulty
-                    ]
-                  }
+                  {difficultyDescription[currentDifficulty]}
                 </p>
               </div>
 
@@ -1384,9 +1192,7 @@ const terminateForSecurityViolation = useCallback(
           <section>
             <QuestionPanel
               question={question}
-              questionNumber={
-                interview.current_question_number
-              }
+              questionNumber={interview.current_question_number}
               totalQuestions={interview.total_questions}
               difficulty={currentDifficulty}
             />
@@ -1532,8 +1338,7 @@ const terminateForSecurityViolation = useCallback(
                   "
                   role="status"
                 >
-                  Speech-to-text is not supported
-                  by this browser. You can still
+                  Speech-to-text is not supported by this browser. You can still
                   type your answer normally.
                 </div>
               )}
@@ -1562,12 +1367,7 @@ const terminateForSecurityViolation = useCallback(
               <textarea
                 value={answer}
                 onChange={(event) =>
-                  setAnswer(
-                    event.target.value.slice(
-                      0,
-                      MAX_ANSWER_LENGTH,
-                    ),
-                  )
+                  setAnswer(event.target.value.slice(0, MAX_ANSWER_LENGTH))
                 }
                 disabled={!canEditAnswer}
                 maxLength={MAX_ANSWER_LENGTH}
@@ -1618,9 +1418,7 @@ const terminateForSecurityViolation = useCallback(
                     {isListening ? (
                       <button
                         type="button"
-                        onClick={
-                          handleStopListening
-                        }
+                        onClick={handleStopListening}
                         className="
                           inline-flex
                           items-center
@@ -1662,19 +1460,13 @@ const terminateForSecurityViolation = useCallback(
                             "
                           />
                         </span>
-
                         Stop speaking
                       </button>
                     ) : (
                       <button
                         type="button"
-                        onClick={
-                          handleStartListening
-                        }
-                        disabled={
-                          !speechSupported ||
-                          isSubmitting
-                        }
+                        onClick={handleStartListening}
+                        disabled={!speechSupported || isSubmitting}
                         className="
                           inline-flex
                           items-center
@@ -1717,20 +1509,15 @@ const terminateForSecurityViolation = useCallback(
                             className="h-4 w-4"
                             aria-hidden="true"
                           >
-                            <path
-                              d="M12 14a3 3 0 0 0 3-3V6a3 3 0 1 0-6 0v5a3 3 0 0 0 3 3Z"
-                            />
+                            <path d="M12 14a3 3 0 0 0 3-3V6a3 3 0 1 0-6 0v5a3 3 0 0 0 3 3Z" />
 
-                            <path
-                              d="M19 11a7 7 0 0 1-14 0"
-                            />
+                            <path d="M19 11a7 7 0 0 1-14 0" />
 
                             <path d="M12 18v4" />
 
                             <path d="M8 22h8" />
                           </svg>
                         </span>
-
                         Start speaking
                       </button>
                     )}
@@ -1742,8 +1529,7 @@ const terminateForSecurityViolation = useCallback(
                       text-slate-600
                     "
                   >
-                    Speak naturally — your
-                    words will appear above.
+                    Speak naturally — your words will appear above.
                   </span>
                 </div>
               )}
@@ -1751,14 +1537,9 @@ const terminateForSecurityViolation = useCallback(
               {/* Submit */}
               <button
                 type="button"
-                onClick={() =>
-                  void handleSubmitAnswer()
-                }
+                onClick={() => void handleSubmitAnswer()}
                 disabled={
-                  isSubmitting ||
-                  isEvaluated ||
-                  isCompleting ||
-                  !answer.trim()
+                  isSubmitting || isEvaluated || isCompleting || !answer.trim()
                 }
                 className="
                   mt-5
@@ -1796,15 +1577,12 @@ const terminateForSecurityViolation = useCallback(
                         border-t-slate-900
                       "
                     />
-
                     Evaluating answer...
                   </>
                 ) : (
                   <>
                     Submit Answer
-                    <span aria-hidden="true">
-                      →
-                    </span>
+                    <span aria-hidden="true">→</span>
                   </>
                 )}
               </button>
@@ -1828,10 +1606,9 @@ const terminateForSecurityViolation = useCallback(
                 EVALUATION
             ================================================== */}
 
-            {isEvaluated &&
-              evaluation && (
-                <div
-                  className="
+            {isEvaluated && evaluation && (
+              <div
+                className="
                     mt-6
                     rounded-3xl
                     border
@@ -1840,36 +1617,36 @@ const terminateForSecurityViolation = useCallback(
                     p-6
                     sm:p-8
                   "
-                >
-                  <div className="flex items-start justify-between gap-5">
-                    <div>
-                      <div
-                        className="
+              >
+                <div className="flex items-start justify-between gap-5">
+                  <div>
+                    <div
+                      className="
                           font-mono
                           text-[9px]
                           uppercase
                           tracking-[0.18em]
                           text-violet-400
                         "
-                      >
-                        AI Evaluation
-                      </div>
+                    >
+                      AI Evaluation
+                    </div>
 
-                      <h2
-                        className="
+                    <h2
+                      className="
                           mt-2
                           font-display
                           text-xl
                           font-semibold
                           text-white
                         "
-                      >
-                        Your feedback
-                      </h2>
-                    </div>
+                    >
+                      Your feedback
+                    </h2>
+                  </div>
 
-                    <div
-                      className="
+                  <div
+                    className="
                         rounded-2xl
                         border
                         border-white/[0.07]
@@ -1878,256 +1655,246 @@ const terminateForSecurityViolation = useCallback(
                         py-3
                         text-center
                       "
-                    >
-                      <div
-                        className="
+                  >
+                    <div
+                      className="
                           font-display
                           text-2xl
                           font-bold
                           text-white
                         "
-                      >
-                        {Math.round(
-                          evaluation.overall_score ?? 0
-                        )}
-                      </div>
+                    >
+                      {Math.round(evaluation.overall_score ?? 0)}
+                    </div>
 
-                      <div
-                        className="
+                    <div
+                      className="
                           font-mono
                           text-[8px]
                           uppercase
                           tracking-wider
                           text-slate-600
                         "
-                      >
-                        Score
-                      </div>
+                    >
+                      Score
                     </div>
                   </div>
+                </div>
 
-                  {/* Scores */}
-                  <div
-                    className="
+                {/* Scores */}
+                <div
+                  className="
                       mt-6
                       grid
                       gap-3
                       sm:grid-cols-3
                     "
-                  >
-                    <div
-                      className="
+                >
+                  <div
+                    className="
                         rounded-2xl
                         border
                         border-white/[0.06]
                         bg-black/10
                         p-4
                       "
-                    >
-                      <div
-                        className="
+                  >
+                    <div
+                      className="
                           font-mono
                           text-[8px]
                           uppercase
                           tracking-wider
                           text-slate-600
                         "
-                      >
-                        Technical
-                      </div>
+                    >
+                      Technical
+                    </div>
 
-                      <div
-                        className="
+                    <div
+                      className="
                           mt-2
                           text-xl
                           font-semibold
                           text-white
                         "
-                      >
-                        {Math.round(
-                          evaluation.technical_score ?? 0
-                        )}
-                      </div>
+                    >
+                      {Math.round(evaluation.technical_score ?? 0)}
                     </div>
+                  </div>
 
-                    <div
-                      className="
+                  <div
+                    className="
                         rounded-2xl
                         border
                         border-white/[0.06]
                         bg-black/10
                         p-4
                       "
-                    >
-                      <div
-                        className="
+                  >
+                    <div
+                      className="
                           font-mono
                           text-[8px]
                           uppercase
                           tracking-wider
                           text-slate-600
                         "
-                      >
-                        Communication
-                      </div>
+                    >
+                      Communication
+                    </div>
 
-                      <div
-                        className="
+                    <div
+                      className="
                           mt-2
                           text-xl
                           font-semibold
                           text-white
                         "
-                      >
-                        {Math.round(
-                          evaluation.communication_score ?? 0
-                        )}
-                      </div>
+                    >
+                      {Math.round(evaluation.communication_score ?? 0)}
                     </div>
+                  </div>
 
-                    <div
-                      className="
+                  <div
+                    className="
                         rounded-2xl
                         border
                         border-white/[0.06]
                         bg-black/10
                         p-4
                       "
-                    >
-                      <div
-                        className="
+                  >
+                    <div
+                      className="
                           font-mono
                           text-[8px]
                           uppercase
                           tracking-wider
                           text-slate-600
                         "
-                      >
-                        Relevance
-                      </div>
+                    >
+                      Relevance
+                    </div>
 
-                      <div
-                        className="
+                    <div
+                      className="
                           mt-2
                           text-xl
                           font-semibold
                           text-white
                         "
-                      >
-                        {Math.round(
-                          evaluation.relevance_score ?? 0
-                        )}
-                      </div>
+                    >
+                      {Math.round(evaluation.relevance_score ?? 0)}
                     </div>
                   </div>
+                </div>
 
-                  {/* Feedback */}
-                  <div
-                    className="
+                {/* Feedback */}
+                <div
+                  className="
                       mt-6
                       border-t
                       border-white/[0.06]
                       pt-6
                     "
-                  >
-                    <div
-                      className="
+                >
+                  <div
+                    className="
                         font-mono
                         text-[8px]
                         uppercase
                         tracking-[0.16em]
                         text-slate-600
                       "
-                    >
-                      Feedback
-                    </div>
+                  >
+                    Feedback
+                  </div>
 
-                    <p
-                      className="
+                  <p
+                    className="
                         mt-3
                         text-sm
                         leading-7
                         text-slate-400
                       "
-                    >
-                      {evaluation.feedback}
-                    </p>
-                  </div>
+                  >
+                    {evaluation.feedback}
+                  </p>
+                </div>
 
-                  {/* Strengths */}
-                  <div
-                    className="
+                {/* Strengths */}
+                <div
+                  className="
                       mt-6
                       border-t
                       border-white/[0.06]
                       pt-6
                     "
-                  >
-                    <div
-                      className="
+                >
+                  <div
+                    className="
                         font-mono
                         text-[8px]
                         uppercase
                         tracking-[0.16em]
                         text-slate-600
                       "
-                    >
-                      Strengths
-                    </div>
+                  >
+                    Strengths
+                  </div>
 
-                    <p
-                      className="
+                  <p
+                    className="
                         mt-3
                         text-sm
                         leading-7
                         text-slate-400
                       "
-                    >
-                      {evaluation.strengths}
-                    </p>
-                  </div>
+                  >
+                    {evaluation.strengths}
+                  </p>
+                </div>
 
-                  {/* Improvements */}
-                  <div
-                    className="
+                {/* Improvements */}
+                <div
+                  className="
                       mt-6
                       border-t
                       border-white/[0.06]
                       pt-6
                     "
-                  >
-                    <div
-                      className="
+                >
+                  <div
+                    className="
                         font-mono
                         text-[8px]
                         uppercase
                         tracking-[0.16em]
                         text-slate-600
                       "
-                    >
-                      Improvements
-                    </div>
+                  >
+                    Improvements
+                  </div>
 
-                    <p
-                      className="
+                  <p
+                    className="
                         mt-3
                         text-sm
                         leading-7
                         text-slate-400
                       "
-                    >
-                      {evaluation.improvements}
-                    </p>
-                  </div>
+                  >
+                    {evaluation.improvements}
+                  </p>
+                </div>
 
-                  {/* Continue */}
-                  <button
-                    type="button"
-                    onClick={() =>
-                      void handleNextQuestion()
-                    }
-                    disabled={isFinishing}
-                    className="
+                {/* Continue */}
+                <button
+                  type="button"
+                  onClick={() => void handleNextQuestion()}
+                  disabled={isFinishing}
+                  className="
                       mt-7
                       flex
                       w-full
@@ -2148,14 +1915,12 @@ const terminateForSecurityViolation = useCallback(
                       disabled:cursor-not-allowed
                       disabled:opacity-50
                     "
-                  >
-                    Continue to next question
-                    <span aria-hidden="true">
-                      →
-                    </span>
-                  </button>
-                </div>
-              )}
+                >
+                  Continue to next question
+                  <span aria-hidden="true">→</span>
+                </button>
+              </div>
+            )}
 
             {/* Completing */}
             {isCompleting && (
@@ -2219,8 +1984,7 @@ const terminateForSecurityViolation = useCallback(
                     text-slate-500
                   "
                 >
-                  We're analyzing your interview
-                  performance and preparing your
+                  We're analyzing your interview performance and preparing your
                   personalized feedback.
                 </p>
               </div>
@@ -2242,7 +2006,14 @@ const terminateForSecurityViolation = useCallback(
         >
           <div className="w-full max-w-lg rounded-3xl border border-white/[0.08] bg-white/[0.035] p-8 text-center shadow-2xl">
             <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-violet-400/[0.10] text-violet-300">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" className="h-7 w-7" aria-hidden="true">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.7"
+                className="h-7 w-7"
+                aria-hidden="true"
+              >
                 <path d="M8 3H5a2 2 0 0 0-2 2v3" />
                 <path d="M16 3h3a2 2 0 0 1 2 2v3" />
                 <path d="M8 21H5a2 2 0 0 1-2-2v-3" />
@@ -2254,16 +2025,23 @@ const terminateForSecurityViolation = useCallback(
               Secure interview
             </div>
 
-            <h2 id="fullscreen-gate-title" className="mt-2 font-display text-2xl font-semibold text-white">
+            <h2
+              id="fullscreen-gate-title"
+              className="mt-2 font-display text-2xl font-semibold text-white"
+            >
               Enter fullscreen to begin
             </h2>
 
             <p className="mx-auto mt-3 max-w-md text-sm leading-6 text-slate-500">
-              Fullscreen mode is required for the interview. Switching to another tab or window will immediately end the interview.
+              Fullscreen mode is required for the interview. Switching to
+              another tab or window will immediately end the interview.
             </p>
 
             {fullscreenError && (
-              <p className="mt-5 rounded-2xl border border-red-400/20 bg-red-400/[0.05] px-4 py-3 text-xs leading-5 text-red-200/80" role="alert">
+              <p
+                className="mt-5 rounded-2xl border border-red-400/20 bg-red-400/[0.05] px-4 py-3 text-xs leading-5 text-red-200/80"
+                role="alert"
+              >
                 {fullscreenError}
               </p>
             )}
@@ -2295,16 +2073,23 @@ const terminateForSecurityViolation = useCallback(
               !
             </div>
 
-            <h2 id="fullscreen-warning-title" className="mt-5 font-display text-xl font-semibold text-white">
+            <h2
+              id="fullscreen-warning-title"
+              className="mt-5 font-display text-xl font-semibold text-white"
+            >
               Fullscreen required
             </h2>
 
             <p className="mt-3 text-sm leading-6 text-slate-500">
-              You exited fullscreen. This is warning {fullscreenWarningCount} of 3. The third fullscreen exit will end the interview.
+              You exited fullscreen. This is warning {fullscreenWarningCount} of
+              3. The third fullscreen exit will end the interview.
             </p>
 
             {fullscreenError && (
-              <p className="mt-4 rounded-2xl border border-red-400/20 bg-red-400/[0.05] px-4 py-3 text-xs leading-5 text-red-200/80" role="alert">
+              <p
+                className="mt-4 rounded-2xl border border-red-400/20 bg-red-400/[0.05] px-4 py-3 text-xs leading-5 text-red-200/80"
+                role="alert"
+              >
                 {fullscreenError}
               </p>
             )}
@@ -2389,8 +2174,7 @@ const terminateForSecurityViolation = useCallback(
                 text-slate-500
               "
             >
-              Your current interview will be
-              abandoned and you will return to
+              Your current interview will be abandoned and you will return to
               the home page.
             </p>
 
@@ -2403,9 +2187,7 @@ const terminateForSecurityViolation = useCallback(
             >
               <button
                 type="button"
-                onClick={() =>
-                  setShowExitConfirmation(false)
-                }
+                onClick={() => setShowExitConfirmation(false)}
                 className="
                   flex-1
                   rounded-2xl
@@ -2426,9 +2208,7 @@ const terminateForSecurityViolation = useCallback(
 
               <button
                 type="button"
-                onClick={() =>
-                  void handleAbandonInterview()
-                }
+                onClick={() => void handleAbandonInterview()}
                 className="
                   flex-1
                   rounded-2xl

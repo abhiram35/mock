@@ -15,11 +15,7 @@ interface StatCardProps {
   description: string;
 }
 
-function StatCard({
-  label,
-  value,
-  description,
-}: StatCardProps) {
+function StatCard({ label, value, description }: StatCardProps) {
   return (
     <div
       className="
@@ -59,9 +55,7 @@ function StatCard({
         {value}
       </div>
 
-      <div className="mt-1 text-xs text-slate-600">
-        {description}
-      </div>
+      <div className="mt-1 text-xs text-slate-600">{description}</div>
     </div>
   );
 }
@@ -69,18 +63,14 @@ function StatCard({
 export default function Home() {
   const navigate = useNavigate();
 
-  const [user, setUser] =
-    useState<CurrentUser | null>(null);
+  const [user, setUser] = useState<CurrentUser | null>(null);
 
-  const [isLoading, setIsLoading] =
-    useState(true);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const storedToken =
-      localStorage.getItem("access_token");
+    const storedToken = localStorage.getItem("access_token");
 
-    const storedUser =
-      localStorage.getItem("user");
+    const storedUser = localStorage.getItem("user");
 
     if (!storedToken || !storedUser) {
       navigate("/login", {
@@ -91,8 +81,7 @@ export default function Home() {
     }
 
     try {
-      const parsedUser: CurrentUser =
-        JSON.parse(storedUser);
+      const parsedUser: CurrentUser = JSON.parse(storedUser);
 
       if (parsedUser.role === "admin") {
         navigate("/admin", {
@@ -104,9 +93,7 @@ export default function Home() {
 
       setUser(parsedUser);
     } catch {
-      localStorage.removeItem(
-        "access_token",
-      );
+      localStorage.removeItem("access_token");
 
       localStorage.removeItem("user");
 
@@ -121,9 +108,7 @@ export default function Home() {
   }, [navigate]);
 
   const handleLogout = () => {
-    localStorage.removeItem(
-      "access_token",
-    );
+    localStorage.removeItem("access_token");
 
     localStorage.removeItem("user");
 
@@ -180,12 +165,10 @@ export default function Home() {
     return null;
   }
 
-  const firstName =
-    user.full_name.trim().split(" ")[0];
+  const firstName = user.full_name.trim().split(" ")[0];
 
   return (
     <div className="app-background min-h-screen">
-
       {/* =====================================================
           AMBIENT BACKGROUND
       ===================================================== */}
@@ -212,7 +195,6 @@ export default function Home() {
         "
       />
 
-
       {/* =====================================================
           NAVIGATION
       ===================================================== */}
@@ -238,13 +220,10 @@ export default function Home() {
             lg:px-10
           "
         >
-
           {/* Brand */}
 
           <button
-            onClick={() =>
-              navigate("/home")
-            }
+            onClick={() => navigate("/home")}
             className="
               flex
               items-center
@@ -319,11 +298,9 @@ export default function Home() {
             </div>
           </button>
 
-
           {/* User controls */}
 
           <div className="flex items-center gap-4">
-
             <div className="hidden text-right sm:block">
               <div className="text-sm font-medium text-slate-200">
                 {user.full_name}
@@ -372,11 +349,9 @@ export default function Home() {
             >
               Logout
             </button>
-
           </div>
         </div>
       </header>
-
 
       {/* =====================================================
           MAIN CONTENT
@@ -394,13 +369,11 @@ export default function Home() {
           lg:py-14
         "
       >
-
         {/* ===================================================
             GREETING
         =================================================== */}
 
         <section className="mb-10">
-
           <div
             className="
               font-mono
@@ -424,9 +397,7 @@ export default function Home() {
               lg:items-end
             "
           >
-
             <div>
-
               <h1
                 className="
                   font-display
@@ -461,14 +432,11 @@ export default function Home() {
                   text-slate-500
                 "
               >
-                Ready for your next challenge?
-                Practice under realistic interview
-                conditions and turn your answers into
-                measurable progress.
+                Ready for your next challenge? Practice under realistic
+                interview conditions and turn your answers into measurable
+                progress.
               </p>
-
             </div>
-
 
             {/* System status */}
 
@@ -508,10 +476,8 @@ export default function Home() {
                 Interview engine ready
               </span>
             </div>
-
           </div>
         </section>
-
 
         {/* ===================================================
             PRIMARY ACTION + PERFORMANCE
@@ -524,7 +490,6 @@ export default function Home() {
             lg:grid-cols-[1.4fr_1fr]
           "
         >
-
           {/* Start interview */}
 
           <div
@@ -546,7 +511,6 @@ export default function Home() {
               hover:border-violet-400/25
             "
           >
-
             {/* Ambient glow */}
 
             <div
@@ -566,7 +530,6 @@ export default function Home() {
             />
 
             <div className="relative">
-
               <div
                 className="
                   inline-flex
@@ -580,7 +543,6 @@ export default function Home() {
                   py-1.5
                 "
               >
-
                 <span
                   className="
                     h-1.5
@@ -602,9 +564,7 @@ export default function Home() {
                 >
                   New session
                 </span>
-
               </div>
-
 
               <h2
                 className="
@@ -619,10 +579,8 @@ export default function Home() {
                   sm:text-4xl
                 "
               >
-                Put your technical
-                skills under pressure.
+                Put your technical skills under pressure.
               </h2>
-
 
               <p
                 className="
@@ -633,16 +591,12 @@ export default function Home() {
                   text-slate-400
                 "
               >
-                Choose a topic and starting difficulty.
-                The AI interviewer will adapt the
-                conversation based on how you perform.
+                Choose a topic and starting difficulty. The AI interviewer will
+                adapt the conversation based on how you perform.
               </p>
 
-
               <button
-                onClick={() =>
-                  navigate("/interviews/new")
-                }
+                onClick={() => navigate("/interviews/new")}
                 className="
                   group/button
                   mt-8
@@ -665,7 +619,6 @@ export default function Home() {
                 "
               >
                 Start new interview
-
                 <span
                   className="
                     transition-transform
@@ -676,7 +629,6 @@ export default function Home() {
                   →
                 </span>
               </button>
-
 
               {/* Interview metadata */}
 
@@ -692,7 +644,6 @@ export default function Home() {
                   pt-6
                 "
               >
-
                 <div>
                   <div
                     className="
@@ -706,11 +657,8 @@ export default function Home() {
                     Difficulty
                   </div>
 
-                  <div className="mt-1 text-xs text-slate-300">
-                    Adaptive
-                  </div>
+                  <div className="mt-1 text-xs text-slate-300">Adaptive</div>
                 </div>
-
 
                 <div>
                   <div
@@ -725,11 +673,8 @@ export default function Home() {
                     Evaluation
                   </div>
 
-                  <div className="mt-1 text-xs text-slate-300">
-                    AI-powered
-                  </div>
+                  <div className="mt-1 text-xs text-slate-300">AI-powered</div>
                 </div>
-
 
                 <div>
                   <div
@@ -744,17 +689,11 @@ export default function Home() {
                     Feedback
                   </div>
 
-                  <div className="mt-1 text-xs text-slate-300">
-                    Instant
-                  </div>
+                  <div className="mt-1 text-xs text-slate-300">Instant</div>
                 </div>
-
               </div>
-
             </div>
-
           </div>
-
 
           {/* Performance */}
 
@@ -765,7 +704,6 @@ export default function Home() {
               p-7
             "
           >
-
             <div
               className="
                 font-mono
@@ -778,9 +716,7 @@ export default function Home() {
               Your performance
             </div>
 
-
             <div className="mt-7">
-
               <div
                 className="
                   font-display
@@ -796,12 +732,9 @@ export default function Home() {
               <div className="mt-2 text-sm text-slate-500">
                 Average interview score
               </div>
-
             </div>
 
-
             <div className="mt-8 grid grid-cols-2 gap-3">
-
               <StatCard
                 label="Completed"
                 value="0"
@@ -813,20 +746,15 @@ export default function Home() {
                 value="0"
                 description="Active sessions"
               />
-
             </div>
-
           </div>
-
         </section>
-
 
         {/* ===================================================
             QUICK ACTIONS
         =================================================== */}
 
         <section className="mt-8">
-
           <div
             className="
               mb-4
@@ -840,15 +768,11 @@ export default function Home() {
             Quick actions
           </div>
 
-
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-
             {/* Performance */}
 
             <button
-              onClick={() =>
-                navigate("/dashboard")
-              }
+              onClick={() => navigate("/dashboard")}
               className="
                 group
                 rounded-2xl
@@ -864,9 +788,7 @@ export default function Home() {
                 hover:bg-white/[0.035]
               "
             >
-
               <div className="flex items-center justify-between">
-
                 <div
                   className="
                     flex
@@ -880,11 +802,8 @@ export default function Home() {
                     bg-violet-500/[0.06]
                   "
                 >
-                  <span className="font-mono text-xs text-violet-300">
-                    ↗
-                  </span>
+                  <span className="font-mono text-xs text-violet-300">↗</span>
                 </div>
-
 
                 <span
                   className="
@@ -896,28 +815,21 @@ export default function Home() {
                 >
                   →
                 </span>
-
               </div>
-
 
               <h3 className="mt-5 font-display text-base font-semibold text-white">
                 Performance dashboard
               </h3>
 
               <p className="mt-2 text-xs leading-5 text-slate-600">
-                Review your scores, progress, and
-                interview history.
+                Review your scores, progress, and interview history.
               </p>
-
             </button>
-
 
             {/* Coding Interview */}
 
             <button
-              onClick={() =>
-                navigate("/coding-interview/new")
-              }
+              onClick={() => navigate("/coding-interview/new")}
               className="
                 group
                 rounded-2xl
@@ -933,9 +845,7 @@ export default function Home() {
                 hover:bg-white/[0.035]
               "
             >
-
               <div className="flex items-center justify-between">
-
                 <div
                   className="
                     flex
@@ -954,7 +864,6 @@ export default function Home() {
                   </span>
                 </div>
 
-
                 <span
                   className="
                     text-slate-700
@@ -965,28 +874,21 @@ export default function Home() {
                 >
                   →
                 </span>
-
               </div>
-
 
               <h3 className="mt-5 font-display text-base font-semibold text-white">
                 Coding interview
               </h3>
 
               <p className="mt-2 text-xs leading-5 text-slate-600">
-                Solve coding problems, run your code,
-                and test your solutions.
+                Solve coding problems, run your code, and test your solutions.
               </p>
-
             </button>
-
 
             {/* Practice Problems */}
 
             <button
-              onClick={() =>
-                navigate("/practice")
-              }
+              onClick={() => navigate("/practice")}
               className="
                 group
                 rounded-2xl
@@ -1002,9 +904,7 @@ export default function Home() {
                 hover:bg-white/[0.035]
               "
             >
-
               <div className="flex items-center justify-between">
-
                 <div
                   className="
                     flex
@@ -1018,11 +918,8 @@ export default function Home() {
                     bg-emerald-400/[0.05]
                   "
                 >
-                  <span className="font-mono text-xs text-emerald-300">
-                    ⚡
-                  </span>
+                  <span className="font-mono text-xs text-emerald-300">⚡</span>
                 </div>
-
 
                 <span
                   className="
@@ -1034,28 +931,22 @@ export default function Home() {
                 >
                   →
                 </span>
-
               </div>
-
 
               <h3 className="mt-5 font-display text-base font-semibold text-white">
                 Practice bank
               </h3>
 
               <p className="mt-2 text-xs leading-5 text-slate-600">
-                Browse questions, write in Monaco editor,
-                and track your solved submissions.
+                Browse questions, write in Monaco editor, and track your solved
+                submissions.
               </p>
-
             </button>
-
 
             {/* Profile */}
 
             <button
-              onClick={() =>
-                navigate("/profile")
-              }
+              onClick={() => navigate("/profile")}
               className="
                 group
                 rounded-2xl
@@ -1071,9 +962,7 @@ export default function Home() {
                 hover:bg-white/[0.035]
               "
             >
-
               <div className="flex items-center justify-between">
-
                 <div
                   className="
                     flex
@@ -1087,11 +976,8 @@ export default function Home() {
                     bg-cyan-400/[0.05]
                   "
                 >
-                  <span className="font-mono text-xs text-cyan-300">
-                    ID
-                  </span>
+                  <span className="font-mono text-xs text-cyan-300">ID</span>
                 </div>
-
 
                 <span
                   className="
@@ -1103,32 +989,24 @@ export default function Home() {
                 >
                   →
                 </span>
-
               </div>
-
 
               <h3 className="mt-5 font-display text-base font-semibold text-white">
                 Your profile
               </h3>
 
               <p className="mt-2 text-xs leading-5 text-slate-600">
-                Manage your account information and
-                preferences.
+                Manage your account information and preferences.
               </p>
-
             </button>
-
           </div>
-
         </section>
-
 
         {/* ===================================================
             INTERVIEW HISTORY
         =================================================== */}
 
         <section className="mt-8">
-
           <div
             className="
               glass-panel
@@ -1136,7 +1014,6 @@ export default function Home() {
               rounded-3xl
             "
           >
-
             {/* Header */}
 
             <div
@@ -1152,9 +1029,7 @@ export default function Home() {
                 sm:justify-between
               "
             >
-
               <div>
-
                 <div
                   className="
                     font-mono
@@ -1178,9 +1053,7 @@ export default function Home() {
                 >
                   Recent interviews
                 </h2>
-
               </div>
-
 
               <div
                 className="
@@ -1193,14 +1066,11 @@ export default function Home() {
               >
                 0 sessions
               </div>
-
             </div>
-
 
             {/* Empty state */}
 
             <div className="p-7">
-
               <div
                 className="
                   flex
@@ -1214,9 +1084,7 @@ export default function Home() {
                   bg-white/[0.012]
                 "
               >
-
                 <div className="max-w-sm text-center">
-
                   <div
                     className="
                       mx-auto
@@ -1231,7 +1099,6 @@ export default function Home() {
                       bg-white/[0.025]
                     "
                   >
-
                     <span
                       className="
                         font-mono
@@ -1242,9 +1109,7 @@ export default function Home() {
                     >
                       01
                     </span>
-
                   </div>
-
 
                   <h3
                     className="
@@ -1258,7 +1123,6 @@ export default function Home() {
                     Your interview history is empty.
                   </h3>
 
-
                   <p
                     className="
                       mt-2
@@ -1267,16 +1131,12 @@ export default function Home() {
                       text-slate-600
                     "
                   >
-                    Complete your first interview to
-                    start tracking your technical
-                    performance and growth.
+                    Complete your first interview to start tracking your
+                    technical performance and growth.
                   </p>
 
-
                   <button
-                    onClick={() =>
-                      navigate("/interviews/new")
-                    }
+                    onClick={() => navigate("/interviews/new")}
                     className="
                       mt-5
                       rounded-lg
@@ -1296,17 +1156,11 @@ export default function Home() {
                   >
                     Start your first interview
                   </button>
-
                 </div>
-
               </div>
-
             </div>
-
           </div>
-
         </section>
-
 
         {/* ===================================================
             FOOTER
@@ -1320,7 +1174,6 @@ export default function Home() {
             py-7
           "
         >
-
           <div
             className="
               flex
@@ -1331,7 +1184,6 @@ export default function Home() {
               sm:justify-between
             "
           >
-
             <div
               className="
                 font-mono
@@ -1355,13 +1207,9 @@ export default function Home() {
             >
               Intelligent practice · Better interviews
             </div>
-
           </div>
-
         </footer>
-
       </main>
-
     </div>
   );
 }

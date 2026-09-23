@@ -13,9 +13,7 @@ export default function Register() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  async function handleSubmit(
-    event: FormEvent<HTMLFormElement>
-  ) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
     setError("");
@@ -30,8 +28,7 @@ export default function Register() {
 
       navigate("/login");
     } catch (error: any) {
-      let message =
-        "Unable to create your account.";
+      let message = "Unable to create your account.";
 
       if (error?.response?.data?.detail) {
         const detail = error.response.data.detail;
@@ -63,9 +60,7 @@ export default function Register() {
           ← Back to home
         </button>
 
-        <h1 className="text-3xl font-bold text-white">
-          Create account
-        </h1>
+        <h1 className="text-3xl font-bold text-white">Create account</h1>
 
         <p className="mt-2 text-slate-400">
           Start practicing for your technical interviews.
@@ -77,10 +72,7 @@ export default function Register() {
           </div>
         )}
 
-        <form
-          onSubmit={handleSubmit}
-          className="mt-6 space-y-5"
-        >
+        <form onSubmit={handleSubmit} className="mt-6 space-y-5">
           <div>
             <label className="flex items-center gap-2 text-sm text-slate-300">
               <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-cyan-400" />
@@ -93,9 +85,7 @@ export default function Register() {
               minLength={3}
               maxLength={100}
               value={fullName}
-              onChange={(event) =>
-                setFullName(event.target.value)
-              }
+              onChange={(event) => setFullName(event.target.value)}
               className="mt-2 w-full rounded-lg border border-slate-700 bg-slate-800 px-4 py-3 text-white outline-none focus:border-blue-500"
               placeholder="your_username"
               aria-label="Username"
@@ -103,26 +93,20 @@ export default function Register() {
           </div>
 
           <div>
-            <label className="text-sm text-slate-300">
-              Email
-            </label>
+            <label className="text-sm text-slate-300">Email</label>
 
             <input
               type="email"
               required
               value={email}
-              onChange={(event) =>
-                setEmail(event.target.value)
-              }
+              onChange={(event) => setEmail(event.target.value)}
               className="mt-2 w-full rounded-lg border border-slate-700 bg-slate-800 px-4 py-3 text-white outline-none focus:border-blue-500"
               placeholder="you@example.com"
             />
           </div>
 
           <div>
-            <label className="text-sm text-slate-300">
-              Password
-            </label>
+            <label className="text-sm text-slate-300">Password</label>
 
             <input
               type="password"
@@ -130,9 +114,7 @@ export default function Register() {
               minLength={8}
               maxLength={128}
               value={password}
-              onChange={(event) =>
-                setPassword(event.target.value)
-              }
+              onChange={(event) => setPassword(event.target.value)}
               className="mt-2 w-full rounded-lg border border-slate-700 bg-slate-800 px-4 py-3 text-white outline-none focus:border-blue-500"
               placeholder="Minimum 8 characters"
             />
@@ -143,9 +125,7 @@ export default function Register() {
             disabled={loading}
             className="w-full rounded-lg bg-blue-600 py-3 font-semibold text-white hover:bg-blue-700 disabled:opacity-50"
           >
-            {loading
-              ? "Creating account..."
-              : "Create Account"}
+            {loading ? "Creating account..." : "Create Account"}
           </button>
         </form>
 

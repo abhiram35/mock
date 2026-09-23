@@ -1,15 +1,8 @@
 export type UserRole = "admin" | "user";
 
-export type QuestionDifficulty =
-  | "easy"
-  | "medium"
-  | "hard";
+export type QuestionDifficulty = "easy" | "medium" | "hard";
 
-export type InterviewStatus =
-  | "in_progress"
-  | "completed"
-  | "abandoned";
-
+export type InterviewStatus = "in_progress" | "completed" | "abandoned";
 
 // ============================================================
 // USER
@@ -24,7 +17,6 @@ export interface User {
   created_at: string;
   updated_at: string;
 }
-
 
 // ============================================================
 // AUTHENTICATION
@@ -45,7 +37,6 @@ export interface TokenResponse {
   access_token: string;
   token_type: string;
 }
-
 
 // ============================================================
 // TOPIC
@@ -70,7 +61,6 @@ export interface TopicUpdate {
   description?: string | null;
   is_active?: boolean;
 }
-
 
 // ============================================================
 // QUESTION
@@ -99,7 +89,6 @@ export interface QuestionUpdate {
   question_text?: string;
   expected_answer?: string;
 }
-
 
 // ============================================================
 // INTERVIEW
@@ -136,7 +125,6 @@ export interface Interview {
   updated_at: string;
 }
 
-
 // ============================================================
 // INTERVIEW ANSWER
 // ============================================================
@@ -158,7 +146,6 @@ export interface InterviewEvaluation {
   improvements: string;
 }
 
-
 // ============================================================
 // INTERVIEW QUESTION / CURRENT QUESTION
 // ============================================================
@@ -172,7 +159,6 @@ export interface InterviewQuestion {
   created_at: string;
   updated_at: string;
 }
-
 
 // ============================================================
 // QUESTION-BY-QUESTION RESULT
@@ -194,7 +180,6 @@ export interface InterviewResultAnswer {
   strengths: string | null;
   improvements: string | null;
 }
-
 
 // ============================================================
 // FINAL INTERVIEW RESULT
@@ -233,7 +218,6 @@ export interface InterviewResult {
   answers: InterviewResultAnswer[];
 }
 
-
 // ============================================================
 // ADMIN DASHBOARD
 // ============================================================
@@ -246,7 +230,6 @@ export interface AdminDashboardStats {
   abandoned_interviews: number;
   average_interview_score: number | null;
 }
-
 
 // ============================================================
 // ADMIN USER
@@ -265,7 +248,6 @@ export interface AdminUser {
 export interface AdminUserStatusUpdate {
   is_active: boolean;
 }
-
 
 // ============================================================
 // ADMIN INTERVIEW
@@ -295,7 +277,6 @@ export interface AdminInterview {
   updated_at: string;
 }
 
-
 // ============================================================
 // ADMIN INTERVIEW ANSWER
 // ============================================================
@@ -316,7 +297,6 @@ export interface AdminInterviewAnswer {
   strengths: string | null;
   improvements: string | null;
 }
-
 
 // ============================================================
 // ADMIN INTERVIEW DETAIL

@@ -1,12 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import {
-  getInterviews,
-  type Interview,
-} from "../lib/api";
+import { getInterviews, type Interview } from "../lib/api";
 import ProfileInfoCard from "../components/profile/ProfileInfoCard";
-
 
 interface CurrentUser {
   id: number;
@@ -16,28 +12,20 @@ interface CurrentUser {
   is_active: boolean;
 }
 
-
 export default function Profile() {
   const navigate = useNavigate();
 
-  const [user, setUser] =
-    useState<CurrentUser | null>(null);
+  const [user, setUser] = useState<CurrentUser | null>(null);
 
-  const [interviews, setInterviews] =
-    useState<Interview[]>([]);
+  const [interviews, setInterviews] = useState<Interview[]>([]);
 
-  const [isLoading, setIsLoading] =
-    useState(true);
-
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     async function loadProfile() {
-      const storedToken =
-        localStorage.getItem("access_token");
+      const storedToken = localStorage.getItem("access_token");
 
-      const storedUser =
-        localStorage.getItem("user");
-
+      const storedUser = localStorage.getItem("user");
 
       if (!storedToken || !storedUser) {
         navigate("/login", {
@@ -47,23 +35,16 @@ export default function Profile() {
         return;
       }
 
-
       try {
-        const parsedUser: CurrentUser =
-          JSON.parse(storedUser);
+        const parsedUser: CurrentUser = JSON.parse(storedUser);
 
         setUser(parsedUser);
 
-
-        const interviewData =
-          await getInterviews();
+        const interviewData = await getInterviews();
 
         setInterviews(interviewData);
-
       } catch {
-        localStorage.removeItem(
-          "access_token",
-        );
+        localStorage.removeItem("access_token");
 
         localStorage.removeItem("user");
 
@@ -77,15 +58,11 @@ export default function Profile() {
       }
     }
 
-
     loadProfile();
   }, [navigate]);
 
-
   const handleLogout = () => {
-    localStorage.removeItem(
-      "access_token",
-    );
+    localStorage.removeItem("access_token");
 
     localStorage.removeItem("user");
 
@@ -94,7 +71,6 @@ export default function Profile() {
     });
   };
 
-
   if (isLoading) {
     return (
       <div className="app-background min-h-screen">
@@ -102,7 +78,6 @@ export default function Profile() {
 
         <div className="flex min-h-screen items-center justify-center">
           <div className="text-center">
-
             <div
               className="
                 mx-auto
@@ -128,79 +103,45 @@ export default function Profile() {
             >
               Loading profile
             </p>
-
           </div>
         </div>
       </div>
     );
   }
 
-
   if (!user) {
     return null;
   }
 
+  const completedInterviews = interviews.filter(
+    (interview) => interview.status === "completed",
+  );
 
-  const completedInterviews =
-    interviews.filter(
-      (interview) =>
-        interview.status === "completed",
-    );
+  const inProgressInterviews = interviews.filter(
+    (interview) => interview.status === "in_progress",
+  );
 
-
-  const inProgressInterviews =
-    interviews.filter(
-      (interview) =>
-        interview.status === "in_progress",
-    );
-
-
-  const scores =
-    completedInterviews
-      .map(
-        (interview) =>
-          interview.overall_score,
-      )
-      .filter(
-        (
-          score,
-        ): score is number =>
-          score !== null,
-      );
-
+  const scores = completedInterviews
+    .map((interview) => interview.overall_score)
+    .filter((score): score is number => score !== null);
 
   const averageScore =
     scores.length > 0
-      ? scores.reduce(
-          (sum, score) =>
-            sum + score,
-          0,
-        ) / scores.length
+      ? scores.reduce((sum, score) => sum + score, 0) / scores.length
       : null;
 
+  const bestScore = scores.length > 0 ? Math.max(...scores) : null;
 
-  const bestScore =
-    scores.length > 0
-      ? Math.max(...scores)
-      : null;
-
-
-  const initials =
-    user.full_name
-      .trim()
-      .split(/\s+/)
-      .map(
-        (name) =>
-          name.charAt(0),
-      )
-      .slice(0, 2)
-      .join("")
-      .toUpperCase();
-
+  const initials = user.full_name
+    .trim()
+    .split(/\s+/)
+    .map((name) => name.charAt(0))
+    .slice(0, 2)
+    .join("")
+    .toUpperCase();
 
   return (
     <div className="app-background min-h-screen">
-
       {/* =====================================================
           BACKGROUND
       ====================================================== */}
@@ -227,7 +168,6 @@ export default function Profile() {
         "
       />
 
-
       {/* =====================================================
           NAVIGATION
       ====================================================== */}
@@ -241,7 +181,6 @@ export default function Profile() {
           bg-black/10
         "
       >
-
         <div
           className="
             mx-auto
@@ -254,11 +193,8 @@ export default function Profile() {
             lg:px-10
           "
         >
-
           <button
-            onClick={() =>
-              navigate("/home")
-            }
+            onClick={() => navigate("/home")}
             className="
               flex
               items-center
@@ -266,7 +202,6 @@ export default function Profile() {
               text-left
             "
           >
-
             <div
               className="
                 flex
@@ -292,9 +227,7 @@ export default function Profile() {
               </span>
             </div>
 
-
             <div>
-
               <div
                 className="
                   font-display
@@ -318,11 +251,8 @@ export default function Profile() {
               >
                 Candidate workspace
               </div>
-
             </div>
-
           </button>
-
 
           <button
             onClick={handleLogout}
@@ -344,11 +274,8 @@ export default function Profile() {
           >
             Logout
           </button>
-
         </div>
-
       </header>
-
 
       {/* =====================================================
           MAIN
@@ -366,13 +293,10 @@ export default function Profile() {
           lg:py-14
         "
       >
-
         {/* Back */}
 
         <button
-          onClick={() =>
-            navigate("/home")
-          }
+          onClick={() => navigate("/home")}
           className="
             mb-8
             font-mono
@@ -387,13 +311,11 @@ export default function Profile() {
           ← Back to home
         </button>
 
-
         {/* =================================================
             TITLE
         ================================================== */}
 
         <section className="mb-10">
-
           <div
             className="
               font-mono
@@ -429,13 +351,9 @@ export default function Profile() {
               text-slate-500
             "
           >
-            Manage your account information
-            and review your interview
-            activity.
+            Manage your account information and review your interview activity.
           </p>
-
         </section>
-
 
         {/* =================================================
             PROFILE CARD
@@ -449,7 +367,6 @@ export default function Profile() {
             sm:p-9
           "
         >
-
           <div
             className="
               flex
@@ -459,7 +376,6 @@ export default function Profile() {
               sm:items-center
             "
           >
-
             {/* Avatar */}
 
             <div
@@ -489,9 +405,7 @@ export default function Profile() {
               </span>
             </div>
 
-
             <div className="flex-1">
-
               <div
                 className="
                   font-mono
@@ -516,12 +430,8 @@ export default function Profile() {
                 {user.full_name}
               </h2>
 
-              <p className="mt-1 text-sm text-slate-500">
-                {user.email}
-              </p>
-
+              <p className="mt-1 text-sm text-slate-500">{user.email}</p>
             </div>
-
 
             <div
               className="
@@ -537,7 +447,6 @@ export default function Profile() {
                 py-2
               "
             >
-
               <span
                 className="
                   h-1.5
@@ -556,24 +465,17 @@ export default function Profile() {
                   text-emerald-400/80
                 "
               >
-                {user.is_active
-                  ? "Active account"
-                  : "Inactive account"}
+                {user.is_active ? "Active account" : "Inactive account"}
               </span>
-
             </div>
-
           </div>
-
         </section>
-
 
         {/* =================================================
             ACCOUNT INFORMATION
         ================================================== */}
 
         <section className="mt-6">
-
           <div
             className="
               mb-4
@@ -587,7 +489,6 @@ export default function Profile() {
             Account information
           </div>
 
-
           <div
             className="
               grid
@@ -595,12 +496,7 @@ export default function Profile() {
               sm:grid-cols-2
             "
           >
-
-            <ProfileInfoCard
-              label="Full name"
-              value={user.full_name}
-            />
-
+            <ProfileInfoCard label="Full name" value={user.full_name} />
 
             <div
               className="
@@ -611,7 +507,6 @@ export default function Profile() {
                 p-6
               "
             >
-
               <div
                 className="
                   font-mono
@@ -635,9 +530,7 @@ export default function Profile() {
               >
                 {user.email}
               </div>
-
             </div>
-
 
             <div
               className="
@@ -648,7 +541,6 @@ export default function Profile() {
                 p-6
               "
             >
-
               <div
                 className="
                   font-mono
@@ -672,9 +564,7 @@ export default function Profile() {
               >
                 #{user.id}
               </div>
-
             </div>
-
 
             <div
               className="
@@ -685,7 +575,6 @@ export default function Profile() {
                 p-6
               "
             >
-
               <div
                 className="
                   font-mono
@@ -709,20 +598,15 @@ export default function Profile() {
               >
                 {user.role}
               </div>
-
             </div>
-
           </div>
-
         </section>
-
 
         {/* =================================================
             INTERVIEW STATISTICS
         ================================================== */}
 
         <section className="mt-8">
-
           <div
             className="
               mb-4
@@ -736,7 +620,6 @@ export default function Profile() {
             Interview activity
           </div>
 
-
           <div
             className="
               grid
@@ -745,7 +628,6 @@ export default function Profile() {
               lg:grid-cols-4
             "
           >
-
             <div
               className="
                 rounded-2xl
@@ -755,10 +637,7 @@ export default function Profile() {
                 p-5
               "
             >
-
-              <div className="text-xs text-slate-600">
-                Total interviews
-              </div>
+              <div className="text-xs text-slate-600">Total interviews</div>
 
               <div
                 className="
@@ -771,9 +650,7 @@ export default function Profile() {
               >
                 {interviews.length}
               </div>
-
             </div>
-
 
             <div
               className="
@@ -784,10 +661,7 @@ export default function Profile() {
                 p-5
               "
             >
-
-              <div className="text-xs text-slate-600">
-                Completed
-              </div>
+              <div className="text-xs text-slate-600">Completed</div>
 
               <div
                 className="
@@ -800,9 +674,7 @@ export default function Profile() {
               >
                 {completedInterviews.length}
               </div>
-
             </div>
-
 
             <div
               className="
@@ -813,10 +685,7 @@ export default function Profile() {
                 p-5
               "
             >
-
-              <div className="text-xs text-slate-600">
-                Average score
-              </div>
+              <div className="text-xs text-slate-600">Average score</div>
 
               <div
                 className="
@@ -827,13 +696,9 @@ export default function Profile() {
                   text-white
                 "
               >
-                {averageScore !== null
-                  ? averageScore.toFixed(0)
-                  : "—"}
+                {averageScore !== null ? averageScore.toFixed(0) : "—"}
               </div>
-
             </div>
-
 
             <div
               className="
@@ -844,10 +709,7 @@ export default function Profile() {
                 p-5
               "
             >
-
-              <div className="text-xs text-slate-600">
-                Best score
-              </div>
+              <div className="text-xs text-slate-600">Best score</div>
 
               <div
                 className="
@@ -858,18 +720,12 @@ export default function Profile() {
                   text-white
                 "
               >
-                {bestScore !== null
-                  ? bestScore.toFixed(0)
-                  : "—"}
+                {bestScore !== null ? bestScore.toFixed(0) : "—"}
               </div>
-
             </div>
-
           </div>
 
-
-          {inProgressInterviews.length >
-            0 && (
+          {inProgressInterviews.length > 0 && (
             <div
               className="
                 mt-4
@@ -880,7 +736,6 @@ export default function Profile() {
                 p-5
               "
             >
-
               <div
                 className="
                   font-mono
@@ -900,19 +755,12 @@ export default function Profile() {
                   text-slate-400
                 "
               >
-                You have{" "}
-                {inProgressInterviews.length}{" "}
-                interview session
-                {inProgressInterviews.length !==
-                1
-                  ? "s"
-                  : ""}{" "}
-                currently in progress.
+                You have {inProgressInterviews.length} interview session
+                {inProgressInterviews.length !== 1 ? "s" : ""} currently in
+                progress.
               </p>
-
             </div>
           )}
-
         </section>
 
         {/* =================================================
@@ -927,7 +775,6 @@ export default function Profile() {
             py-7
           "
         >
-
           <div
             className="
               flex
@@ -938,7 +785,6 @@ export default function Profile() {
               sm:justify-between
             "
           >
-
             <div
               className="
                 font-mono
@@ -962,13 +808,9 @@ export default function Profile() {
             >
               Intelligent practice · Better interviews
             </div>
-
           </div>
-
         </footer>
-
       </main>
-
     </div>
   );
 }

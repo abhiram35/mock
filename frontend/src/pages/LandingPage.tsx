@@ -121,7 +121,6 @@ function LandingPage() {
                   className="landing-primary-cta group inline-flex items-center justify-center gap-3 rounded-xl px-6 py-3.5 text-sm font-bold transition duration-200 active:translate-y-0"
                 >
                   Start practicing
-
                   <span className="transition-transform duration-200 group-hover:translate-x-1">
                     →
                   </span>
@@ -181,10 +180,16 @@ function LandingPage() {
                 </div>
 
                 <div className="mb-4 flex items-center gap-3 rounded-2xl border border-cyan-300/10 bg-cyan-300/[0.04] p-4">
-                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-cyan-300/10 text-cyan-200">✦</div>
+                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-cyan-300/10 text-cyan-200">
+                    ✦
+                  </div>
                   <div>
-                    <div className="text-[9px] uppercase tracking-[0.2em] text-cyan-200/70">AI interviewer</div>
-                    <p className="mt-1 text-xs text-slate-300">Listening for your reasoning...</p>
+                    <div className="text-[9px] uppercase tracking-[0.2em] text-cyan-200/70">
+                      AI interviewer
+                    </div>
+                    <p className="mt-1 text-xs text-slate-300">
+                      Listening for your reasoning...
+                    </p>
                   </div>
                 </div>
 
@@ -201,24 +206,26 @@ function LandingPage() {
                   </div>
 
                   <p className="text-base font-medium leading-7 text-slate-100">
-                    Explain the difference between a list and a tuple in
-                    Python.
+                    Explain the difference between a list and a tuple in Python.
                   </p>
 
                   {/* Fake waveform */}
-                  <div className="landing-waveform mt-5 flex h-8 items-center gap-1" aria-label="Active voice waveform">
-                    {[18, 28, 12, 24, 35, 17, 29, 40, 22, 31, 16, 27, 20, 34].map(
-                      (height, index) => (
-                        <span
-                          key={index}
-                          className="landing-wave-bar w-1 rounded-full bg-violet-200/70"
-                          style={{
-                            height: `${height}%`,
-                            animationDelay: `${index * 80}ms`,
-                          }}
-                        />
-                      ),
-                    )}
+                  <div
+                    className="landing-waveform mt-5 flex h-8 items-center gap-1"
+                    aria-label="Active voice waveform"
+                  >
+                    {[
+                      18, 28, 12, 24, 35, 17, 29, 40, 22, 31, 16, 27, 20, 34,
+                    ].map((height, index) => (
+                      <span
+                        key={index}
+                        className="landing-wave-bar w-1 rounded-full bg-violet-200/70"
+                        style={{
+                          height: `${height}%`,
+                          animationDelay: `${index * 80}ms`,
+                        }}
+                      />
+                    ))}
                   </div>
                 </div>
 
@@ -235,7 +242,9 @@ function LandingPage() {
 
                 <div className="mt-4 border-t border-white/[0.06] pt-4 text-xs text-slate-400">
                   <span className="text-emerald-300">Feedback ready</span>
-                  <span className="ml-2">Clear structure, add one concrete example.</span>
+                  <span className="ml-2">
+                    Clear structure, add one concrete example.
+                  </span>
                 </div>
               </div>
             </div>
@@ -282,10 +291,7 @@ function LandingPage() {
             FEATURES
         ====================================================== */}
 
-        <section
-          id="features"
-          className="mx-auto max-w-7xl px-6 py-28 lg:px-8"
-        >
+        <section id="features" className="mx-auto max-w-7xl px-6 py-28 lg:px-8">
           <div className="max-w-2xl">
             <div className="text-[10px] font-semibold uppercase tracking-[0.25em] text-violet-300">
               Built for better interviews
@@ -309,9 +315,7 @@ function LandingPage() {
                 01
               </div>
 
-              <h3 className="text-lg font-semibold">
-                Adaptive interviews
-              </h3>
+              <h3 className="text-lg font-semibold">Adaptive interviews</h3>
 
               <p className="mt-3 text-sm leading-7 text-slate-500">
                 Strong answers can increase the difficulty while weaker
@@ -325,9 +329,7 @@ function LandingPage() {
                 02
               </div>
 
-              <h3 className="text-lg font-semibold">
-                Semantic AI evaluation
-              </h3>
+              <h3 className="text-lg font-semibold">Semantic AI evaluation</h3>
 
               <p className="mt-3 text-sm leading-7 text-slate-500">
                 Your answer is evaluated for technical correctness, relevance,
@@ -341,9 +343,7 @@ function LandingPage() {
                 03
               </div>
 
-              <h3 className="text-lg font-semibold">
-                Actionable feedback
-              </h3>
+              <h3 className="text-lg font-semibold">Actionable feedback</h3>
 
               <p className="mt-3 text-sm leading-7 text-slate-500">
                 Receive scores, strengths, weaknesses, feedback, and
@@ -401,9 +401,7 @@ function LandingPage() {
                     {step.number}
                   </div>
 
-                  <h3 className="mt-4 text-lg font-semibold">
-                    {step.title}
-                  </h3>
+                  <h3 className="mt-4 text-lg font-semibold">{step.title}</h3>
 
                   <p className="mt-3 text-sm leading-7 text-slate-500">
                     {step.text}
@@ -442,7 +440,6 @@ function LandingPage() {
                 className="group mt-8 inline-flex items-center gap-3 rounded-xl bg-white px-7 py-3.5 text-sm font-bold text-[#0b0c16] transition hover:-translate-y-0.5 hover:bg-violet-100 active:translate-y-0"
               >
                 Create your account
-
                 <span className="transition-transform group-hover:translate-x-1">
                   →
                 </span>
@@ -459,9 +456,7 @@ function LandingPage() {
       <footer className="border-t border-white/[0.06]">
         <div className="mx-auto flex max-w-7xl flex-col gap-4 px-6 py-8 sm:flex-row sm:items-center sm:justify-between lg:px-8">
           <div>
-            <div className="text-sm font-semibold">
-              AI Mock Interview
-            </div>
+            <div className="text-sm font-semibold">AI Mock Interview</div>
 
             <div className="mt-1 text-xs text-slate-600">
               Practice. Improve. Succeed.

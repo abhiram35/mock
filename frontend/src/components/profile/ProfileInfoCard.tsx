@@ -14,9 +14,7 @@ export default function ProfileInfoCard({
       <div className="font-mono text-[9px] uppercase tracking-[0.14em] text-slate-600">
         {label}
       </div>
-      <div className={`mt-3 ${valueClassName}`}>
-        {value}
-      </div>
+      <div className={`mt-3 ${valueClassName}`}>{value}</div>
     </div>
   );
 }

@@ -15,10 +15,7 @@ export default function QuestionPanel({
 }: QuestionPanelProps) {
   const progress =
     totalQuestions > 0
-      ? Math.min(
-          (questionNumber / totalQuestions) * 100,
-          100,
-        )
+      ? Math.min((questionNumber / totalQuestions) * 100, 100)
       : 0;
 
   return (
@@ -26,9 +23,7 @@ export default function QuestionPanel({
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-violet-400">
           Question{" "}
-          {questionNumber > 0
-            ? String(questionNumber).padStart(2, "0")
-            : "01"}
+          {questionNumber > 0 ? String(questionNumber).padStart(2, "0") : "01"}
         </div>
 
         <div className="rounded-full border border-cyan-400/15 bg-cyan-400/[0.04] px-3 py-1.5 font-mono text-[9px] uppercase tracking-[0.14em] text-cyan-300">

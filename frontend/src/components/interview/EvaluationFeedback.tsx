@@ -6,13 +6,7 @@ interface EvaluationFeedbackProps {
   isContinuing: boolean;
 }
 
-function Score({
-  label,
-  value,
-}: {
-  label: string;
-  value: number | null;
-}) {
+function Score({ label, value }: { label: string; value: number | null }) {
   return (
     <div className="rounded-2xl border border-white/[0.06] bg-white/[0.02] p-4">
       <div className="font-mono text-[9px] uppercase tracking-[0.14em] text-slate-600">
@@ -58,20 +52,11 @@ export default function EvaluationFeedback({
       </div>
 
       <div className="mt-6 grid grid-cols-3 gap-3">
-        <Score
-          label="Technical"
-          value={evaluation.technical_score}
-        />
+        <Score label="Technical" value={evaluation.technical_score} />
 
-        <Score
-          label="Communication"
-          value={evaluation.communication_score}
-        />
+        <Score label="Communication" value={evaluation.communication_score} />
 
-        <Score
-          label="Relevance"
-          value={evaluation.relevance_score}
-        />
+        <Score label="Relevance" value={evaluation.relevance_score} />
       </div>
 
       <div className="mt-6 grid gap-4 md:grid-cols-3">
@@ -81,8 +66,7 @@ export default function EvaluationFeedback({
           </div>
 
           <p className="mt-3 text-sm leading-6 text-slate-300">
-            {evaluation.feedback ||
-              "No additional feedback provided."}
+            {evaluation.feedback || "No additional feedback provided."}
           </p>
         </div>
 
@@ -92,8 +76,7 @@ export default function EvaluationFeedback({
           </div>
 
           <p className="mt-3 text-sm leading-6 text-slate-300">
-            {evaluation.strengths ||
-              "No strengths provided."}
+            {evaluation.strengths || "No strengths provided."}
           </p>
         </div>
 
@@ -103,8 +86,7 @@ export default function EvaluationFeedback({
           </div>
 
           <p className="mt-3 text-sm leading-6 text-slate-300">
-            {evaluation.improvements ||
-              "No improvements provided."}
+            {evaluation.improvements || "No improvements provided."}
           </p>
         </div>
       </div>
@@ -115,9 +97,7 @@ export default function EvaluationFeedback({
         onClick={onContinue}
         className="mt-6 w-full rounded-xl bg-white px-6 py-3.5 font-display text-sm font-semibold text-slate-950 transition-all hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50"
       >
-        {isContinuing
-          ? "Loading next question..."
-          : "Continue interview →"}
+        {isContinuing ? "Loading next question..." : "Continue interview →"}
       </button>
     </section>
   );

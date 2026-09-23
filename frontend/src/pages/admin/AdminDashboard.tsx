@@ -16,25 +16,18 @@ interface DashboardStats {
 export default function AdminDashboard() {
   const navigate = useNavigate();
 
-  const [stats, setStats] =
-    useState<DashboardStats | null>(null);
+  const [stats, setStats] = useState<DashboardStats | null>(null);
 
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function loadDashboard() {
       try {
-        const response =
-          await api.get<DashboardStats>(
-            "/admin/dashboard"
-          );
+        const response = await api.get<DashboardStats>("/admin/dashboard");
 
         setStats(response.data);
       } catch (error) {
-        console.error(
-          "Failed to load admin dashboard:",
-          error
-        );
+        console.error("Failed to load admin dashboard:", error);
       } finally {
         setLoading(false);
       }
@@ -84,13 +77,9 @@ export default function AdminDashboard() {
       <nav className="border-b border-slate-800">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5">
           <div>
-            <h1 className="font-bold">
-              AI Mock Interview
-            </h1>
+            <h1 className="font-bold">AI Mock Interview</h1>
 
-            <p className="text-xs text-slate-500">
-              Administrator
-            </p>
+            <p className="text-xs text-slate-500">Administrator</p>
           </div>
 
           <button
@@ -103,18 +92,14 @@ export default function AdminDashboard() {
       </nav>
 
       <main className="mx-auto max-w-7xl px-6 py-10">
-        <h2 className="text-4xl font-bold">
-          Admin Dashboard
-        </h2>
+        <h2 className="text-4xl font-bold">Admin Dashboard</h2>
 
         <p className="mt-2 text-slate-400">
           Overview of the interview platform.
         </p>
 
         {loading ? (
-          <p className="mt-10 text-slate-400">
-            Loading dashboard...
-          </p>
+          <p className="mt-10 text-slate-400">Loading dashboard...</p>
         ) : (
           <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {cards.map((card) => (
@@ -122,13 +107,9 @@ export default function AdminDashboard() {
                 key={card.title}
                 className="rounded-2xl border border-slate-800 bg-slate-900 p-6"
               >
-                <p className="text-sm text-slate-400">
-                  {card.title}
-                </p>
+                <p className="text-sm text-slate-400">{card.title}</p>
 
-                <p className="mt-3 text-3xl font-bold">
-                  {card.value}
-                </p>
+                <p className="mt-3 text-3xl font-bold">{card.value}</p>
               </div>
             ))}
           </div>
@@ -136,56 +117,40 @@ export default function AdminDashboard() {
 
         <div className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-4">
           <button
-            onClick={() =>
-              navigate("/admin/users")
-            }
+            onClick={() => navigate("/admin/users")}
             className="rounded-xl border border-slate-800 bg-slate-900 p-5 text-left hover:border-blue-500"
           >
-            <h3 className="font-semibold">
-              Users
-            </h3>
+            <h3 className="font-semibold">Users</h3>
             <p className="mt-1 text-sm text-slate-400">
               Manage application users.
             </p>
           </button>
 
           <button
-            onClick={() =>
-              navigate("/admin/topics")
-            }
+            onClick={() => navigate("/admin/topics")}
             className="rounded-xl border border-slate-800 bg-slate-900 p-5 text-left hover:border-blue-500"
           >
-            <h3 className="font-semibold">
-              Topics
-            </h3>
+            <h3 className="font-semibold">Topics</h3>
             <p className="mt-1 text-sm text-slate-400">
               Manage interview topics.
             </p>
           </button>
 
           <button
-            onClick={() =>
-              navigate("/admin/questions")
-            }
+            onClick={() => navigate("/admin/questions")}
             className="rounded-xl border border-slate-800 bg-slate-900 p-5 text-left hover:border-blue-500"
           >
-            <h3 className="font-semibold">
-              Questions
-            </h3>
+            <h3 className="font-semibold">Questions</h3>
             <p className="mt-1 text-sm text-slate-400">
               Manage interview questions.
             </p>
           </button>
 
           <button
-            onClick={() =>
-              navigate("/admin/interviews")
-            }
+            onClick={() => navigate("/admin/interviews")}
             className="rounded-xl border border-slate-800 bg-slate-900 p-5 text-left hover:border-blue-500"
           >
-            <h3 className="font-semibold">
-              Interviews
-            </h3>
+            <h3 className="font-semibold">Interviews</h3>
             <p className="mt-1 text-sm text-slate-400">
               Review candidate interviews.
             </p>

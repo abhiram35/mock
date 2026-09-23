@@ -1,0 +1,42 @@
+# See https://pre-commit.com for more information
+# See https://pre-commit.com/hooks.html for more hooks
+repos:
+  # ── Backend: Ruff (lint + format) ──────────────────────────
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.8.0
+    hooks:
+      - id: ruff
+        name: ruff lint
+        args: [--fix, --exit-non-zero-on-fix]
+        files: ^backend/
+      - id: ruff-format
+        name: ruff format
+        files: ^backend/
+
+  # ── Frontend: ESLint ───────────────────────────────────────
+  - repo: local
+    hooks:
+      - id: eslint
+        name: eslint
+        entry: npx --prefix frontend eslint --max-warnings 0
+        language: system
+        files: ^frontend/src/.*\.(ts|tsx)$
+        types: [file]
+
+      # ── Frontend: Prettier ─────────────────────────────────
+      - id: prettier
+        name: prettier
+        entry: npx --prefix frontend prettier --check --ignore-unknown
+        language: system
+        files: ^frontend/src/.*\.(ts|tsx|css|json)$
+        types: [file]
+
+  # ── Alembic migration check ────────────────────────────────
+  - repo: local
+    hooks:
+      - id: alembic-check
+        name: alembic check (detect missing migrations)
+        entry: python -m alembic check
+        language: system
+        files: ^backend/app/models/.*\.py$
+        pass_filenames: false

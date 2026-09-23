@@ -1,10 +1,7 @@
 import { FormEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import {
-  getCurrentUser,
-  login,
-} from "../api/auth";
+import { getCurrentUser, login } from "../api/auth";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -15,9 +12,7 @@ export default function Login() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  async function handleSubmit(
-    event: FormEvent<HTMLFormElement>
-  ) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
     setError("");
@@ -29,17 +24,11 @@ export default function Login() {
         password,
       });
 
-      localStorage.setItem(
-        "access_token",
-        token.access_token
-      );
+      localStorage.setItem("access_token", token.access_token);
 
       const user = await getCurrentUser();
 
-      localStorage.setItem(
-        "user",
-        JSON.stringify(user)
-      );
+      localStorage.setItem("user", JSON.stringify(user));
 
       if (user.role === "admin") {
         navigate("/admin");
@@ -47,8 +36,7 @@ export default function Login() {
         navigate("/home", { replace: true });
       }
     } catch (error: any) {
-      let message =
-        "Unable to login. Please check your credentials.";
+      let message = "Unable to login. Please check your credentials.";
 
       if (error?.response?.data?.detail) {
         const detail = error.response.data.detail;
@@ -80,13 +68,9 @@ export default function Login() {
           ← Back to home
         </button>
 
-        <h1 className="text-3xl font-bold text-white">
-          Welcome back
-        </h1>
+        <h1 className="text-3xl font-bold text-white">Welcome back</h1>
 
-        <p className="mt-2 text-slate-400">
-          Sign in to your account.
-        </p>
+        <p className="mt-2 text-slate-400">Sign in to your account.</p>
 
         {error && (
           <div className="mt-6 rounded-lg border border-red-500/30 bg-red-500/10 p-3 text-sm text-red-400">
@@ -94,39 +78,28 @@ export default function Login() {
           </div>
         )}
 
-        <form
-          onSubmit={handleSubmit}
-          className="mt-6 space-y-5"
-        >
+        <form onSubmit={handleSubmit} className="mt-6 space-y-5">
           <div>
-            <label className="text-sm text-slate-300">
-              Email
-            </label>
+            <label className="text-sm text-slate-300">Email</label>
 
             <input
               type="email"
               required
               value={email}
-              onChange={(event) =>
-                setEmail(event.target.value)
-              }
+              onChange={(event) => setEmail(event.target.value)}
               className="mt-2 w-full rounded-lg border border-slate-700 bg-slate-800 px-4 py-3 text-white outline-none focus:border-blue-500"
               placeholder="you@example.com"
             />
           </div>
 
           <div>
-            <label className="text-sm text-slate-300">
-              Password
-            </label>
+            <label className="text-sm text-slate-300">Password</label>
 
             <input
               type="password"
               required
               value={password}
-              onChange={(event) =>
-                setPassword(event.target.value)
-              }
+              onChange={(event) => setPassword(event.target.value)}
               className="mt-2 w-full rounded-lg border border-slate-700 bg-slate-800 px-4 py-3 text-white outline-none focus:border-blue-500"
               placeholder="••••••••"
             />

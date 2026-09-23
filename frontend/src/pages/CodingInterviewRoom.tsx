@@ -1,13 +1,6 @@
-import {
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import { useEffect, useMemo, useState } from "react";
 
-import {
-  useLocation,
-  useNavigate,
-} from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import {
   CodingLanguage,
@@ -16,7 +9,6 @@ import {
   getCodingQuestions,
 } from "../lib/api";
 
-
 interface LocationState {
   topicId?: number;
   language?: CodingLanguage;
@@ -24,7 +16,6 @@ interface LocationState {
   questionCount?: number;
   questions?: CodingQuestion[];
 }
-
 
 interface TestCaseResult {
   test_case_number: number;
@@ -36,7 +27,6 @@ interface TestCaseResult {
   execution_time_ms: number | null;
 }
 
-
 interface CodeExecutionResponse {
   success: boolean;
   language: string;
@@ -46,117 +36,70 @@ interface CodeExecutionResponse {
   results: TestCaseResult[];
 }
 
-
-const LANGUAGE_LABELS: Record<
-  CodingLanguage,
-  string
-> = {
+const LANGUAGE_LABELS: Record<CodingLanguage, string> = {
   python: "Python",
   javascript: "JavaScript",
   java: "Java",
   cpp: "C++",
 };
 
-
 function CodingInterviewRoom() {
   const navigate = useNavigate();
 
-  const location =
-    useLocation();
+  const location = useLocation();
 
-  const locationState =
-    (location.state as LocationState | null) ??
-    null;
+  const locationState = (location.state as LocationState | null) ?? null;
 
+  const [questions, setQuestions] = useState<CodingQuestion[]>(
+    locationState?.questions ?? [],
+  );
 
-  const [questions, setQuestions] =
-    useState<CodingQuestion[]>(
-      locationState?.questions ?? [],
-    );
+  const [currentIndex, setCurrentIndex] = useState(0);
 
-  const [currentIndex, setCurrentIndex] =
-    useState(0);
+  const [code, setCode] = useState("");
 
-  const [code, setCode] =
-    useState("");
+  const [loading, setLoading] = useState(
+    locationState?.questions ? false : true,
+  );
 
-  const [loading, setLoading] =
-    useState(
-      locationState?.questions
-        ? false
-        : true,
-    );
+  const [running, setRunning] = useState(false);
 
-  const [running, setRunning] =
-    useState(false);
-
-  const [submitting, setSubmitting] =
-    useState(false);
+  const [submitting, setSubmitting] = useState(false);
 
   const [executionResult, setExecutionResult] =
-    useState<CodeExecutionResponse | null>(
-      null,
-    );
+    useState<CodeExecutionResponse | null>(null);
 
-  const [error, setError] =
-    useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
-  const [showProblem, setShowProblem] =
-    useState(true);
+  const [showProblem, setShowProblem] = useState(true);
 
-
-  const currentQuestion =
-    questions[currentIndex];
-
+  const currentQuestion = questions[currentIndex];
 
   const language =
-    currentQuestion?.language ??
-    locationState?.language ??
-    "python";
+    currentQuestion?.language ?? locationState?.language ?? "python";
 
+  const questionNumber = currentIndex + 1;
 
-  const questionNumber =
-    currentIndex + 1;
-
-
-  const totalQuestions =
-    questions.length;
-
+  const totalQuestions = questions.length;
 
   const progressPercentage =
-    totalQuestions > 0
-      ? (questionNumber / totalQuestions) * 100
-      : 0;
+    totalQuestions > 0 ? (questionNumber / totalQuestions) * 100 : 0;
 
+  const isLastQuestion = currentIndex === totalQuestions - 1;
 
-  const isLastQuestion =
-    currentIndex ===
-    totalQuestions - 1;
+  const canSubmit = executionResult !== null && executionResult.success;
 
+  const languageLabel = LANGUAGE_LABELS[language];
 
-  const canSubmit =
-    executionResult !== null &&
-    executionResult.success;
+  const formattedExamples = useMemo(() => {
+    if (!currentQuestion?.examples) {
+      return [];
+    }
 
-
-  const languageLabel =
-    LANGUAGE_LABELS[language];
-
-
-  const formattedExamples =
-    useMemo(() => {
-      if (!currentQuestion?.examples) {
-        return [];
-      }
-
-      return currentQuestion.examples
-        .split(/\n\s*\n/)
-        .filter(
-          (example) =>
-            example.trim().length > 0,
-        );
-    }, [currentQuestion]);
-
+    return currentQuestion.examples
+      .split(/\n\s*\n/)
+      .filter((example) => example.trim().length > 0);
+  }, [currentQuestion]);
 
   useEffect(() => {
     async function loadQuestions() {
@@ -169,48 +112,32 @@ function CodingInterviewRoom() {
         !locationState.language ||
         !locationState.difficulty
       ) {
-        setError(
-          "Coding interview configuration is missing.",
-        );
+        setError("Coding interview configuration is missing.");
 
         setLoading(false);
 
         return;
       }
 
-
       try {
         setLoading(true);
         setError(null);
 
-        const data =
-          await getCodingQuestions(
-            locationState.topicId,
-            locationState.language,
-            locationState.difficulty,
-          );
-
+        const data = await getCodingQuestions(
+          locationState.topicId,
+          locationState.language,
+          locationState.difficulty,
+        );
 
         if (data.length === 0) {
-          setError(
-            "No coding questions are available for this interview.",
-          );
+          setError("No coding questions are available for this interview.");
 
           return;
         }
 
+        const requestedCount = locationState.questionCount ?? data.length;
 
-        const requestedCount =
-          locationState.questionCount ??
-          data.length;
-
-
-        setQuestions(
-          data.slice(
-            0,
-            requestedCount,
-          ),
-        );
+        setQuestions(data.slice(0, requestedCount));
       } catch (err) {
         setError(
           err instanceof Error
@@ -222,144 +149,97 @@ function CodingInterviewRoom() {
       }
     }
 
-
     loadQuestions();
-  }, [
-    locationState,
-  ]);
-
+  }, [locationState]);
 
   useEffect(() => {
     if (currentQuestion) {
-      setCode(
-        currentQuestion.starter_code,
-      );
+      setCode(currentQuestion.starter_code);
 
       setExecutionResult(null);
       setError(null);
     }
-  }, [
-    currentQuestion,
-  ]);
-
+  }, [currentQuestion]);
 
   async function executeCode() {
     if (!currentQuestion) {
       return;
     }
 
-
     if (!code.trim()) {
-      setError(
-        "Please write some code before running it.",
-      );
+      setError("Please write some code before running it.");
 
       return;
     }
-
 
     try {
       setRunning(true);
       setError(null);
       setExecutionResult(null);
 
-
-      const token =
-        localStorage.getItem(
-          "access_token",
-        );
-
+      const token = localStorage.getItem("access_token");
 
       const API_BASE_URL =
-        import.meta.env.VITE_API_BASE_URL ||
-        "http://127.0.0.1:8000";
+        import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000";
 
+      const response = await fetch(`${API_BASE_URL}/code-execution/run`, {
+        method: "POST",
 
-      const response =
-        await fetch(
-          `${API_BASE_URL}/code-execution/run`,
-          {
-            method: "POST",
+        headers: {
+          "Content-Type": "application/json",
 
-            headers: {
-              "Content-Type":
-                "application/json",
+          ...(token
+            ? {
+                Authorization: `Bearer ${token}`,
+              }
+            : {}),
+        },
 
-              ...(token
-                ? {
-                    Authorization:
-                      `Bearer ${token}`,
-                  }
-                : {}),
-            },
+        body: JSON.stringify({
+          coding_question_id: currentQuestion.id,
 
-            body: JSON.stringify({
-              coding_question_id:
-                currentQuestion.id,
-
-              code,
-            }),
-          },
-        );
-
+          code,
+        }),
+      });
 
       if (!response.ok) {
-        let message =
-          "Code execution failed.";
-
+        let message = "Code execution failed.";
 
         try {
-          const data =
-            await response.json();
+          const data = await response.json();
 
-          message =
-            data.detail ||
-            message;
+          message = data.detail || message;
         } catch {
           // Keep default message.
         }
 
-
         throw new Error(message);
       }
 
-
-      const result =
-        (await response.json()) as CodeExecutionResponse;
-
+      const result = (await response.json()) as CodeExecutionResponse;
 
       setExecutionResult(result);
     } catch (err) {
-      setError(
-        err instanceof Error
-          ? err.message
-          : "Unable to execute code.",
-      );
+      setError(err instanceof Error ? err.message : "Unable to execute code.");
     } finally {
       setRunning(false);
     }
   }
-
 
   async function submitSolution() {
     if (!currentQuestion) {
       return;
     }
 
-
     if (!executionResult?.success) {
-      setError(
-        "Your solution must pass all test cases before submission.",
-      );
+      setError("Your solution must pass all test cases before submission.");
 
       return;
     }
 
-
     try {
       setSubmitting(true);
       setError(null);
-
 
       /*
        * For now, successful submission moves
@@ -370,41 +250,29 @@ function CodingInterviewRoom() {
        * next development step.
        */
 
-
       if (isLastQuestion) {
-        navigate(
-          "/dashboard",
-          {
-            replace: true,
-          },
-        );
+        navigate("/dashboard", {
+          replace: true,
+        });
 
         return;
       }
 
-
-      setCurrentIndex(
-        (previous) =>
-          previous + 1,
-      );
+      setCurrentIndex((previous) => previous + 1);
     } finally {
       setSubmitting(false);
     }
   }
 
-
   function handleBack() {
-    const confirmed =
-      window.confirm(
-        "Are you sure you want to leave this coding interview? Your current progress may be lost.",
-      );
-
+    const confirmed = window.confirm(
+      "Are you sure you want to leave this coding interview? Your current progress may be lost.",
+    );
 
     if (confirmed) {
       navigate("/home");
     }
   }
-
 
   if (loading) {
     return (
@@ -422,14 +290,12 @@ function CodingInterviewRoom() {
     );
   }
 
-
   if (error && !currentQuestion) {
     return (
       <div className="app-background flex min-h-screen items-center justify-center px-6">
         <div className="app-grid" />
 
         <div className="glass-panel relative z-10 w-full max-w-lg rounded-2xl p-8 text-center">
-
           <div className="mx-auto mb-5 flex h-12 w-12 items-center justify-center rounded-full bg-rose-500/10 text-rose-400">
             !
           </div>
@@ -438,47 +304,36 @@ function CodingInterviewRoom() {
             Unable to start interview
           </h1>
 
-          <p className="mt-3 text-sm leading-6 text-slate-400">
-            {error}
-          </p>
+          <p className="mt-3 text-sm leading-6 text-slate-400">{error}</p>
 
           <button
             type="button"
-            onClick={() =>
-              navigate("/coding-interview/new")
-            }
+            onClick={() => navigate("/coding-interview/new")}
             className="mt-7 rounded-xl bg-violet-500 px-6 py-3 text-sm font-semibold text-white hover:bg-violet-400"
           >
             Back to setup
           </button>
-
         </div>
       </div>
     );
   }
 
-
   if (!currentQuestion) {
     return null;
   }
-
 
   return (
     <div className="app-background min-h-screen">
       <div className="app-grid" />
 
       <main className="relative z-10 flex min-h-screen flex-col">
-
         {/* =================================================
             TOP BAR
         ================================================== */}
 
         <header className="border-b border-white/10 bg-black/20 backdrop-blur-xl">
-
           <div className="mx-auto flex max-w-[1600px] items-center justify-between gap-6 px-5 py-4">
-
             <div className="flex items-center gap-5">
-
               <button
                 type="button"
                 onClick={handleBack}
@@ -500,16 +355,11 @@ function CodingInterviewRoom() {
                   {currentQuestion.difficulty}
                 </p>
               </div>
-
             </div>
 
-
             <div className="flex items-center gap-4">
-
               <div className="hidden text-right sm:block">
-                <p className="text-xs text-slate-500">
-                  Question
-                </p>
+                <p className="text-xs text-slate-500">Question</p>
 
                 <p className="text-sm font-semibold text-white">
                   {questionNumber}
@@ -522,67 +372,45 @@ function CodingInterviewRoom() {
                 <div
                   className="h-full rounded-full bg-violet-400 transition-all duration-300"
                   style={{
-                    width:
-                      `${progressPercentage}%`,
+                    width: `${progressPercentage}%`,
                   }}
                 />
               </div>
-
             </div>
-
           </div>
-
         </header>
-
 
         {/* =================================================
             MOBILE PROBLEM TOGGLE
         ================================================== */}
 
         <div className="border-b border-white/10 bg-black/10 px-5 py-3 lg:hidden">
-
           <button
             type="button"
-            onClick={() =>
-              setShowProblem(
-                (previous) =>
-                  !previous,
-              )
-            }
+            onClick={() => setShowProblem((previous) => !previous)}
             className="text-sm font-medium text-violet-300"
           >
-            {showProblem
-              ? "Hide problem"
-              : "Show problem"}
+            {showProblem ? "Hide problem" : "Show problem"}
           </button>
-
         </div>
-
 
         {/* =================================================
             MAIN INTERVIEW AREA
         ================================================== */}
 
         <div className="mx-auto flex w-full max-w-[1600px] flex-1 flex-col gap-0 lg:grid lg:grid-cols-[minmax(320px,0.85fr)_minmax(500px,1.4fr)]">
-
           {/* =================================================
               PROBLEM PANEL
           ================================================== */}
 
           <section
             className={`border-b border-white/10 lg:border-b-0 lg:border-r ${
-              showProblem
-                ? "block"
-                : "hidden lg:block"
+              showProblem ? "block" : "hidden lg:block"
             }`}
           >
-
             <div className="h-full overflow-y-auto p-6 md:p-8 lg:max-h-[calc(100vh-81px)]">
-
               <div className="mb-8">
-
                 <div className="mb-4 flex flex-wrap items-center gap-2">
-
                   <span className="rounded-full border border-violet-400/20 bg-violet-400/10 px-3 py-1 font-mono text-[10px] uppercase tracking-wider text-violet-300">
                     {currentQuestion.difficulty}
                   </span>
@@ -590,19 +418,14 @@ function CodingInterviewRoom() {
                   <span className="rounded-full border border-cyan-400/20 bg-cyan-400/10 px-3 py-1 font-mono text-[10px] uppercase tracking-wider text-cyan-300">
                     {languageLabel}
                   </span>
-
                 </div>
-
 
                 <h1 className="text-3xl font-semibold tracking-tight text-white">
                   {currentQuestion.title}
                 </h1>
-
               </div>
 
-
               <div className="space-y-8">
-
                 {/* Problem */}
                 <div>
                   <h2 className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
@@ -613,7 +436,6 @@ function CodingInterviewRoom() {
                     {currentQuestion.problem_statement}
                   </p>
                 </div>
-
 
                 {/* Input */}
                 <div>
@@ -628,7 +450,6 @@ function CodingInterviewRoom() {
                   </div>
                 </div>
 
-
                 {/* Output */}
                 <div>
                   <h2 className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
@@ -641,7 +462,6 @@ function CodingInterviewRoom() {
                     </p>
                   </div>
                 </div>
-
 
                 {/* Constraints */}
                 <div>
@@ -656,7 +476,6 @@ function CodingInterviewRoom() {
                   </div>
                 </div>
 
-
                 {/* Examples */}
                 <div>
                   <h2 className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
@@ -664,48 +483,34 @@ function CodingInterviewRoom() {
                   </h2>
 
                   <div className="space-y-3">
-
                     {formattedExamples.length > 0 ? (
-                      formattedExamples.map(
-                        (
-                          example,
-                          index,
-                        ) => (
-                          <pre
-                            key={index}
-                            className="overflow-x-auto rounded-xl border border-white/10 bg-black/30 p-4 font-mono text-xs leading-6 text-slate-300"
-                          >
-                            {example}
-                          </pre>
-                        ),
-                      )
+                      formattedExamples.map((example, index) => (
+                        <pre
+                          key={index}
+                          className="overflow-x-auto rounded-xl border border-white/10 bg-black/30 p-4 font-mono text-xs leading-6 text-slate-300"
+                        >
+                          {example}
+                        </pre>
+                      ))
                     ) : (
                       <pre className="overflow-x-auto rounded-xl border border-white/10 bg-black/30 p-4 font-mono text-xs leading-6 text-slate-300">
                         {currentQuestion.examples}
                       </pre>
                     )}
-
                   </div>
                 </div>
-
               </div>
-
             </div>
-
           </section>
-
 
           {/* =================================================
               CODE PANEL
           ================================================== */}
 
           <section className="flex min-h-[650px] flex-1 flex-col">
-
             {/* Editor Header */}
             <div className="flex items-center justify-between border-b border-white/10 bg-black/20 px-5 py-3">
-
               <div className="flex items-center gap-3">
-
                 <div className="flex gap-1.5">
                   <div className="h-2.5 w-2.5 rounded-full bg-rose-400/70" />
                   <div className="h-2.5 w-2.5 rounded-full bg-amber-400/70" />
@@ -715,30 +520,21 @@ function CodingInterviewRoom() {
                 <span className="font-mono text-xs text-slate-500">
                   solution
                 </span>
-
               </div>
-
 
               <span className="rounded-md border border-white/10 bg-white/[0.03] px-3 py-1 font-mono text-xs text-slate-400">
                 {languageLabel}
               </span>
-
             </div>
-
 
             {/* Editor */}
             <div className="relative flex-1 bg-[#080b12]">
-
               <textarea
                 value={code}
                 onChange={(event) => {
-                  setCode(
-                    event.target.value,
-                  );
+                  setCode(event.target.value);
 
-                  setExecutionResult(
-                    null,
-                  );
+                  setExecutionResult(null);
 
                   setError(null);
                 }}
@@ -746,30 +542,22 @@ function CodingInterviewRoom() {
                 className="h-full min-h-[420px] w-full resize-none border-0 bg-transparent p-6 font-mono text-sm leading-7 text-slate-200 outline-none"
                 placeholder="Write your solution here..."
               />
-
             </div>
-
 
             {/* Error */}
             {error && (
               <div className="border-t border-rose-500/20 bg-rose-500/5 px-5 py-3">
-                <p className="text-sm text-rose-300">
-                  {error}
-                </p>
+                <p className="text-sm text-rose-300">{error}</p>
               </div>
             )}
-
 
             {/* =================================================
                 TEST RESULTS
             ================================================== */}
 
             <div className="max-h-[280px] overflow-y-auto border-t border-white/10 bg-black/20">
-
               <div className="px-5 py-4">
-
                 <div className="mb-4 flex items-center justify-between">
-
                   <h2 className="text-sm font-semibold text-white">
                     Test Results
                   </h2>
@@ -782,173 +570,123 @@ function CodingInterviewRoom() {
                           : "text-amber-400"
                       }`}
                     >
-                      {
-                        executionResult.passed_test_cases
-                      }
+                      {executionResult.passed_test_cases}
                       {" / "}
-                      {
-                        executionResult.total_test_cases
-                      }
+                      {executionResult.total_test_cases}
                       {" passed"}
                     </span>
                   )}
-
                 </div>
-
 
                 {!executionResult ? (
                   <div className="rounded-xl border border-dashed border-white/10 px-5 py-7 text-center">
                     <p className="text-sm text-slate-500">
-                      Run your code to see the
-                      test results.
+                      Run your code to see the test results.
                     </p>
                   </div>
                 ) : (
                   <div className="space-y-3">
+                    {executionResult.results.map((result) => (
+                      <div
+                        key={result.test_case_number}
+                        className={`rounded-xl border p-4 ${
+                          result.passed
+                            ? "border-emerald-400/20 bg-emerald-400/5"
+                            : "border-rose-400/20 bg-rose-400/5"
+                        }`}
+                      >
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-3">
+                            <span
+                              className={`flex h-7 w-7 items-center justify-center rounded-full text-xs font-bold ${
+                                result.passed
+                                  ? "bg-emerald-400/10 text-emerald-400"
+                                  : "bg-rose-400/10 text-rose-400"
+                              }`}
+                            >
+                              {result.passed ? "✓" : "×"}
+                            </span>
 
-                    {executionResult.results.map(
-                      (result) => (
-                        <div
-                          key={
-                            result.test_case_number
-                          }
-                          className={`rounded-xl border p-4 ${
-                            result.passed
-                              ? "border-emerald-400/20 bg-emerald-400/5"
-                              : "border-rose-400/20 bg-rose-400/5"
-                          }`}
-                        >
-
-                          <div className="flex items-center justify-between">
-
-                            <div className="flex items-center gap-3">
-
-                              <span
-                                className={`flex h-7 w-7 items-center justify-center rounded-full text-xs font-bold ${
-                                  result.passed
-                                    ? "bg-emerald-400/10 text-emerald-400"
-                                    : "bg-rose-400/10 text-rose-400"
-                                }`}
-                              >
-                                {result.passed
-                                  ? "✓"
-                                  : "×"}
-                              </span>
-
-                              <span className="text-sm font-medium text-white">
-                                Test Case{" "}
-                                {
-                                  result.test_case_number
-                                }
-                              </span>
-
-                            </div>
-
-
-                            {result.execution_time_ms !==
-                              null && (
-                              <span className="font-mono text-[10px] text-slate-500">
-                                {
-                                  result.execution_time_ms.toFixed(
-                                    0,
-                                  )
-                                }
-                                {" ms"}
-                              </span>
-                            )}
-
+                            <span className="text-sm font-medium text-white">
+                              Test Case {result.test_case_number}
+                            </span>
                           </div>
 
-
-                          {!result.passed && (
-                            <div className="mt-4 space-y-3">
-
-                              <div>
-                                <p className="mb-1 text-[10px] uppercase tracking-wider text-slate-500">
-                                  Expected
-                                </p>
-
-                                <pre className="overflow-x-auto rounded-lg bg-black/20 p-3 font-mono text-xs text-slate-300">
-                                  {result.expected_output}
-                                </pre>
-                              </div>
-
-
-                              <div>
-                                <p className="mb-1 text-[10px] uppercase tracking-wider text-slate-500">
-                                  Actual
-                                </p>
-
-                                <pre className="overflow-x-auto rounded-lg bg-black/20 p-3 font-mono text-xs text-slate-300">
-                                  {result.actual_output ||
-                                    "No output"}
-                                </pre>
-                              </div>
-
-
-                              {result.error && (
-                                <div>
-                                  <p className="mb-1 text-[10px] uppercase tracking-wider text-rose-400">
-                                    Error
-                                  </p>
-
-                                  <pre className="overflow-x-auto rounded-lg bg-black/20 p-3 font-mono text-xs text-rose-300">
-                                    {result.error}
-                                  </pre>
-                                </div>
-                              )}
-
-                            </div>
+                          {result.execution_time_ms !== null && (
+                            <span className="font-mono text-[10px] text-slate-500">
+                              {result.execution_time_ms.toFixed(0)}
+                              {" ms"}
+                            </span>
                           )}
-
                         </div>
-                      ),
-                    )}
 
+                        {!result.passed && (
+                          <div className="mt-4 space-y-3">
+                            <div>
+                              <p className="mb-1 text-[10px] uppercase tracking-wider text-slate-500">
+                                Expected
+                              </p>
+
+                              <pre className="overflow-x-auto rounded-lg bg-black/20 p-3 font-mono text-xs text-slate-300">
+                                {result.expected_output}
+                              </pre>
+                            </div>
+
+                            <div>
+                              <p className="mb-1 text-[10px] uppercase tracking-wider text-slate-500">
+                                Actual
+                              </p>
+
+                              <pre className="overflow-x-auto rounded-lg bg-black/20 p-3 font-mono text-xs text-slate-300">
+                                {result.actual_output || "No output"}
+                              </pre>
+                            </div>
+
+                            {result.error && (
+                              <div>
+                                <p className="mb-1 text-[10px] uppercase tracking-wider text-rose-400">
+                                  Error
+                                </p>
+
+                                <pre className="overflow-x-auto rounded-lg bg-black/20 p-3 font-mono text-xs text-rose-300">
+                                  {result.error}
+                                </pre>
+                              </div>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                    ))}
                   </div>
                 )}
-
               </div>
-
             </div>
-
 
             {/* =================================================
                 ACTION BAR
             ================================================== */}
 
             <div className="flex flex-col gap-3 border-t border-white/10 bg-black/30 p-4 sm:flex-row sm:items-center sm:justify-between">
-
               <div className="text-xs text-slate-500">
-
                 {executionResult?.success
                   ? "All test cases passed."
                   : "Run your code before submitting."}
-
               </div>
 
-
               <div className="flex gap-3">
-
                 <button
                   type="button"
                   onClick={executeCode}
                   disabled={running}
                   className="rounded-xl border border-white/10 bg-white/[0.04] px-5 py-3 text-sm font-semibold text-white hover:bg-white/[0.08] disabled:cursor-not-allowed disabled:opacity-50"
                 >
-                  {running
-                    ? "Running..."
-                    : "▶ Run Code"}
+                  {running ? "Running..." : "▶ Run Code"}
                 </button>
-
 
                 <button
                   type="button"
                   onClick={submitSolution}
-                  disabled={
-                    submitting ||
-                    !canSubmit
-                  }
+                  disabled={submitting || !canSubmit}
                   className="rounded-xl bg-violet-500 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-violet-500/20 hover:bg-violet-400 disabled:cursor-not-allowed disabled:opacity-40"
                 >
                   {submitting
@@ -957,19 +695,13 @@ function CodingInterviewRoom() {
                       ? "Submit & Finish"
                       : "Submit & Next →"}
                 </button>
-
               </div>
-
             </div>
-
           </section>
-
         </div>
-
       </main>
     </div>
   );
 }
-
 
 export default CodingInterviewRoom;

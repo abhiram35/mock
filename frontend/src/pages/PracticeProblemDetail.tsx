@@ -58,8 +58,11 @@ export default function PracticeProblemDetail() {
   // Execution State
   const [isRunning, setIsRunning] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [executionResult, setExecutionResult] = useState<CodeExecutionResponse | null>(null);
-  const [activeTab, setActiveTab] = useState<"results" | "submissions">("results");
+  const [executionResult, setExecutionResult] =
+    useState<CodeExecutionResponse | null>(null);
+  const [activeTab, setActiveTab] = useState<"results" | "submissions">(
+    "results",
+  );
   const [submissions, setSubmissions] = useState<CodingSubmission[]>([]);
   const [isConsoleOpen, setIsConsoleOpen] = useState(true);
   const [activeTestCaseTab, setActiveTestCaseTab] = useState(0);
@@ -73,7 +76,9 @@ export default function PracticeProblemDetail() {
         const data = await getCodingQuestion(Number(questionId));
         setQuestion(data);
         setLanguage(data.language || "python");
-        setCode(data.starter_code || STARTER_CODE_TEMPLATES[data.language] || "");
+        setCode(
+          data.starter_code || STARTER_CODE_TEMPLATES[data.language] || "",
+        );
 
         // Load submission history
         loadSubmissions(data.id);
@@ -143,7 +148,9 @@ export default function PracticeProblemDetail() {
       <div className="flex min-h-screen items-center justify-center bg-slate-950 text-white">
         <div className="flex flex-col items-center gap-3">
           <div className="h-8 w-8 animate-spin rounded-full border-2 border-cyan-400 border-t-transparent" />
-          <p className="font-mono text-xs uppercase tracking-widest text-slate-400">Loading problem workspace...</p>
+          <p className="font-mono text-xs uppercase tracking-widest text-slate-400">
+            Loading problem workspace...
+          </p>
         </div>
       </div>
     );
@@ -153,8 +160,12 @@ export default function PracticeProblemDetail() {
     return (
       <div className="flex min-h-screen flex-col items-center justify-center bg-slate-950 px-6 text-center text-white">
         <div className="max-w-md rounded-2xl border border-rose-500/20 bg-rose-500/[0.05] p-6">
-          <h2 className="text-lg font-semibold text-rose-300">Problem Not Found</h2>
-          <p className="mt-2 text-sm text-slate-400">{error || "Could not retrieve question."}</p>
+          <h2 className="text-lg font-semibold text-rose-300">
+            Problem Not Found
+          </h2>
+          <p className="mt-2 text-sm text-slate-400">
+            {error || "Could not retrieve question."}
+          </p>
           <button
             onClick={() => navigate("/practice")}
             className="mt-5 rounded-xl bg-white/10 px-4 py-2 text-xs font-semibold text-white transition hover:bg-white/20"
@@ -240,10 +251,16 @@ export default function PracticeProblemDetail() {
         {/* Left Pane: Problem Description */}
         <div className="flex flex-1 flex-col overflow-y-auto border-b border-white/[0.08] p-6 lg:border-b-0 lg:border-r lg:max-w-[48%]">
           <div className="mb-6">
-            <h1 className="text-2xl font-bold tracking-tight text-white">{question.title}</h1>
+            <h1 className="text-2xl font-bold tracking-tight text-white">
+              {question.title}
+            </h1>
             <div className="mt-2 flex items-center gap-2">
-              <span className="font-mono text-xs text-slate-400">Language template:</span>
-              <span className="font-mono text-xs text-cyan-400 uppercase">{question.language}</span>
+              <span className="font-mono text-xs text-slate-400">
+                Language template:
+              </span>
+              <span className="font-mono text-xs text-cyan-400 uppercase">
+                {question.language}
+              </span>
             </div>
           </div>
 
@@ -317,7 +334,8 @@ export default function PracticeProblemDetail() {
                 automaticLayout: true,
                 scrollBeyondLastLine: false,
                 tabSize: 4,
-                fontFamily: "Fira Code, Menlo, Monaco, 'Courier New', monospace",
+                fontFamily:
+                  "Fira Code, Menlo, Monaco, 'Courier New', monospace",
               }}
             />
           </div>
@@ -373,7 +391,8 @@ export default function PracticeProblemDetail() {
                 {activeTab === "results" ? (
                   !executionResult ? (
                     <div className="flex h-full items-center justify-center text-slate-500">
-                      Run your code against test cases or submit your solution for verdict.
+                      Run your code against test cases or submit your solution
+                      for verdict.
                     </div>
                   ) : (
                     <div>
@@ -387,7 +406,9 @@ export default function PracticeProblemDetail() {
                       >
                         <div className="flex items-center gap-2">
                           <span className="text-base font-bold">
-                            {executionResult.success ? "✓ Accepted" : "✗ Wrong Answer / Execution Error"}
+                            {executionResult.success
+                              ? "✓ Accepted"
+                              : "✗ Wrong Answer / Execution Error"}
                           </span>
                           {executionResult.status && (
                             <span className="rounded-md bg-white/10 px-2 py-0.5 text-[10px] uppercase">
@@ -396,7 +417,8 @@ export default function PracticeProblemDetail() {
                           )}
                         </div>
                         <div className="text-slate-400">
-                          Passed: {executionResult.passed_test_cases} / {executionResult.total_test_cases} test cases
+                          Passed: {executionResult.passed_test_cases} /{" "}
+                          {executionResult.total_test_cases} test cases
                         </div>
                       </div>
 
@@ -418,7 +440,8 @@ export default function PracticeProblemDetail() {
                               }`}
                             />
                             <span>
-                              Case {r.test_case_number} {r.is_hidden ? "(Hidden)" : ""}
+                              Case {r.test_case_number}{" "}
+                              {r.is_hidden ? "(Hidden)" : ""}
                             </span>
                           </button>
                         ))}
@@ -427,15 +450,25 @@ export default function PracticeProblemDetail() {
                       {/* Active Case Detail */}
                       {executionResult.results[activeTestCaseTab] && (
                         <div className="space-y-3 rounded-xl border border-white/[0.06] bg-black/40 p-3">
-                          {executionResult.results[activeTestCaseTab].is_hidden ? (
+                          {executionResult.results[activeTestCaseTab]
+                            .is_hidden ? (
                             <div className="text-slate-400">
-                              <p className="font-semibold text-slate-300">Hidden Test Case</p>
-                              <p className="mt-1 text-[11px] text-slate-500">
-                                Hidden test cases are evaluated during submission. Test inputs and expected outputs are hidden to verify general algorithmic correctness.
+                              <p className="font-semibold text-slate-300">
+                                Hidden Test Case
                               </p>
-                              {executionResult.results[activeTestCaseTab].error && (
+                              <p className="mt-1 text-[11px] text-slate-500">
+                                Hidden test cases are evaluated during
+                                submission. Test inputs and expected outputs are
+                                hidden to verify general algorithmic
+                                correctness.
+                              </p>
+                              {executionResult.results[activeTestCaseTab]
+                                .error && (
                                 <p className="mt-2 text-rose-400">
-                                  {executionResult.results[activeTestCaseTab].error}
+                                  {
+                                    executionResult.results[activeTestCaseTab]
+                                      .error
+                                  }
                                 </p>
                               )}
                             </div>
@@ -444,26 +477,39 @@ export default function PracticeProblemDetail() {
                               <div>
                                 <span className="text-slate-500">Input:</span>
                                 <pre className="mt-1 rounded bg-black/50 p-2 text-slate-300">
-                                  {executionResult.results[activeTestCaseTab].input_data || "(empty)"}
+                                  {executionResult.results[activeTestCaseTab]
+                                    .input_data || "(empty)"}
                                 </pre>
                               </div>
                               <div>
-                                <span className="text-slate-500">Expected Output:</span>
+                                <span className="text-slate-500">
+                                  Expected Output:
+                                </span>
                                 <pre className="mt-1 rounded bg-black/50 p-2 text-emerald-400">
-                                  {executionResult.results[activeTestCaseTab].expected_output || "(empty)"}
+                                  {executionResult.results[activeTestCaseTab]
+                                    .expected_output || "(empty)"}
                                 </pre>
                               </div>
                               <div>
-                                <span className="text-slate-500">Your Output:</span>
+                                <span className="text-slate-500">
+                                  Your Output:
+                                </span>
                                 <pre className="mt-1 rounded bg-black/50 p-2 text-cyan-300">
-                                  {executionResult.results[activeTestCaseTab].actual_output || "(empty)"}
+                                  {executionResult.results[activeTestCaseTab]
+                                    .actual_output || "(empty)"}
                                 </pre>
                               </div>
-                              {executionResult.results[activeTestCaseTab].error && (
+                              {executionResult.results[activeTestCaseTab]
+                                .error && (
                                 <div>
-                                  <span className="text-rose-400 font-semibold">Error:</span>
+                                  <span className="text-rose-400 font-semibold">
+                                    Error:
+                                  </span>
                                   <pre className="mt-1 rounded bg-rose-950/30 p-2 text-rose-300">
-                                    {executionResult.results[activeTestCaseTab].error}
+                                    {
+                                      executionResult.results[activeTestCaseTab]
+                                        .error
+                                    }
                                   </pre>
                                 </div>
                               )}
@@ -471,7 +517,8 @@ export default function PracticeProblemDetail() {
                           )}
                           <div className="text-[10px] text-slate-500">
                             Execution time:{" "}
-                            {executionResult.results[activeTestCaseTab].execution_time_ms
+                            {executionResult.results[activeTestCaseTab]
+                              .execution_time_ms
                               ? `${executionResult.results[activeTestCaseTab].execution_time_ms!.toFixed(1)} ms`
                               : "N/A"}
                           </div>
@@ -484,7 +531,8 @@ export default function PracticeProblemDetail() {
                   <div className="space-y-2">
                     {submissions.length === 0 ? (
                       <div className="text-center py-8 text-slate-500">
-                        No submissions yet. Submit your code to build your track record!
+                        No submissions yet. Submit your code to build your track
+                        record!
                       </div>
                     ) : (
                       submissions.map((sub) => (
@@ -500,9 +548,13 @@ export default function PracticeProblemDetail() {
                                   : "bg-rose-400/10 text-rose-400 border border-rose-400/20"
                               }`}
                             >
-                              {sub.status === "solved" ? "✓ Accepted" : "✗ Attempted"}
+                              {sub.status === "solved"
+                                ? "✓ Accepted"
+                                : "✗ Attempted"}
                             </span>
-                            <span className="text-slate-400 uppercase font-mono">{sub.language}</span>
+                            <span className="text-slate-400 uppercase font-mono">
+                              {sub.language}
+                            </span>
                           </div>
                           <div className="text-slate-500 text-[11px]">
                             {new Date(sub.submitted_at).toLocaleString()}

@@ -1,50 +1,38 @@
 const API_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL ||
-  "http://127.0.0.1:8000";
-
+  import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000";
 
 interface ApiError {
   detail?: string;
 }
 
-
 async function request<T>(
   endpoint: string,
   options: RequestInit = {},
 ): Promise<T> {
-  const token =
-    localStorage.getItem("access_token");
+  const token = localStorage.getItem("access_token");
 
-  const response = await fetch(
-    `${API_BASE_URL}${endpoint}`,
-    {
-      ...options,
-      headers: {
-        "Content-Type": "application/json",
+  const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
 
-        ...(token
-          ? {
-              Authorization: `Bearer ${token}`,
-            }
-          : {}),
+      ...(token
+        ? {
+            Authorization: `Bearer ${token}`,
+          }
+        : {}),
 
-        ...(options.headers || {}),
-      },
+      ...(options.headers || {}),
     },
-  );
-
+  });
 
   if (!response.ok) {
-    let message =
-      "Something went wrong.";
+    let message = "Something went wrong.";
 
     try {
-      const error: ApiError =
-        await response.json();
+      const error: ApiError = await response.json();
 
-      message =
-        error.detail ||
-        message;
+      message = error.detail || message;
     } catch {
       // Keep default error message.
     }
@@ -52,10 +40,8 @@ async function request<T>(
     throw new Error(message);
   }
 
-
   return response.json();
 }
-
 
 /* =========================================================
    TOPIC
@@ -70,27 +56,17 @@ export interface Topic {
   updated_at: string;
 }
 
-
 /* =========================================================
    DIFFICULTY
    ========================================================= */
 
-export type Difficulty =
-  | "easy"
-  | "medium"
-  | "hard";
-
+export type Difficulty = "easy" | "medium" | "hard";
 
 /* =========================================================
    CODING LANGUAGE
    ========================================================= */
 
-export type CodingLanguage =
-  | "python"
-  | "javascript"
-  | "java"
-  | "cpp";
-
+export type CodingLanguage = "python" | "javascript" | "java" | "cpp";
 
 /* =========================================================
    INTERVIEW
@@ -104,10 +80,7 @@ export interface Interview {
   starting_difficulty: Difficulty;
   current_difficulty: Difficulty;
 
-  status:
-    | "in_progress"
-    | "completed"
-    | "abandoned";
+  status: "in_progress" | "completed" | "abandoned";
 
   total_questions: number;
   current_question_number: number;
@@ -120,7 +93,6 @@ export interface Interview {
   created_at: string;
   updated_at: string;
 }
-
 
 /* =========================================================
    QUESTION
@@ -137,7 +109,6 @@ export interface Question {
   created_at: string;
   updated_at: string;
 }
-
 
 /* =========================================================
    EVALUATION
@@ -164,7 +135,6 @@ export interface Evaluation {
   updated_at: string;
 }
 
-
 /* =========================================================
    INTERVIEW RESULT
    ========================================================= */
@@ -186,7 +156,6 @@ export interface InterviewResultAnswer {
   improvements: string | null;
 }
 
-
 export interface InterviewResult {
   session_id: number;
   user_id: number;
@@ -195,10 +164,7 @@ export interface InterviewResult {
   starting_difficulty: Difficulty;
   final_difficulty: Difficulty;
 
-  status:
-    | "in_progress"
-    | "completed"
-    | "abandoned";
+  status: "in_progress" | "completed" | "abandoned";
 
   total_questions: number;
   current_question_number: number;
@@ -222,7 +188,6 @@ export interface InterviewResult {
 
   answers: InterviewResultAnswer[];
 }
-
 
 /* =========================================================
    CODING QUESTION
@@ -256,19 +221,13 @@ export interface CodingQuestion {
   updated_at: string;
 }
 
-
 /* =========================================================
    TOPIC API
    ========================================================= */
 
-export async function getTopics(): Promise<
-  Topic[]
-> {
-  return request<Topic[]>(
-    "/topics",
-  );
+export async function getTopics(): Promise<Topic[]> {
+  return request<Topic[]>("/topics");
 }
-
 
 /* =========================================================
    INTERVIEW API
@@ -278,72 +237,40 @@ export async function createInterview(
   topicId: number,
   startingDifficulty: Difficulty,
 ): Promise<Interview> {
-  return request<Interview>(
-    "/interviews",
-    {
-      method: "POST",
+  return request<Interview>("/interviews", {
+    method: "POST",
 
-      body: JSON.stringify({
-        topic_id: topicId,
+    body: JSON.stringify({
+      topic_id: topicId,
 
-        starting_difficulty:
-          startingDifficulty,
-      }),
-    },
-  );
+      starting_difficulty: startingDifficulty,
+    }),
+  });
 }
 
-
-export async function getInterviews(): Promise<
-  Interview[]
-> {
-  return request<Interview[]>(
-    "/interviews",
-  );
+export async function getInterviews(): Promise<Interview[]> {
+  return request<Interview[]>("/interviews");
 }
 
-
-export async function getInterview(
-  sessionId: number,
-): Promise<Interview> {
-  return request<Interview>(
-    `/interviews/${sessionId}`,
-  );
+export async function getInterview(sessionId: number): Promise<Interview> {
+  return request<Interview>(`/interviews/${sessionId}`);
 }
 
-
-export async function getNextQuestion(
-  sessionId: number,
-): Promise<Question> {
-  return request<Question>(
-    `/interviews/${sessionId}/next-question`,
-  );
+export async function getNextQuestion(sessionId: number): Promise<Question> {
+  return request<Question>(`/interviews/${sessionId}/next-question`);
 }
 
-
-export async function completeInterview(
-  sessionId: number,
-): Promise<Interview> {
-  return request<Interview>(
-    `/interviews/${sessionId}/complete`,
-    {
-      method: "POST",
-    },
-  );
+export async function completeInterview(sessionId: number): Promise<Interview> {
+  return request<Interview>(`/interviews/${sessionId}/complete`, {
+    method: "POST",
+  });
 }
 
-
-export async function abandonInterview(
-  sessionId: number,
-): Promise<Interview> {
-  return request<Interview>(
-    `/interviews/${sessionId}/abandon`,
-    {
-      method: "POST",
-    },
-  );
+export async function abandonInterview(sessionId: number): Promise<Interview> {
+  return request<Interview>(`/interviews/${sessionId}/abandon`, {
+    method: "POST",
+  });
 }
-
 
 /* =========================================================
    ANSWER API
@@ -354,22 +281,18 @@ export async function submitAnswer(
   questionId: number,
   answerText: string,
 ): Promise<Evaluation> {
-  return request<Evaluation>(
-    "/interview-answers",
-    {
-      method: "POST",
+  return request<Evaluation>("/interview-answers", {
+    method: "POST",
 
-      body: JSON.stringify({
-        session_id: sessionId,
+    body: JSON.stringify({
+      session_id: sessionId,
 
-        question_id: questionId,
+      question_id: questionId,
 
-        answer_text: answerText,
-      }),
-    },
-  );
+      answer_text: answerText,
+    }),
+  });
 }
-
 
 /* =========================================================
    RESULT API
@@ -378,11 +301,8 @@ export async function submitAnswer(
 export async function getInterviewResult(
   sessionId: number,
 ): Promise<InterviewResult> {
-  return request<InterviewResult>(
-    `/interviews/${sessionId}/result`,
-  );
+  return request<InterviewResult>(`/interviews/${sessionId}/result`);
 }
-
 
 /* =========================================================
    CODING QUESTION API
@@ -393,56 +313,32 @@ export async function getCodingQuestions(
   language?: CodingLanguage,
   difficulty?: Difficulty,
 ): Promise<CodingQuestion[]> {
-  const params =
-    new URLSearchParams();
-
+  const params = new URLSearchParams();
 
   if (topicId !== undefined) {
-    params.append(
-      "topic_id",
-      String(topicId),
-    );
+    params.append("topic_id", String(topicId));
   }
-
 
   if (language !== undefined) {
-    params.append(
-      "language",
-      language,
-    );
+    params.append("language", language);
   }
-
 
   if (difficulty !== undefined) {
-    params.append(
-      "difficulty",
-      difficulty,
-    );
+    params.append("difficulty", difficulty);
   }
 
-
-  const queryString =
-    params.toString();
-
+  const queryString = params.toString();
 
   return request<CodingQuestion[]>(
-    `/coding-questions${
-      queryString
-        ? `?${queryString}`
-        : ""
-    }`,
+    `/coding-questions${queryString ? `?${queryString}` : ""}`,
   );
 }
-
 
 export async function getCodingQuestion(
   questionId: number,
 ): Promise<CodingQuestion> {
-  return request<CodingQuestion>(
-    `/coding-questions/${questionId}`,
-  );
+  return request<CodingQuestion>(`/coding-questions/${questionId}`);
 }
-
 
 /* =========================================================
    CODE EXECUTION & PRACTICE SUBMISSIONS
@@ -484,32 +380,26 @@ export async function runCode(
   codingQuestionId: number,
   code: string,
 ): Promise<CodeExecutionResponse> {
-  return request<CodeExecutionResponse>(
-    "/code-execution/run",
-    {
-      method: "POST",
-      body: JSON.stringify({
-        coding_question_id: codingQuestionId,
-        code,
-      }),
-    },
-  );
+  return request<CodeExecutionResponse>("/code-execution/run", {
+    method: "POST",
+    body: JSON.stringify({
+      coding_question_id: codingQuestionId,
+      code,
+    }),
+  });
 }
 
 export async function submitCode(
   codingQuestionId: number,
   code: string,
 ): Promise<CodeExecutionResponse> {
-  return request<CodeExecutionResponse>(
-    "/code-execution/submit",
-    {
-      method: "POST",
-      body: JSON.stringify({
-        coding_question_id: codingQuestionId,
-        code,
-      }),
-    },
-  );
+  return request<CodeExecutionResponse>("/code-execution/submit", {
+    method: "POST",
+    body: JSON.stringify({
+      coding_question_id: codingQuestionId,
+      code,
+    }),
+  });
 }
 
 export async function getQuestionSubmissions(
@@ -521,7 +411,5 @@ export async function getQuestionSubmissions(
 }
 
 export async function getUserSolvedQuestionIds(): Promise<number[]> {
-  return request<number[]>(
-    "/coding-questions/user/solved-ids",
-  );
+  return request<number[]>("/coding-questions/user/solved-ids");
 }

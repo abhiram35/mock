@@ -1,15 +1,8 @@
 import { useState } from "react";
 
-import {
-  useNavigate,
-} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-import {
-  CodingLanguage,
-  Difficulty,
-  getCodingQuestions,
-} from "../lib/api";
-
+import { CodingLanguage, Difficulty, getCodingQuestions } from "../lib/api";
 
 /* =========================================================
    PROGRAMMING LANGUAGES
@@ -23,11 +16,9 @@ const languages: {
   {
     value: "python",
     label: "Python",
-    description:
-      "Clean and beginner-friendly programming.",
+    description: "Clean and beginner-friendly programming.",
   },
 ];
-
 
 /* =========================================================
    DIFFICULTIES
@@ -41,23 +32,19 @@ const difficulties: {
   {
     value: "easy",
     label: "Easy",
-    description:
-      "Basic programming and problem-solving concepts.",
+    description: "Basic programming and problem-solving concepts.",
   },
   {
     value: "medium",
     label: "Medium",
-    description:
-      "Intermediate algorithms and practical problems.",
+    description: "Intermediate algorithms and practical problems.",
   },
   {
     value: "hard",
     label: "Hard",
-    description:
-      "Advanced algorithms and challenging problems.",
+    description: "Advanced algorithms and challenging problems.",
   },
 ];
-
 
 /* =========================================================
    COMPONENT
@@ -72,15 +59,11 @@ function CodingInterviewSetup() {
   const [selectedDifficulty, setSelectedDifficulty] =
     useState<Difficulty>("easy");
 
-  const [questionCount, setQuestionCount] =
-    useState<number>(5);
+  const [questionCount, setQuestionCount] = useState<number>(5);
 
-  const [starting, setStarting] =
-    useState(false);
+  const [starting, setStarting] = useState(false);
 
-  const [error, setError] =
-    useState<string | null>(null);
-
+  const [error, setError] = useState<string | null>(null);
 
   /* =======================================================
      START CODING INTERVIEW
@@ -102,13 +85,11 @@ function CodingInterviewSetup() {
        * question pool.
        */
 
-      const questions =
-        await getCodingQuestions(
-          undefined,
-          selectedLanguage,
-          selectedDifficulty,
-        );
-
+      const questions = await getCodingQuestions(
+        undefined,
+        selectedLanguage,
+        selectedDifficulty,
+      );
 
       if (questions.length === 0) {
         setError(
@@ -118,39 +99,29 @@ function CodingInterviewSetup() {
         return;
       }
 
-
       /*
        * Pass the selected configuration and questions
        * to the coding interview room.
        */
 
-      navigate(
-        "/coding-interview",
-        {
-          state: {
-            language: selectedLanguage,
-            difficulty: selectedDifficulty,
-            questionCount: Math.min(
-              questionCount,
-              questions.length,
-            ),
-            questions,
-          },
+      navigate("/coding-interview", {
+        state: {
+          language: selectedLanguage,
+          difficulty: selectedDifficulty,
+          questionCount: Math.min(questionCount, questions.length),
+          questions,
         },
-      );
-
+      });
     } catch (err) {
       setError(
         err instanceof Error
           ? err.message
           : "Unable to start coding interview.",
       );
-
     } finally {
       setStarting(false);
     }
   }
-
 
   /* =======================================================
      UI
@@ -158,9 +129,7 @@ function CodingInterviewSetup() {
 
   return (
     <div className="app-background min-h-screen">
-
       <div className="app-grid" />
-
 
       <main
         className="
@@ -172,16 +141,13 @@ function CodingInterviewSetup() {
           py-12
         "
       >
-
         {/* =================================================
             BACK
         ================================================== */}
 
         <button
           type="button"
-          onClick={() =>
-            navigate("/home")
-          }
+          onClick={() => navigate("/home")}
           className="
             mb-8
             text-sm
@@ -193,13 +159,11 @@ function CodingInterviewSetup() {
           ← Back to home
         </button>
 
-
         {/* =================================================
             HEADER
         ================================================== */}
 
         <div className="mb-10">
-
           <p
             className="
               mb-3
@@ -213,7 +177,6 @@ function CodingInterviewSetup() {
             Coding Interview
           </p>
 
-
           <h1
             className="
               text-4xl
@@ -226,7 +189,6 @@ function CodingInterviewSetup() {
             Configure your coding interview
           </h1>
 
-
           <p
             className="
               mt-4
@@ -236,13 +198,10 @@ function CodingInterviewSetup() {
               text-slate-400
             "
           >
-            Choose a programming language, difficulty,
-            and number of questions before starting
-            your coding interview.
+            Choose a programming language, difficulty, and number of questions
+            before starting your coding interview.
           </p>
-
         </div>
-
 
         {/* =================================================
             ERROR
@@ -266,14 +225,11 @@ function CodingInterviewSetup() {
           </div>
         )}
 
-
         {/* =================================================
             MAIN OPTIONS
         ================================================== */}
 
         <div className="space-y-8">
-
-
           {/* ===============================================
               LANGUAGE
           ================================================ */}
@@ -285,9 +241,7 @@ function CodingInterviewSetup() {
               p-7
             "
           >
-
             <div className="mb-6">
-
               <p
                 className="
                   font-mono
@@ -300,7 +254,6 @@ function CodingInterviewSetup() {
                 Step 01
               </p>
 
-
               <h2
                 className="
                   mt-2
@@ -312,7 +265,6 @@ function CodingInterviewSetup() {
                 Choose a language
               </h2>
 
-
               <p
                 className="
                   mt-2
@@ -320,12 +272,10 @@ function CodingInterviewSetup() {
                   text-slate-400
                 "
               >
-                Select the programming language you
-                want to use during the interview.
+                Select the programming language you want to use during the
+                interview.
               </p>
-
             </div>
-
 
             <div
               className="
@@ -335,23 +285,14 @@ function CodingInterviewSetup() {
                 lg:grid-cols-4
               "
             >
-
               {languages.map((language) => {
-
-                const selected =
-                  selectedLanguage ===
-                  language.value;
-
+                const selected = selectedLanguage === language.value;
 
                 return (
                   <button
                     key={language.value}
                     type="button"
-                    onClick={() =>
-                      setSelectedLanguage(
-                        language.value,
-                      )
-                    }
+                    onClick={() => setSelectedLanguage(language.value)}
                     className={`
                       rounded-xl
                       border
@@ -366,7 +307,6 @@ function CodingInterviewSetup() {
                       }
                     `}
                   >
-
                     <div
                       className="
                         flex
@@ -375,9 +315,7 @@ function CodingInterviewSetup() {
                         gap-4
                       "
                     >
-
                       <div>
-
                         <h3
                           className="
                             text-lg
@@ -387,7 +325,6 @@ function CodingInterviewSetup() {
                         >
                           {language.label}
                         </h3>
-
 
                         <p
                           className="
@@ -399,9 +336,7 @@ function CodingInterviewSetup() {
                         >
                           {language.description}
                         </p>
-
                       </div>
-
 
                       <div
                         className={`
@@ -415,14 +350,9 @@ function CodingInterviewSetup() {
                           rounded-full
                           border
 
-                          ${
-                            selected
-                              ? "border-cyan-400"
-                              : "border-white/20"
-                          }
+                          ${selected ? "border-cyan-400" : "border-white/20"}
                         `}
                       >
-
                         {selected && (
                           <div
                             className="
@@ -433,20 +363,13 @@ function CodingInterviewSetup() {
                             "
                           />
                         )}
-
                       </div>
-
                     </div>
-
                   </button>
                 );
-
               })}
-
             </div>
-
           </section>
-
 
           {/* ===============================================
               DIFFICULTY
@@ -459,9 +382,7 @@ function CodingInterviewSetup() {
               p-7
             "
           >
-
             <div className="mb-6">
-
               <p
                 className="
                   font-mono
@@ -474,7 +395,6 @@ function CodingInterviewSetup() {
                 Step 02
               </p>
 
-
               <h2
                 className="
                   mt-2
@@ -486,7 +406,6 @@ function CodingInterviewSetup() {
                 Starting difficulty
               </h2>
 
-
               <p
                 className="
                   mt-2
@@ -494,12 +413,9 @@ function CodingInterviewSetup() {
                   text-slate-400
                 "
               >
-                Questions can adapt based on your
-                performance.
+                Questions can adapt based on your performance.
               </p>
-
             </div>
-
 
             <div
               className="
@@ -508,23 +424,14 @@ function CodingInterviewSetup() {
                 md:grid-cols-3
               "
             >
-
               {difficulties.map((difficulty) => {
-
-                const selected =
-                  selectedDifficulty ===
-                  difficulty.value;
-
+                const selected = selectedDifficulty === difficulty.value;
 
                 return (
                   <button
                     key={difficulty.value}
                     type="button"
-                    onClick={() =>
-                      setSelectedDifficulty(
-                        difficulty.value,
-                      )
-                    }
+                    onClick={() => setSelectedDifficulty(difficulty.value)}
                     className={`
                       rounded-xl
                       border
@@ -539,7 +446,6 @@ function CodingInterviewSetup() {
                       }
                     `}
                   >
-
                     <div
                       className="
                         flex
@@ -547,7 +453,6 @@ function CodingInterviewSetup() {
                         justify-between
                       "
                     >
-
                       <h3
                         className="
                           text-lg
@@ -557,7 +462,6 @@ function CodingInterviewSetup() {
                       >
                         {difficulty.label}
                       </h3>
-
 
                       <div
                         className={`
@@ -573,9 +477,7 @@ function CodingInterviewSetup() {
                           }
                         `}
                       />
-
                     </div>
-
 
                     <p
                       className="
@@ -587,16 +489,11 @@ function CodingInterviewSetup() {
                     >
                       {difficulty.description}
                     </p>
-
                   </button>
                 );
-
               })}
-
             </div>
-
           </section>
-
 
           {/* ===============================================
               QUESTION COUNT
@@ -609,9 +506,7 @@ function CodingInterviewSetup() {
               p-7
             "
           >
-
             <div className="mb-6">
-
               <p
                 className="
                   font-mono
@@ -624,7 +519,6 @@ function CodingInterviewSetup() {
                 Step 03
               </p>
 
-
               <h2
                 className="
                   mt-2
@@ -636,7 +530,6 @@ function CodingInterviewSetup() {
                 Number of questions
               </h2>
 
-
               <p
                 className="
                   mt-2
@@ -644,28 +537,19 @@ function CodingInterviewSetup() {
                   text-slate-400
                 "
               >
-                Choose how many coding problems you
-                want to solve.
+                Choose how many coding problems you want to solve.
               </p>
-
             </div>
 
-
             <div className="flex flex-wrap gap-3">
-
               {[3, 5, 7, 10].map((count) => {
-
-                const selected =
-                  questionCount === count;
-
+                const selected = questionCount === count;
 
                 return (
                   <button
                     key={count}
                     type="button"
-                    onClick={() =>
-                      setQuestionCount(count)
-                    }
+                    onClick={() => setQuestionCount(count)}
                     className={`
                       rounded-lg
                       border
@@ -685,13 +569,9 @@ function CodingInterviewSetup() {
                     {count} Questions
                   </button>
                 );
-
               })}
-
             </div>
-
           </section>
-
 
           {/* ===============================================
               START
@@ -704,7 +584,6 @@ function CodingInterviewSetup() {
               p-7
             "
           >
-
             <div
               className="
                 flex
@@ -715,9 +594,7 @@ function CodingInterviewSetup() {
                 md:justify-between
               "
             >
-
               <div>
-
                 <p
                   className="
                     font-mono
@@ -730,7 +607,6 @@ function CodingInterviewSetup() {
                   Ready?
                 </p>
 
-
                 <h2
                   className="
                     mt-2
@@ -742,7 +618,6 @@ function CodingInterviewSetup() {
                   Start your coding interview
                 </h2>
 
-
                 <p
                   className="
                     mt-2
@@ -750,12 +625,10 @@ function CodingInterviewSetup() {
                     text-slate-400
                   "
                 >
-                  Your code will be tested against
-                  coding test cases during the interview.
+                  Your code will be tested against coding test cases during the
+                  interview.
                 </p>
-
               </div>
-
 
               <button
                 type="button"
@@ -777,22 +650,14 @@ function CodingInterviewSetup() {
                   disabled:opacity-50
                 "
               >
-                {starting
-                  ? "Preparing..."
-                  : "Start Coding Interview →"}
+                {starting ? "Preparing..." : "Start Coding Interview →"}
               </button>
-
             </div>
-
           </section>
-
         </div>
-
       </main>
-
     </div>
   );
 }
-
 
 export default CodingInterviewSetup;
