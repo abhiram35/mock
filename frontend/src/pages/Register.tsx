@@ -30,10 +30,24 @@ export default function Register() {
 
       navigate("/login");
     } catch (error: any) {
-      setError(
-        error?.response?.data?.detail ||
-          "Unable to create your account."
-      );
+      let message =
+        "Unable to create your account.";
+
+      if (error?.response?.data?.detail) {
+        const detail = error.response.data.detail;
+
+        if (typeof detail === "string") {
+          message = detail;
+        } else if (Array.isArray(detail)) {
+          message = detail
+            .map((err: any) => err.msg || err.message || JSON.stringify(err))
+            .join(", ");
+        }
+      } else if (error?.message) {
+        message = error.message;
+      }
+
+      setError(message);
     } finally {
       setLoading(false);
     }
