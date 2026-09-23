@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { AlertTriangle } from "lucide-react";
 
 import {
   abandonInterview,
@@ -8,6 +9,7 @@ import {
   getInterviewResult,
   getNextQuestion,
   submitAnswer,
+  ApiRequestError,
   type Difficulty,
   type Evaluation,
   type Interview,
@@ -84,6 +86,24 @@ export default function InterviewRoom() {
   const [roomState, setRoomState] = useState<RoomState>("loading");
 
   const [error, setError] = useState<string | null>(null);
+
+  /*
+   * Fatal load error. Kept separate from `error` (which covers
+   * recoverable, in-room failures like a rejected answer) so the
+   * full-screen error state can offer a real retry.
+   */
+  const [loadError, setLoadError] = useState<string | null>(null);
+
+  const [loadAttempt, setLoadAttempt] = useState(0);
+
+  /*
+   * Set when an answer was saved but the AI evaluation service is
+   * unavailable (placeholder Gemini keys / upstream 503). The room
+   * stays usable; a notice explains why no feedback appeared.
+   */
+  const [aiUnavailableNotice, setAiUnavailableNotice] = useState<
+    string | null
+  >(null);
 
   const [showExitConfirmation, setShowExitConfirmation] = useState(false);
 
@@ -327,7 +347,16 @@ export default function InterviewRoom() {
         setQuestion(questionData);
         setRoomState("ready");
       } catch (err) {
-        setError(
+        /*
+         * Log the real error — previously failures surfaced only as
+         * a generic screen with no diagnostic trail.
+         */
+        console.error(
+          `[InterviewRoom] Failed to load interview ${numericSessionId}:`,
+          err,
+        );
+
+        setLoadError(
           err instanceof Error ? err.message : "Unable to load the interview.",
         );
 
@@ -336,7 +365,12 @@ export default function InterviewRoom() {
     };
 
     void loadInterview();
-  }, [sessionId, numericSessionId, navigate]);
+  }, [sessionId, numericSessionId, navigate, loadAttempt]);
+
+  const handleRetryLoad = () => {
+    setLoadError(null);
+    setLoadAttempt((attempt) => attempt + 1);
+  };
 
   /*
    * ---------------------------------------------------------
@@ -364,6 +398,7 @@ export default function InterviewRoom() {
     try {
       setError(null);
       setSpeechError(null);
+      setAiUnavailableNotice(null);
       setRoomState("submitting");
 
       const result = await submitAnswer(
@@ -373,8 +408,32 @@ export default function InterviewRoom() {
       );
 
       setEvaluation(result);
+      setAiUnavailableNotice(null);
       setRoomState("evaluated");
     } catch (err) {
+      /*
+       * Gemini down (placeholder keys / upstream 503): the backend
+       * rolls the answer back, so nothing was lost but nothing was
+       * scored either. Keep the user in the room with their answer
+       * intact and a retry path, instead of crashing or faking a
+       * continuation that the backend would reject.
+       */
+      if (err instanceof ApiRequestError && err.status === 503) {
+        console.warn(
+          `[InterviewRoom] AI evaluation unavailable for question ${question.id}:`,
+          err,
+        );
+
+        setAiUnavailableNotice(
+          "AI evaluation is unavailable right now, so your answer couldn't be scored. Nothing is lost — it's still in the box below. Give it a moment and submit again.",
+        );
+        setRoomState("ready");
+
+        return;
+      }
+
+      console.error("[InterviewRoom] Answer submission failed:", err);
+
       setError(
         err instanceof Error ? err.message : "Unable to evaluate your answer.",
       );
@@ -400,6 +459,7 @@ export default function InterviewRoom() {
       setError(null);
       setSpeechError(null);
       setEvaluation(null);
+      setAiUnavailableNotice(null);
       setAnswer("");
       speechBaseAnswerRef.current = "";
       setRoomState("loading");
@@ -423,20 +483,29 @@ export default function InterviewRoom() {
       setQuestion(nextQuestion);
       setRoomState("ready");
     } catch (err) {
-      const message = err instanceof Error ? err.message : "";
-
       /*
-       * If there are no remaining questions,
-       * complete the interview.
+       * Empty bank: the backend answers with 400 + "No unanswered
+       * questions are available for this interview." Match on the
+       * status code (falling back to text for safety) and complete
+       * the interview instead of showing a scary error.
        */
+      const isEmptyBank =
+        (err instanceof ApiRequestError && err.status === 400) ||
+        (err instanceof Error &&
+          (err.message.toLowerCase().includes("no unanswered") ||
+            err.message.toLowerCase().includes("no more")));
 
-      if (
-        message.toLowerCase().includes("no more") ||
-        message.toLowerCase().includes("question")
-      ) {
+      if (isEmptyBank) {
         await handleCompleteInterview();
         return;
       }
+
+      console.error(
+        "[InterviewRoom] Failed to load the next question:",
+        err,
+      );
+
+      const message = err instanceof Error ? err.message : "";
 
       setError(message || "Unable to load the next question.");
 
@@ -704,10 +773,16 @@ export default function InterviewRoom() {
    * ---------------------------------------------------------
    */
 
+  const loadSteps = [
+    "Fetching your session",
+    "Picking the next question",
+    "Setting up the room",
+  ];
+
   if (roomState === "loading") {
     return (
       <div className="app-background flex min-h-screen items-center justify-center px-6">
-        <div className="text-center">
+        <div className="w-full max-w-sm text-center">
           <AIOrb state="thinking" />
 
           <p
@@ -722,6 +797,56 @@ export default function InterviewRoom() {
           >
             Preparing your interview
           </p>
+
+          {/*
+           * Skeleton shaped like the incoming question card, plus a
+           * narrated step list — no anonymous spinner.
+           */}
+          <div
+            aria-hidden="true"
+            className="
+              mt-8
+              space-y-3
+              text-left
+            "
+          >
+            <div className="h-4 w-1/3 animate-pulse rounded bg-white/10" />
+            <div className="h-10 w-full animate-pulse rounded-xl bg-white/[0.06]" />
+            <div className="h-20 w-full animate-pulse rounded-xl bg-white/[0.06]" />
+            <div className="h-10 w-2/3 animate-pulse rounded-xl bg-white/[0.06]" />
+          </div>
+
+          <ul
+            className="
+              mt-8
+              space-y-2
+              text-left
+            "
+          >
+            {loadSteps.map((step, index) => (
+              <li
+                key={step}
+                className="
+                  flex
+                  items-center
+                  gap-2.5
+                  text-xs
+                  text-slate-500
+                "
+              >
+                <span
+                  className={`flex h-4 w-4 shrink-0 items-center justify-center rounded-full border text-[9px] ${
+                    index === 0
+                      ? "border-emerald-300/40 bg-emerald-300/10 text-emerald-300"
+                      : "border-white/15 text-slate-600"
+                  }`}
+                >
+                  ✓
+                </span>
+                {step}
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
     );
@@ -762,7 +887,7 @@ export default function InterviewRoom() {
               text-red-300
             "
           >
-            !
+            <AlertTriangle size={24} aria-hidden="true" />
           </div>
 
           <h1
@@ -774,7 +899,7 @@ export default function InterviewRoom() {
               text-white
             "
           >
-            Something went wrong
+            We couldn't open this interview
           </h1>
 
           <p
@@ -785,7 +910,115 @@ export default function InterviewRoom() {
               text-slate-500
             "
           >
-            {error || "Unable to load this interview."}
+            {loadError ||
+              error ||
+              "The session may have expired, or the server is briefly unavailable."}
+          </p>
+
+          {import.meta.env.DEV && loadError && (
+            <pre
+              className="
+                mt-4
+                max-h-32
+                overflow-auto
+                rounded-xl
+                bg-black/30
+                p-3
+                text-left
+                font-mono
+                text-[11px]
+                leading-5
+                text-red-200/80
+              "
+            >
+              {loadError}
+            </pre>
+          )}
+
+          <div className="mt-7 flex items-center justify-center gap-3">
+            <button
+              type="button"
+              onClick={handleRetryLoad}
+              className="
+                rounded-2xl
+                bg-white
+                px-6
+                py-3
+                text-sm
+                font-semibold
+                text-slate-950
+                transition
+                hover:-translate-y-0.5
+              "
+            >
+              Try again
+            </button>
+
+            <button
+              type="button"
+              onClick={() => navigate("/home")}
+              className="
+                rounded-2xl
+                border
+                border-white/15
+                px-6
+                py-3
+                text-sm
+                font-medium
+                text-slate-300
+                transition
+                hover:border-white/30
+              "
+            >
+              Return Home
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  /*
+   * Empty state: the session loaded but no question is available
+   * (e.g. the topic's bank ran dry). Offer a real action instead
+   * of a blank screen.
+   */
+  if (!interview || !question) {
+    return (
+      <div className="app-background flex min-h-screen items-center justify-center px-6">
+        <div
+          className="
+            w-full
+            max-w-md
+            rounded-3xl
+            border
+            border-white/10
+            bg-white/[0.025]
+            p-8
+            text-center
+          "
+        >
+          <h1
+            className="
+              font-display
+              text-2xl
+              font-semibold
+              text-white
+            "
+          >
+            No questions ready
+          </h1>
+
+          <p
+            className="
+              mt-3
+              text-sm
+              leading-6
+              text-slate-500
+            "
+          >
+            This session doesn't have a question to show right now. Head back
+            home and start a fresh interview.
           </p>
 
           <button
@@ -804,15 +1037,11 @@ export default function InterviewRoom() {
               hover:-translate-y-0.5
             "
           >
-            Return Home
+            Back to Home
           </button>
         </div>
       </div>
     );
-  }
-
-  if (!interview || !question) {
-    return null;
   }
 
   const progress =
@@ -1042,8 +1271,8 @@ export default function InterviewRoom() {
                     : isEvaluated
                       ? "idle"
                       : isListening
-                        ? "speaking"
-                        : "speaking"
+                        ? "listening"
+                        : "idle"
                 }
               />
 
@@ -1600,6 +1829,48 @@ export default function InterviewRoom() {
                   {error}
                 </p>
               )}
+
+            {/*
+             * AI unavailable: honest notice + the answer stays in the
+             * textarea so "Submit Answer" simply retried.
+             */}
+            {roomState === "ready" && aiUnavailableNotice && (
+              <div
+                className="
+                    mt-4
+                    rounded-2xl
+                    border
+                    border-amber-400/20
+                    bg-amber-400/[0.05]
+                    px-4
+                    py-3
+                  "
+                role="status"
+              >
+                <div
+                  className="
+                      font-mono
+                      text-[9px]
+                      uppercase
+                      tracking-[0.18em]
+                      text-amber-300
+                    "
+                >
+                  AI evaluation unavailable
+                </div>
+
+                <p
+                  className="
+                      mt-1.5
+                      text-xs
+                      leading-5
+                      text-slate-400
+                    "
+                >
+                  {aiUnavailableNotice}
+                </p>
+              </div>
+            )}
             </div>
 
             {/* =================================================

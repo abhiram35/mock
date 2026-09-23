@@ -2,7 +2,22 @@ const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000";
 
 interface ApiError {
-  detail?: string;
+  detail?: string | Array<{ msg?: string }>;
+}
+
+/**
+ * Error thrown by every `request` failure. Carries the HTTP status so
+ * callers can distinguish e.g. "question bank empty" (400) from an
+ * unexpected server crash (500) without parsing message strings.
+ */
+export class ApiRequestError extends Error {
+  readonly status: number;
+
+  constructor(message: string, status: number) {
+    super(message);
+    this.name = "ApiRequestError";
+    this.status = status;
+  }
 }
 
 async function request<T>(
@@ -27,17 +42,37 @@ async function request<T>(
   });
 
   if (!response.ok) {
-    let message = "Something went wrong.";
+    let message = `Request failed with status ${response.status}.`;
 
     try {
       const error: ApiError = await response.json();
 
-      message = error.detail || message;
+      if (typeof error.detail === "string") {
+        message = error.detail;
+      } else if (Array.isArray(error.detail)) {
+        /* FastAPI validation errors: join the per-field messages. */
+        message = error.detail
+          .map((item) => item?.msg ?? "")
+          .filter(Boolean)
+          .join("; ");
+      }
     } catch {
-      // Keep default error message.
+      /*
+       * Crashing handlers return a non-JSON body; the
+       * status-bearing default above is the best we can do.
+      */
     }
 
-    throw new Error(message);
+    /* Always log the real failure for debugging — never swallow it. */
+    console.error(
+      `[api] ${(options.method ?? "GET")} ${endpoint} failed:`,
+      {
+        status: response.status,
+        message,
+      },
+    );
+
+    throw new ApiRequestError(message, response.status);
   }
 
   return response.json();

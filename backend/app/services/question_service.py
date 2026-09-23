@@ -197,6 +197,12 @@ class QuestionService:
 
         difficulties = difficulty_order[difficulty]
 
+        # Randomize candidate order so repeat sessions vary. MySQL names
+        # the function RAND(); SQLite and PostgreSQL name it RANDOM().
+        bind = self.db.get_bind()
+        is_mysql = bind is not None and bind.dialect.name == "mysql"
+        random_order = func.rand() if is_mysql else func.random()
+
         for current_difficulty in difficulties:
 
             question = (
@@ -209,7 +215,7 @@ class QuestionService:
                     ),
                 )
                 .order_by(
-                    func.rand()
+                    random_order
                 )
                 .first()
             )
