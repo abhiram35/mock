@@ -36,12 +36,41 @@ export default {
           cyan: "#22D3EE",
           mint: "#2DD4BF",
         },
+
+        /* ===== Redesign bridge (token-driven, theme-aware) ===== */
+        paper: "var(--paper)",
+        "paper-raised": "var(--paper-raised)",
+        "paper-sunken": "var(--paper-sunken)",
+        ink: "var(--ink)",
+        "ink-2": "var(--ink-2)",
+        "ink-3": "var(--ink-3)",
+        line: "var(--line)",
+        "line-strong": "var(--line-strong)",
+        accent: "var(--accent)",
+        "accent-hover": "var(--accent-hover)",
+        "accent-ink": "var(--accent-ink)",
+        "accent-soft": "var(--accent-soft)",
+        "accent-line": "var(--accent-line)",
+        ok: "var(--ok)",
+        "ok-soft": "var(--ok-soft)",
+        warn: "var(--warn)",
+        "warn-soft": "var(--warn-soft)",
+        bad: "var(--bad)",
+        "bad-soft": "var(--bad-soft)",
+        info: "var(--info)",
+        "info-soft": "var(--info-soft)",
       },
 
       boxShadow: {
         glow: "0 0 60px rgba(139, 92, 246, 0.18)",
         "glow-cyan":
           "0 0 50px rgba(34, 211, 238, 0.14)",
+
+        /* Redesign elevation tokens */
+        "xs": "var(--shadow-xs)",
+        "sm2": "var(--shadow-sm)",
+        "md2": "var(--shadow-md)",
+        "lg2": "var(--shadow-lg)",
       },
 
       animation: {

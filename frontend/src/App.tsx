@@ -1,6 +1,7 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 
 import ProtectedRoute from "./components/ProtectedRoute";
+import AnimatedOutlet from "./components/motion/AnimatedOutlet";
 
 import LandingPage from "./pages/LandingPage";
 import Home from "./pages/Home";
@@ -44,48 +45,46 @@ function App() {
 
         <Route path="/home" element={<Home />} />
 
-        {/* DASHBOARD */}
+        {/* DASHBOARD + INTERVIEW + PRACTICE ROUTES — animated transitions */}
 
-        <Route path="/dashboard" element={<Dashboard />} />
+        <Route element={<AnimatedOutlet />}>
+          <Route path="/dashboard" element={<Dashboard />} />
 
-        {/* PROFILE */}
+          <Route path="/profile" element={<Profile />} />
 
-        <Route path="/profile" element={<Profile />} />
+          {/* NORMAL INTERVIEW SETUP */}
 
-        {/* NORMAL INTERVIEW SETUP */}
+          <Route path="/interviews/new" element={<InterviewSetup />} />
 
-        <Route path="/interviews/new" element={<InterviewSetup />} />
+          {/* NORMAL INTERVIEW RESULT */}
 
-        {/* NORMAL INTERVIEW ROOM */}
+          <Route
+            path="/interviews/:sessionId/result"
+            element={<InterviewResult />}
+          />
+
+          {/* CODING INTERVIEW SETUP */}
+
+          <Route
+            path="/coding-interview/new"
+            element={<CodingInterviewSetup />}
+          />
+
+          {/* PRACTICE FLOW */}
+
+          <Route path="/practice" element={<PracticeProblems />} />
+
+          <Route
+            path="/practice/:questionId"
+            element={<PracticeProblemDetail />}
+          />
+        </Route>
+
+        {/* FULL-SCREEN FLOWS — no transitions (security + focus) */}
 
         <Route path="/interviews/:sessionId" element={<InterviewRoom />} />
 
-        {/* NORMAL INTERVIEW RESULT */}
-
-        <Route
-          path="/interviews/:sessionId/result"
-          element={<InterviewResult />}
-        />
-
-        {/* CODING INTERVIEW SETUP */}
-
-        <Route
-          path="/coding-interview/new"
-          element={<CodingInterviewSetup />}
-        />
-
-        {/* CODING INTERVIEW ROOM */}
-
         <Route path="/coding-interview" element={<CodingInterviewRoom />} />
-
-        {/* PRACTICE FLOW */}
-
-        <Route path="/practice" element={<PracticeProblems />} />
-
-        <Route
-          path="/practice/:questionId"
-          element={<PracticeProblemDetail />}
-        />
       </Route>
 
       {/* =====================================================

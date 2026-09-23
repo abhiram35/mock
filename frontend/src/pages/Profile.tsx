@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 import { getInterviews, type Interview } from "../lib/api";
 import ProfileInfoCard from "../components/profile/ProfileInfoCard";
+import Button from "../components/ui/Button";
 
 interface CurrentUser {
   id: number;
@@ -20,6 +21,32 @@ export default function Profile() {
   const [interviews, setInterviews] = useState<Interview[]>([]);
 
   const [isLoading, setIsLoading] = useState(true);
+
+  /*
+   * Set when the interview history fetch fails. The profile itself
+   * remains usable — previously ANY fetch failure logged the user
+   * out, which was far too aggressive for a transient API error.
+   */
+  const [interviewsError, setInterviewsError] = useState<string | null>(null);
+
+  /*
+   * Loads (or reloads) the interview history for the stats section.
+   * Exposed separately so the inline error banner can retry without
+   * re-running the auth flow.
+   */
+  async function reloadInterviews() {
+    setInterviewsError(null);
+
+    try {
+      const interviewData = await getInterviews();
+
+      setInterviews(interviewData);
+    } catch {
+      setInterviewsError(
+        "Could not load your interview history. Your profile is still available.",
+      );
+    }
+  }
 
   useEffect(() => {
     async function loadProfile() {
@@ -39,10 +66,6 @@ export default function Profile() {
         const parsedUser: CurrentUser = JSON.parse(storedUser);
 
         setUser(parsedUser);
-
-        const interviewData = await getInterviews();
-
-        setInterviews(interviewData);
       } catch {
         localStorage.removeItem("access_token");
 
@@ -53,9 +76,11 @@ export default function Profile() {
         });
 
         return;
-      } finally {
-        setIsLoading(false);
       }
+
+      await reloadInterviews();
+
+      setIsLoading(false);
     }
 
     loadProfile();
@@ -310,6 +335,43 @@ export default function Profile() {
         >
           ← Back to home
         </button>
+
+        {/* =================================================
+            INTERVIEWS LOAD ERROR
+        ================================================== */}
+
+        {interviewsError && (
+          <div
+            role="alert"
+            className="
+              mb-8
+              flex
+              flex-col
+              gap-3
+              rounded-2xl
+              border
+              border-[#fb718520]
+              bg-[#fb71850d]
+              px-5
+              py-4
+              sm:flex-row
+              sm:items-center
+              sm:justify-between
+            "
+          >
+            <p className="text-sm text-[color:var(--error)]">
+              {interviewsError}
+            </p>
+
+            <Button
+              variant="secondary"
+              size="sm"
+              onClick={() => void reloadInterviews()}
+            >
+              Try Again
+            </Button>
+          </div>
+        )}
 
         {/* =================================================
             TITLE
