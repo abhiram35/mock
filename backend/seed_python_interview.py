@@ -500,6 +500,448 @@ QUESTIONS = [
             "protocol can be used in a for loop regardless of its class."
         ),
     },
+
+
+    # =========================================================
+    # EASY — 10 ADDITIONAL QUESTIONS
+    # =========================================================
+
+    {
+        "difficulty": QuestionDifficulty.EASY,
+        "question_text": (
+            "What is the walrus operator (:=) in Python, and when "
+            "would you use it?"
+        ),
+        "expected_answer": (
+            "The walrus operator, introduced in Python 3.8, is an "
+            "assignment expression that assigns a value to a variable "
+            "as part of a larger expression. It is useful for avoiding "
+            "redundant computations, such as assigning the result of a "
+            "function call inside a while-loop condition or an if-statement "
+            "so the value can be tested and used without calling the "
+            "function twice."
+        ),
+    },
+    {
+        "difficulty": QuestionDifficulty.EASY,
+        "question_text": (
+            "How do f-strings work in Python, and what advantages "
+            "do they have over older formatting methods?"
+        ),
+        "expected_answer": (
+            "F-strings, introduced in Python 3.6, embed expressions "
+            "inside string literals using curly braces prefixed with f. "
+            "They are evaluated at runtime and are generally faster than "
+            "str.format() or percent formatting because the parsing is "
+            "done at compile time. They also support format specifiers, "
+            "arbitrary expressions, and, since Python 3.12, multi-line "
+            "expressions and nested quotes more flexibly."
+        ),
+    },
+    {
+        "difficulty": QuestionDifficulty.EASY,
+        "question_text": (
+            "What is the purpose of the enumerate() function?"
+        ),
+        "expected_answer": (
+            "enumerate() wraps an iterable and yields tuples of an "
+            "index and the corresponding element. It accepts an optional "
+            "start parameter to change the initial index value. It is "
+            "preferred over manually maintaining a counter variable "
+            "inside a for loop because it is more readable and less "
+            "error-prone."
+        ),
+    },
+    {
+        "difficulty": QuestionDifficulty.EASY,
+        "question_text": (
+            "What does the zip() function do, and what happens "
+            "when the iterables have different lengths?"
+        ),
+        "expected_answer": (
+            "zip() takes two or more iterables and returns an iterator "
+            "of tuples, pairing elements by position. By default it "
+            "stops at the shortest iterable. itertools.zip_longest can "
+            "be used to continue until the longest iterable is exhausted, "
+            "filling missing values with a specified fill value. In "
+            "Python 3.10+, zip also accepts a strict=True argument that "
+            "raises ValueError if lengths differ."
+        ),
+    },
+    {
+        "difficulty": QuestionDifficulty.EASY,
+        "question_text": (
+            "What is a dataclass in Python, and how does it differ "
+            "from a regular class?"
+        ),
+        "expected_answer": (
+            "A dataclass, provided by the dataclasses module since "
+            "Python 3.7, automatically generates __init__, __repr__, "
+            "and __eq__ methods based on annotated class fields. It "
+            "reduces boilerplate for classes that primarily hold data. "
+            "Unlike a regular class, fields are declared with type "
+            "annotations and default values, and additional features "
+            "like frozen instances and field ordering can be enabled "
+            "through decorator parameters."
+        ),
+    },
+    {
+        "difficulty": QuestionDifficulty.EASY,
+        "question_text": (
+            "What are type hints in Python, and are they enforced "
+            "at runtime?"
+        ),
+        "expected_answer": (
+            "Type hints are optional annotations that indicate the "
+            "expected types of function parameters, return values, and "
+            "variables. They are not enforced at runtime by CPython; "
+            "they serve as documentation and are used by external tools "
+            "such as mypy, Pyright, and IDEs for static analysis, "
+            "autocompletion, and catching type errors before execution."
+        ),
+    },
+    {
+        "difficulty": QuestionDifficulty.EASY,
+        "question_text": (
+            "What is structural pattern matching (match/case) "
+            "in Python?"
+        ),
+        "expected_answer": (
+            "Structural pattern matching, introduced in Python 3.10, "
+            "allows matching a subject value against a series of "
+            "patterns using match and case statements. Patterns can "
+            "destructure sequences, mappings, and objects. It is more "
+            "expressive than chained if/elif blocks for complex "
+            "branching because it supports guards, wildcards, OR "
+            "patterns, and capture variables."
+        ),
+    },
+    {
+        "difficulty": QuestionDifficulty.EASY,
+        "question_text": (
+            "What is the itertools module, and name three commonly "
+            "used functions from it?"
+        ),
+        "expected_answer": (
+            "itertools is a standard-library module providing fast, "
+            "memory-efficient iterator building blocks. Commonly used "
+            "functions include chain (concatenates iterables), islice "
+            "(lazily slices an iterator), and product (computes the "
+            "Cartesian product). Others like combinations, permutations, "
+            "and groupby are also widely used."
+        ),
+    },
+    {
+        "difficulty": QuestionDifficulty.EASY,
+        "question_text": (
+            "What does functools.lru_cache do, and when should "
+            "you use it?"
+        ),
+        "expected_answer": (
+            "functools.lru_cache is a decorator that memoizes the "
+            "results of a function, caching the most recent calls up "
+            "to a configurable maxsize. It is useful for expensive "
+            "pure functions with hashable arguments, such as recursive "
+            "computations. cache_info() can be used to monitor hit and "
+            "miss rates, and cache_clear() resets the cache."
+        ),
+    },
+    {
+        "difficulty": QuestionDifficulty.EASY,
+        "question_text": (
+            "What is the __all__ variable in a Python module?"
+        ),
+        "expected_answer": (
+            "__all__ is a list of strings that defines the public "
+            "API of a module. When a consumer uses 'from module import *', "
+            "only names listed in __all__ are imported. It does not "
+            "prevent direct import of unlisted names; it only controls "
+            "the wildcard import behavior and serves as documentation "
+            "of the module's intended public interface."
+        ),
+    },
+
+
+    # =========================================================
+    # MEDIUM — 6 ADDITIONAL QUESTIONS
+    # =========================================================
+
+    {
+        "difficulty": QuestionDifficulty.MEDIUM,
+        "question_text": (
+            "How does __slots__ affect memory usage and attribute "
+            "access compared to a regular instance __dict__?"
+        ),
+        "expected_answer": (
+            "When __slots__ is defined, Python stores instance "
+            "attributes in a fixed-size array of slot descriptors "
+            "instead of a per-instance __dict__. This eliminates the "
+            "hash-table overhead of a dict, reducing memory per instance "
+            "significantly when many instances exist. Attribute access "
+            "through slot descriptors can also be slightly faster. The "
+            "trade-off is that instances cannot have arbitrary dynamic "
+            "attributes unless __dict__ is explicitly included in "
+            "__slots__."
+        ),
+    },
+    {
+        "difficulty": QuestionDifficulty.MEDIUM,
+        "question_text": (
+            "Explain the descriptor protocol and the difference "
+            "between data descriptors and non-data descriptors."
+        ),
+        "expected_answer": (
+            "A descriptor is an object that defines __get__, __set__, "
+            "or __delete__. A data descriptor defines at least __set__ "
+            "or __delete__ in addition to __get__, while a non-data "
+            "descriptor defines only __get__. Data descriptors take "
+            "priority over instance __dict__ entries during attribute "
+            "lookup, whereas non-data descriptors are overridden by "
+            "instance __dict__ entries. Functions are non-data descriptors "
+            "whose __get__ returns a bound method."
+        ),
+    },
+    {
+        "difficulty": QuestionDifficulty.MEDIUM,
+        "question_text": (
+            "How does super() work in Python, and why is it "
+            "preferred over calling a parent class directly?"
+        ),
+        "expected_answer": (
+            "super() returns a proxy object that delegates attribute "
+            "lookups to the next class in the Method Resolution Order "
+            "rather than hardcoding a specific parent class. This is "
+            "essential for cooperative multiple inheritance because it "
+            "ensures every class in the MRO is called exactly once. "
+            "Calling a parent class directly by name breaks this chain "
+            "and can cause classes in the MRO to be skipped or called "
+            "multiple times."
+        ),
+    },
+    {
+        "difficulty": QuestionDifficulty.MEDIUM,
+        "question_text": (
+            "What are pytest fixtures, and how do they differ from "
+            "setUp/tearDown in unittest?"
+        ),
+        "expected_answer": (
+            "Pytest fixtures are functions decorated with @pytest.fixture "
+            "that supply reusable setup and teardown logic to tests via "
+            "dependency injection. Tests request fixtures by name in "
+            "their parameter list. Unlike unittest's setUp/tearDown, "
+            "fixtures support scoping (function, class, module, session), "
+            "parameterization, and composability through fixture chaining, "
+            "which makes test setup more modular and explicit."
+        ),
+    },
+    {
+        "difficulty": QuestionDifficulty.MEDIUM,
+        "question_text": (
+            "What are the practical trade-offs between multiprocessing "
+            "and threading for CPU-bound work in Python?"
+        ),
+        "expected_answer": (
+            "Threading in CPython is limited by the GIL, which prevents "
+            "true parallel execution of Python bytecode, making it "
+            "unsuitable for CPU-bound parallelism. Multiprocessing "
+            "spawns separate OS processes, each with its own interpreter "
+            "and GIL, enabling true parallelism but incurring higher "
+            "memory overhead and inter-process communication costs via "
+            "pickling. For CPU-bound work, multiprocessing or "
+            "ProcessPoolExecutor is generally preferred."
+        ),
+    },
+    {
+        "difficulty": QuestionDifficulty.MEDIUM,
+        "question_text": (
+            "What is an Abstract Base Class (ABC) in Python, and "
+            "how does it enforce interface contracts?"
+        ),
+        "expected_answer": (
+            "An ABC, created by subclassing abc.ABC or using "
+            "ABCMeta as a metaclass, defines an interface by marking "
+            "methods with @abstractmethod. Any concrete subclass must "
+            "implement all abstract methods or it cannot be instantiated. "
+            "ABCs also support virtual subclassing via register(), "
+            "allowing unrelated classes to be recognized as subclasses "
+            "without inheriting implementation."
+        ),
+    },
+
+
+    # =========================================================
+    # HARD — 9 ADDITIONAL QUESTIONS
+    # =========================================================
+
+    {
+        "difficulty": QuestionDifficulty.HARD,
+        "question_text": (
+            "Explain Python's import system: what happens internally "
+            "when you write 'import foo'?"
+        ),
+        "expected_answer": (
+            "Python first checks sys.modules for a cached module object. "
+            "If not found, it iterates through the finders in "
+            "sys.meta_path (typically BuiltinImporter, FrozenImporter, "
+            "and PathFinder). The finder returns a module spec, which "
+            "contains a loader. The loader creates the module object, "
+            "adds it to sys.modules, and then executes the module's "
+            "code in the module's namespace. This two-phase "
+            "create-then-exec approach prevents infinite recursion "
+            "in circular imports."
+        ),
+    },
+    {
+        "difficulty": QuestionDifficulty.HARD,
+        "question_text": (
+            "What are weak references, and how does the weakref "
+            "module help prevent memory leaks?"
+        ),
+        "expected_answer": (
+            "A weak reference refers to an object without increasing "
+            "its reference count, so the object can be garbage collected "
+            "when no strong references remain. The weakref module "
+            "provides ref, proxy, and WeakValueDictionary, among "
+            "others. Weak references are useful for caches, observer "
+            "patterns, and parent-child object graphs where you want "
+            "to avoid preventing garbage collection of objects that "
+            "are otherwise unreachable."
+        ),
+    },
+    {
+        "difficulty": QuestionDifficulty.HARD,
+        "question_text": (
+            "Describe the C3 linearization algorithm and explain "
+            "why Python chose it over depth-first or breadth-first "
+            "MRO strategies."
+        ),
+        "expected_answer": (
+            "C3 linearization produces a monotonic, consistent method "
+            "resolution order by merging the linearizations of parent "
+            "classes while preserving local precedence order and the "
+            "ordering of the parents list. Unlike naive depth-first "
+            "search, C3 avoids violating monotonicity in diamond "
+            "inheritance hierarchies and raises TypeError when a "
+            "consistent ordering is impossible. Python adopted C3 in "
+            "version 2.3 to fix inconsistencies in the earlier MRO "
+            "algorithm for new-style classes."
+        ),
+    },
+    {
+        "difficulty": QuestionDifficulty.HARD,
+        "question_text": (
+            "How does asyncio schedule and run tasks, and what is "
+            "the difference between asyncio.create_task, "
+            "asyncio.ensure_future, and awaiting a coroutine directly?"
+        ),
+        "expected_answer": (
+            "asyncio.create_task wraps a coroutine into a Task and "
+            "schedules it on the running event loop immediately, "
+            "allowing concurrent execution. ensure_future is a more "
+            "general version that also accepts Futures. Awaiting a "
+            "coroutine directly runs it inline without creating a "
+            "Task, so no concurrency occurs — the caller suspends "
+            "until the coroutine completes. Using create_task is the "
+            "preferred way to run coroutines concurrently within a "
+            "single event loop."
+        ),
+    },
+    {
+        "difficulty": QuestionDifficulty.HARD,
+        "question_text": (
+            "How would you profile memory usage in a Python "
+            "application, and what tools are available?"
+        ),
+        "expected_answer": (
+            "tracemalloc, built into the standard library, tracks "
+            "memory allocations and can produce snapshots showing "
+            "per-file and per-line allocation statistics. objgraph "
+            "visualizes object reference graphs and helps find leaks. "
+            "memory_profiler provides line-by-line memory usage via "
+            "the @profile decorator. sys.getsizeof gives the size of "
+            "a single object but does not account for referenced "
+            "objects, so recursive measurement or pympler.asizeof "
+            "is needed for deep sizes."
+        ),
+    },
+    {
+        "difficulty": QuestionDifficulty.HARD,
+        "question_text": (
+            "What are typing.Protocol and typing.Generic, and how "
+            "do they enable structural subtyping and parameterized "
+            "types in Python?"
+        ),
+        "expected_answer": (
+            "typing.Generic allows defining classes parameterized by "
+            "type variables, enabling type-safe containers and "
+            "algorithms without runtime overhead. typing.Protocol, "
+            "introduced in Python 3.8, enables structural subtyping: "
+            "a class satisfies a Protocol if it has the required "
+            "attributes and method signatures, without needing to "
+            "explicitly inherit from it. This bridges duck typing and "
+            "static type checking, letting tools like mypy verify "
+            "structural compatibility at analysis time."
+        ),
+    },
+    {
+        "difficulty": QuestionDifficulty.HARD,
+        "question_text": (
+            "What is the free-threaded (no-GIL) build introduced "
+            "experimentally in CPython 3.13, and what challenges "
+            "does removing the GIL present?"
+        ),
+        "expected_answer": (
+            "CPython 3.13 offers an experimental free-threaded build "
+            "that disables the GIL, allowing multiple threads to "
+            "execute Python bytecode in parallel. This required "
+            "replacing the GIL with fine-grained per-object locking, "
+            "biased reference counting, and making the memory allocator "
+            "thread-safe. Challenges include potential thread-safety "
+            "bugs in existing C extensions that assumed the GIL, "
+            "possible single-threaded performance regressions, and "
+            "the need for library authors to audit and test their "
+            "code for true thread safety."
+        ),
+    },
+    {
+        "difficulty": QuestionDifficulty.HARD,
+        "question_text": (
+            "Explain the difference between a virtual environment, "
+            "a venv, a conda environment, and a Docker container "
+            "for Python dependency isolation."
+        ),
+        "expected_answer": (
+            "A venv (created via python -m venv) isolates Python "
+            "packages by creating a lightweight directory with its "
+            "own site-packages and a symlink or copy of the Python "
+            "binary, but shares the system's OS-level libraries. "
+            "Conda environments isolate both Python and native C "
+            "libraries, making them suitable for scientific packages "
+            "with complex compiled dependencies. Docker containers "
+            "provide full OS-level isolation, packaging the entire "
+            "filesystem, libraries, and runtime. The trade-off is "
+            "increasing isolation versus increasing resource overhead "
+            "and complexity."
+        ),
+    },
+    {
+        "difficulty": QuestionDifficulty.HARD,
+        "question_text": (
+            "What is functools.singledispatch, and how does it "
+            "enable function overloading in Python?"
+        ),
+        "expected_answer": (
+            "functools.singledispatch is a decorator that transforms "
+            "a function into a single-dispatch generic function, "
+            "dispatching on the type of the first argument. Overloaded "
+            "implementations are registered with @function.register "
+            "for specific types. At call time, the dispatcher looks "
+            "up the most specific registered implementation in the "
+            "MRO of the argument's type. It provides a clean "
+            "alternative to isinstance chains and supports adding "
+            "new type handlers without modifying the original function."
+        ),
+    },
 ]
 
 

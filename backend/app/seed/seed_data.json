@@ -120,6 +120,114 @@
         {"input_data": "15", "expected_output": "1\n2\nFizz\n4\nBuzz\nFizz\n7\n8\nFizz\nBuzz\n11\nFizz\n13\n14\nFizzBuzz", "is_hidden": true, "execution_order": 3},
         {"input_data": "1", "expected_output": "1", "is_hidden": true, "execution_order": 4}
       ]
+    },
+    {
+      "language": "python",
+      "difficulty": "hard",
+      "title": "Median of Two Sorted Arrays",
+      "problem_statement": "Given two sorted arrays of integers, find the median of the combined sorted array in O(log(min(m, n))) time. The median of a combined array of even length is the average of the two middle elements, printed as a float with one decimal place. For odd length, print the middle element as a float with one decimal place. Read both arrays from standard input.",
+      "input_format": "First line: m space-separated integers (the first sorted array, may be empty if m=0).\nSecond line: n space-separated integers (the second sorted array, may be empty if n=0).\nIf an array is empty, its line will be blank.",
+      "output_format": "A single float: the median value, formatted to exactly one decimal place.",
+      "constraints": "0 <= m, n <= 100000. m + n >= 1. -1000000 <= nums[i] <= 1000000.",
+      "examples": "Example 1:\nInput:\n1 3\n2\nOutput:\n2.0\n\nExample 2:\nInput:\n1 2\n3 4\nOutput:\n2.5",
+      "starter_code": "def find_median_sorted_arrays(nums1, nums2):\n    # Write your solution here — aim for O(log(min(m,n)))\n    pass\n\n\ndef main():\n    line1 = input().strip()\n    line2 = input().strip()\n    nums1 = list(map(int, line1.split())) if line1 else []\n    nums2 = list(map(int, line2.split())) if line2 else []\n    result = find_median_sorted_arrays(nums1, nums2)\n    print(f\"{result:.1f}\")\n\n\nif __name__ == \"__main__\":\n    main()\n",
+      "test_cases": [
+        {"input_data": "1 3\n2", "expected_output": "2.0", "is_hidden": false, "execution_order": 1},
+        {"input_data": "1 2\n3 4", "expected_output": "2.5", "is_hidden": false, "execution_order": 2},
+        {"input_data": "\n1", "expected_output": "1.0", "is_hidden": true, "execution_order": 3},
+        {"input_data": "1 1 1 1\n1 1 1 1", "expected_output": "1.0", "is_hidden": true, "execution_order": 4},
+        {"input_data": "-5 -3 -1\n-2 0 4 6", "expected_output": "-1.0", "is_hidden": true, "execution_order": 5}
+      ]
+    },
+    {
+      "language": "python",
+      "difficulty": "hard",
+      "title": "Trapping Rain Water",
+      "problem_statement": "Given n non-negative integers representing an elevation map where each bar has width 1, compute how many units of water can be trapped after raining. Read the elevation map from standard input and print the total trapped water.",
+      "input_format": "First line: n, the number of bars.\nSecond line: n space-separated non-negative integers representing the height of each bar.",
+      "output_format": "A single integer: the total units of trapped rain water.",
+      "constraints": "1 <= n <= 100000. 0 <= height[i] <= 100000.",
+      "examples": "Example 1:\nInput:\n12\n0 1 0 2 1 0 1 3 2 1 2 1\nOutput:\n6\n\nExample 2:\nInput:\n6\n4 2 0 3 2 5\nOutput:\n9",
+      "starter_code": "def trap(height):\n    # Write your solution here\n    pass\n\n\ndef main():\n    n = int(input())\n    height = list(map(int, input().split()))\n    print(trap(height))\n\n\nif __name__ == \"__main__\":\n    main()\n",
+      "test_cases": [
+        {"input_data": "12\n0 1 0 2 1 0 1 3 2 1 2 1", "expected_output": "6", "is_hidden": false, "execution_order": 1},
+        {"input_data": "6\n4 2 0 3 2 5", "expected_output": "9", "is_hidden": false, "execution_order": 2},
+        {"input_data": "1\n5", "expected_output": "0", "is_hidden": true, "execution_order": 3},
+        {"input_data": "5\n3 3 3 3 3", "expected_output": "0", "is_hidden": true, "execution_order": 4},
+        {"input_data": "7\n5 0 0 0 0 0 5", "expected_output": "25", "is_hidden": true, "execution_order": 5}
+      ]
+    },
+    {
+      "language": "python",
+      "difficulty": "hard",
+      "title": "Word Ladder",
+      "problem_statement": "Given two words (begin_word and end_word) and a word list, find the length of the shortest transformation sequence from begin_word to end_word such that only one letter is changed at each step and each intermediate word must exist in the word list. Return 0 if no such transformation exists. The begin_word does not need to be in the word list. All words have the same length and consist of lowercase English letters.",
+      "input_format": "First line: begin_word.\nSecond line: end_word.\nThird line: space-separated words in the word list.",
+      "output_format": "A single integer: the length of the shortest transformation sequence (counting both begin_word and end_word), or 0 if no transformation exists.",
+      "constraints": "1 <= word length <= 10. 1 <= word list size <= 5000. All words are lowercase English letters.",
+      "examples": "Example 1:\nInput:\nhit\ncog\nhot dot dog lot log cog\nOutput:\n5\n\nExample 2:\nInput:\nhit\ncog\nhot dot dog lot log\nOutput:\n0",
+      "starter_code": "from collections import deque\n\ndef ladder_length(begin_word, end_word, word_list):\n    # Write your BFS solution here\n    pass\n\n\ndef main():\n    begin_word = input().strip()\n    end_word = input().strip()\n    word_list = input().strip().split()\n    print(ladder_length(begin_word, end_word, word_list))\n\n\nif __name__ == \"__main__\":\n    main()\n",
+      "test_cases": [
+        {"input_data": "hit\ncog\nhot dot dog lot log cog", "expected_output": "5", "is_hidden": false, "execution_order": 1},
+        {"input_data": "hit\ncog\nhot dot dog lot log", "expected_output": "0", "is_hidden": false, "execution_order": 2},
+        {"input_data": "a\nc\na b c", "expected_output": "2", "is_hidden": true, "execution_order": 3},
+        {"input_data": "hot\ndog\nhot dot dog", "expected_output": "3", "is_hidden": true, "execution_order": 4},
+        {"input_data": "game\nthee\ngame fame fame tame tame time time tile tile thee", "expected_output": "0", "is_hidden": true, "execution_order": 5}
+      ]
+    },
+    {
+      "language": "python",
+      "difficulty": "hard",
+      "title": "Longest Increasing Path in a Matrix",
+      "problem_statement": "Given an m x n matrix of integers, find the length of the longest strictly increasing path. From each cell you can move in four directions: up, down, left, or right. You may not move diagonally or outside the boundary. Read the matrix from standard input and print the length of the longest increasing path.",
+      "input_format": "First line: two integers m and n (rows and columns).\nNext m lines: n space-separated integers representing each row of the matrix.",
+      "output_format": "A single integer: the length of the longest strictly increasing path in the matrix.",
+      "constraints": "1 <= m, n <= 200. -1000000000 <= matrix[i][j] <= 1000000000.",
+      "examples": "Example 1:\nInput:\n3 3\n9 9 4\n6 6 8\n2 1 1\nOutput:\n4\n\nExample 2:\nInput:\n3 3\n3 4 5\n3 2 6\n2 2 1\nOutput:\n4",
+      "starter_code": "def longest_increasing_path(matrix, m, n):\n    # Write your DFS + memoization solution here\n    pass\n\n\ndef main():\n    m, n = map(int, input().split())\n    matrix = []\n    for _ in range(m):\n        row = list(map(int, input().split()))\n        matrix.append(row)\n    print(longest_increasing_path(matrix, m, n))\n\n\nif __name__ == \"__main__\":\n    main()\n",
+      "test_cases": [
+        {"input_data": "3 3\n9 9 4\n6 6 8\n2 1 1", "expected_output": "4", "is_hidden": false, "execution_order": 1},
+        {"input_data": "3 3\n3 4 5\n3 2 6\n2 2 1", "expected_output": "4", "is_hidden": false, "execution_order": 2},
+        {"input_data": "1 1\n42", "expected_output": "1", "is_hidden": true, "execution_order": 3},
+        {"input_data": "1 5\n1 2 3 4 5", "expected_output": "5", "is_hidden": true, "execution_order": 4},
+        {"input_data": "3 3\n-3 -2 -1\n-4 -5 0\n-7 -6 1", "expected_output": "9", "is_hidden": true, "execution_order": 5}
+      ]
+    },
+    {
+      "language": "python",
+      "difficulty": "hard",
+      "title": "Merge K Sorted Lists",
+      "problem_statement": "Given k sorted arrays of integers, merge them into a single sorted array. Use a min-heap for an efficient O(N log k) solution where N is the total number of elements across all arrays. Read the arrays from standard input and print the merged sorted array.",
+      "input_format": "First line: k, the number of sorted arrays.\nNext k lines: each line starts with an integer c (the count of elements in that array), followed by c space-separated integers in sorted order. If c is 0, the line contains just 0.",
+      "output_format": "A single line of space-separated integers: the merged sorted array. If all arrays are empty, print an empty line.",
+      "constraints": "1 <= k <= 10000. 0 <= total elements across all arrays <= 100000. -1000000 <= element value <= 1000000.",
+      "examples": "Example 1:\nInput:\n3\n3 1 4 5\n3 1 3 4\n2 2 6\nOutput:\n1 1 2 3 4 4 5 6\n\nExample 2:\nInput:\n2\n0\n3 -1 0 5\nOutput:\n-1 0 5",
+      "starter_code": "import heapq\n\ndef merge_k_sorted(lists):\n    # Write your heap-based solution here\n    pass\n\n\ndef main():\n    k = int(input())\n    lists = []\n    for _ in range(k):\n        parts = list(map(int, input().split()))\n        c = parts[0]\n        arr = parts[1:c+1] if c > 0 else []\n        lists.append(arr)\n    result = merge_k_sorted(lists)\n    if result:\n        print(' '.join(map(str, result)))\n    else:\n        print()\n\n\nif __name__ == \"__main__\":\n    main()\n",
+      "test_cases": [
+        {"input_data": "3\n3 1 4 5\n3 1 3 4\n2 2 6", "expected_output": "1 1 2 3 4 4 5 6", "is_hidden": false, "execution_order": 1},
+        {"input_data": "2\n0\n3 -1 0 5", "expected_output": "-1 0 5", "is_hidden": false, "execution_order": 2},
+        {"input_data": "1\n1 42", "expected_output": "42", "is_hidden": true, "execution_order": 3},
+        {"input_data": "3\n0\n0\n0", "expected_output": "", "is_hidden": true, "execution_order": 4},
+        {"input_data": "4\n3 -10 -5 0\n2 -3 7\n3 -8 1 4\n2 -1000000 1000000", "expected_output": "-1000000 -10 -8 -5 -3 0 1 4 7 1000000", "is_hidden": true, "execution_order": 5}
+      ]
+    },
+    {
+      "language": "python",
+      "difficulty": "hard",
+      "title": "Number of Islands II",
+      "problem_statement": "You are given an m x n grid initially filled with water (0). You are then given a sequence of positions where land is added one at a time. After each land addition, print the current number of islands. An island is a group of land cells connected horizontally or vertically. Use a Union-Find (Disjoint Set Union) data structure with path compression and union by rank for efficiency.",
+      "input_format": "First line: two integers m and n (grid dimensions).\nSecond line: an integer q (number of operations).\nNext q lines: two integers r and c (0-indexed row and column of the cell to turn into land).",
+      "output_format": "q space-separated integers on a single line: the number of islands after each addition.",
+      "constraints": "1 <= m, n <= 1000. 1 <= q <= 100000. 0 <= r < m. 0 <= c < n. Duplicate positions may occur; adding land to an already-land cell does not change anything.",
+      "examples": "Example 1:\nInput:\n3 3\n4\n0 0\n0 1\n1 2\n2 1\nOutput:\n1 1 2 3\n\nExample 2:\nInput:\n2 2\n4\n0 0\n1 1\n0 1\n1 0\nOutput:\n1 2 1 1",
+      "starter_code": "class UnionFind:\n    def __init__(self, size):\n        self.parent = list(range(size))\n        self.rank = [0] * size\n        self.count = 0\n\n    def find(self, x):\n        # TODO: implement with path compression\n        pass\n\n    def union(self, x, y):\n        # TODO: implement with union by rank\n        pass\n\n    def add(self, x):\n        # TODO: mark x as a new component if not already land\n        pass\n\n\ndef num_islands_ii(m, n, positions):\n    # Write your solution here using UnionFind\n    pass\n\n\ndef main():\n    m, n = map(int, input().split())\n    q = int(input())\n    positions = []\n    for _ in range(q):\n        r, c = map(int, input().split())\n        positions.append((r, c))\n    results = num_islands_ii(m, n, positions)\n    print(' '.join(map(str, results)))\n\n\nif __name__ == \"__main__\":\n    main()\n",
+      "test_cases": [
+        {"input_data": "3 3\n4\n0 0\n0 1\n1 2\n2 1", "expected_output": "1 1 2 3", "is_hidden": false, "execution_order": 1},
+        {"input_data": "2 2\n4\n0 0\n1 1\n0 1\n1 0", "expected_output": "1 2 1 1", "is_hidden": false, "execution_order": 2},
+        {"input_data": "1 1\n1\n0 0", "expected_output": "1", "is_hidden": true, "execution_order": 3},
+        {"input_data": "3 3\n3\n1 1\n1 1\n1 1", "expected_output": "1 1 1", "is_hidden": true, "execution_order": 4},
+        {"input_data": "2 3\n6\n0 0\n0 2\n1 1\n0 1\n1 0\n1 2", "expected_output": "1 2 3 1 1 1", "is_hidden": true, "execution_order": 5}
+      ]
     }
   ]
 }
